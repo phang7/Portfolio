@@ -223,8 +223,10 @@ footer{border-top:1px solid var(--border);padding:2.5rem 0;position:relative;z-i
 .back-top:hover{border-color:var(--accent);background:rgba(59,158,255,.1)}
 
 /* REVEAL */
-.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
-.reveal.visible{opacity:1;transform:translateY(0)}
+/* Reveal: visible by default, animate when JS adds .animated class to body */
+.reveal{opacity:1;transform:none}
+body.animated .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+body.animated .reveal.visible{opacity:1;transform:translateY(0)}
 .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
 
 /* RESPONSIVE */
@@ -1295,31 +1297,37 @@ window.addEventListener('scroll', () => {
 });
 
 // ── REVEAL ON SCROLL ─────────────────────────────────────────
+// Content is visible by default. Animations only activate if page is responsive.
 function revealVisible() {
   document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
     const r = el.getBoundingClientRect();
-    if(r.top < window.innerHeight + 60) el.classList.add('visible');
+    if(r.top < window.innerHeight + 80) el.classList.add('visible');
   });
 }
 
-// Reveal immediately on load (handles hero section)
-revealVisible();
-setTimeout(revealVisible, 100);
-setTimeout(revealVisible, 400);
-
-// Fallback: reveal ALL after 800ms no matter what
-setTimeout(() => {
-  document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
-}, 800);
+// Only enable animations if page loaded within 2s (good connection)
+const _animStart = Date.now();
+window.addEventListener('load', function() {
+  if(Date.now() - _animStart < 2000) {
+    document.body.classList.add('animated');
+    revealVisible();
+    setTimeout(revealVisible, 150);
+  }
+  // Hard fallback: reveal everything after 600ms regardless
+  setTimeout(() => {
+    document.body.classList.remove('animated');
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+  }, 600);
+});
 
 // Reveal on scroll
 window.addEventListener('scroll', revealVisible, { passive: true });
 
-// IntersectionObserver as bonus layer
+// IntersectionObserver
 if('IntersectionObserver' in window) {
   const ro = new IntersectionObserver((entries) => {
     entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+  }, { threshold: 0.04, rootMargin: '0px 0px -20px 0px' });
   document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
 }
 
