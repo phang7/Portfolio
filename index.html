@@ -286,7 +286,7 @@ footer{border-top:1px solid var(--border);padding:2.5rem 0;position:relative;z-i
 <section id="hero">
   <div class="container">
     <div class="hero-grid">
-      <div class="reveal">
+      <div class="reveal visible">
         <div class="hero-tag">Power BI Architect · Microsoft Fabric</div>
         <h1>Phanindra<br/><span class="name-accent">Gaddam</span></h1>
         <p class="hero-sub">Enterprise BI Architect with <strong>13+ years</strong> designing, governing, and scaling analytics platforms — from Fortune 500 Life Sciences to global Oil &amp; Gas.</p>
@@ -700,8 +700,19 @@ window.addEventListener('scroll', () => {
 // ── REVEAL ON SCROLL ─────────────────────────────────────────
 const ro = new IntersectionObserver((entries) => {
   entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.12 });
+}, { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+// Reveal elements already in viewport on page load
+setTimeout(() => {
+  document.querySelectorAll('.reveal').forEach(el => {
+    const r = el.getBoundingClientRect();
+    if(r.top < window.innerHeight) el.classList.add('visible');
+  });
+}, 80);
+// Safety net: reveal everything after 1.5s
+setTimeout(() => {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+}, 1500);
 
 // ── MOBILE MENU ──────────────────────────────────────────────
 function toggleMenu() {
