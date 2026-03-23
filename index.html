@@ -251,6 +251,164 @@ footer{border-top:1px solid var(--border);padding:2.5rem 0;position:relative;z-i
   h1{font-size:2.4rem}
   .hero-stats{gap:1.5rem}
 }
+
+/* ── ARTICLE MODAL STYLES ────────────────────────────────────────── */
+.art-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.75);
+  backdrop-filter:blur(8px);z-index:200;
+  opacity:0;pointer-events:none;transition:opacity .3s ease;
+}
+.art-overlay.open{opacity:1;pointer-events:all}
+
+.art-panel{
+  position:fixed;top:0;right:0;bottom:0;
+  width:min(780px,100vw);
+  background:var(--surface);
+  transform:translateX(100%);
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+  z-index:201;
+  display:flex;flex-direction:column;
+  border-left:1px solid var(--border);
+  overflow:hidden;
+}
+.art-panel.open{transform:translateX(0)}
+
+.art-panel-inner{
+  display:flex;flex-direction:column;
+  height:100%;overflow:hidden;
+}
+
+.art-panel-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.2rem 2rem;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+  background:var(--surface);
+  position:relative;
+}
+.art-panel-header::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+}
+.art-close{
+  background:rgba(255,255,255,.06);border:1px solid var(--border);
+  border-radius:50%;width:32px;height:32px;
+  color:var(--muted);font-size:.9rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;flex-shrink:0;
+}
+.art-close:hover{background:rgba(255,107,107,.15);border-color:#FF6B6B;color:#FF6B6B}
+.art-panel-topic{
+  font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent);
+  flex:1;text-align:center;
+}
+.art-counter{
+  font-family:'DM Mono',monospace;font-size:.68rem;color:var(--muted);
+  flex-shrink:0;
+}
+
+.art-panel-body{
+  flex:1;overflow-y:auto;padding:2.5rem 2.5rem 2rem;
+  scroll-behavior:smooth;
+}
+.art-panel-body::-webkit-scrollbar{width:4px}
+.art-panel-body::-webkit-scrollbar-track{background:transparent}
+.art-panel-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+.art-panel-title{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(1.5rem,3vw,2rem);
+  line-height:1.2;letter-spacing:-.02em;
+  color:var(--text);margin-bottom:1rem;
+}
+.art-panel-meta{
+  display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;
+  font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);
+  margin-bottom:1.5rem;
+}
+.art-panel-divider{
+  height:1px;background:var(--border);margin-bottom:2rem;
+}
+
+/* Article content typography */
+.art-panel-content{color:var(--text);font-size:.95rem;line-height:1.85}
+.art-panel-content p{margin-bottom:1.2rem}
+.art-panel-content h3{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem;
+  color:var(--text);margin:2rem 0 .8rem;
+  border-left:3px solid var(--accent);padding-left:.8rem;
+}
+.art-panel-content h4{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;
+  color:var(--accent);margin:1.5rem 0 .5rem;
+}
+.art-panel-content ul{
+  padding-left:1.4rem;margin-bottom:1.2rem;
+}
+.art-panel-content ul li{
+  margin-bottom:.5rem;color:var(--muted);line-height:1.7;
+}
+.art-panel-content strong{color:var(--text);font-weight:500}
+.art-panel-content code{
+  font-family:'DM Mono',monospace;font-size:.82rem;
+  background:rgba(59,158,255,.1);color:var(--accent);
+  padding:.1rem .4rem;border-radius:3px;
+}
+.art-panel-content blockquote{
+  border-left:3px solid var(--accent2);
+  background:rgba(0,229,195,.05);
+  padding:1rem 1.2rem;margin:1.5rem 0;border-radius:0 6px 6px 0;
+  font-style:italic;color:var(--text);font-size:1rem;
+}
+.art-panel-content em{color:var(--muted);font-size:.82rem}
+.art-tip{
+  background:rgba(59,158,255,.07);
+  border:1px solid rgba(59,158,255,.2);
+  border-radius:8px;padding:1rem 1.2rem;
+  margin:1.5rem 0;font-size:.88rem;
+  color:var(--text);line-height:1.7;
+}
+.art-table{
+  width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.82rem;
+}
+.art-table th{
+  background:rgba(59,158,255,.1);color:var(--accent);
+  font-family:'DM Mono',monospace;font-size:.7rem;
+  text-transform:uppercase;letter-spacing:.08em;
+  padding:.6rem .8rem;border:1px solid var(--border);text-align:left;
+}
+.art-table td{
+  padding:.6rem .8rem;border:1px solid var(--border);
+  color:var(--muted);vertical-align:top;line-height:1.6;
+}
+.art-table tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+
+.art-panel-footer{
+  border-top:1px solid var(--border);
+  padding-top:1.5rem;margin-top:2rem;
+}
+.art-panel-nav{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+}
+.art-nav-btn{
+  font-family:'DM Mono',monospace;font-size:.74rem;letter-spacing:.06em;
+  text-transform:uppercase;
+  padding:.6rem 1.2rem;border-radius:4px;cursor:pointer;
+  border:1px solid var(--border);background:transparent;
+  color:var(--muted);transition:all .2s;
+}
+.art-nav-btn:hover{border-color:var(--accent);color:var(--accent)}
+.art-nav-li{
+  background:var(--accent);color:#000;border-color:var(--accent);font-weight:500;
+}
+.art-nav-li:hover{background:#6ab8ff;border-color:#6ab8ff;color:#000}
+
+@media(max-width:600px){
+  .art-panel-body{padding:1.5rem 1.2rem}
+  .art-panel-header{padding:1rem 1.2rem}
+}
+
 </style>
 </head>
 <body>
@@ -554,51 +712,487 @@ footer{border-top:1px solid var(--border);padding:2.5rem 0;position:relative;z-i
     <h2 class="reveal d1">LinkedIn Articles</h2>
     <p class="section-desc reveal d2">Insights from 13 years at the enterprise coalface. Published on LinkedIn — links active as each article goes live.</p>
     <div class="articles-grid">
-      <a class="art-card reveal" href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank">
+
+      <div class="art-card reveal" onclick="openArticle('a1')">
         <div class="art-arrow">↗</div>
-        <div class="art-topic">Fabric &amp; Architecture</div>
+        <div class="art-topic">Fabric & Architecture</div>
         <div class="art-title">Why Most Fabric Migrations Fail — And How We Made Ours Stick</div>
         <div class="art-desc">The honest architectural decisions behind a successful Denodo → Databricks → Fabric migration at a Fortune 500 Life Sciences company.</div>
-        <div class="art-footer"><span class="art-time">~8 min read</span><span class="art-badge live">● Live</span></div>
-      </a>
-      <a class="art-card reveal d1" href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank">
+        <div class="art-footer">
+          <span class="art-time">8 min read</span>
+          <span class="art-badge live">● Live</span>
+        </div>
+      </div>
+
+      <div class="art-card reveal" onclick="openArticle('a2')">
         <div class="art-arrow">↗</div>
         <div class="art-topic">Performance Optimisation</div>
         <div class="art-title">Zero Throttling at Scale: Eliminating Power BI Bottlenecks Across 100+ Workspaces</div>
         <div class="art-desc">A systematic playbook for throttling, slow DAX, and refresh failures — with real patterns from enterprise deployments.</div>
-        <div class="art-footer"><span class="art-time">~10 min read</span><span class="art-badge live">● Live</span></div>
-      </a>
-      <a class="art-card reveal d2" href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank">
+        <div class="art-footer">
+          <span class="art-time">10 min read</span>
+          <span class="art-badge live">● Live</span>
+        </div>
+      </div>
+
+      <div class="art-card reveal" onclick="openArticle('a3')">
         <div class="art-arrow">↗</div>
-        <div class="art-topic">Governance</div>
+        <div class="art-topic">Governance & Security</div>
         <div class="art-title">The Governance Framework That Scaled Across 100+ Power BI Workspaces</div>
-        <div class="art-desc">RLS, naming conventions, workspace segmentation, and the mindset shifts that made governance stick — not just on paper.</div>
-        <div class="art-footer"><span class="art-time">~7 min read</span><span class="art-badge live">● Live</span></div>
-      </a>
-      <a class="art-card reveal" href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank">
+        <div class="art-desc">Built from scratch. Still running today.</div>
+        <div class="art-footer">
+          <span class="art-time">7 min read</span>
+          <span class="art-badge live">● Live</span>
+        </div>
+      </div>
+
+      <div class="art-card reveal" onclick="openArticle('a4')">
         <div class="art-arrow">↗</div>
-        <div class="art-topic">DAX &amp; Modelling</div>
-        <div class="art-title">Persona-Based BI Architecture: Separating Executive, Operational &amp; Self-Service Layers</div>
-        <div class="art-desc">Why one model for everyone is an anti-pattern — and the architectural pattern that changed how 200+ users interact with data.</div>
-        <div class="art-footer"><span class="art-time">~9 min read</span><span class="art-badge soon">Coming Soon</span></div>
-      </a>
-      <a class="art-card reveal d1" href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank">
+        <div class="art-topic">DAX & Semantic Modelling</div>
+        <div class="art-title">Persona-Based BI Architecture: Separating Executive, Operational & Self-Service Layers</div>
+        <div class="art-desc">Why I stopped building one model for everyone — and what I built instead.</div>
+        <div class="art-footer">
+          <span class="art-time">9 min read</span>
+          <span class="art-badge soon">Coming Soon</span>
+        </div>
+      </div>
+
+      <div class="art-card reveal" onclick="openArticle('a5')">
         <div class="art-arrow">↗</div>
         <div class="art-topic">Direct Lake</div>
         <div class="art-title">Direct Lake vs Import vs Live Connect: The Decision Framework I Use in Every Enterprise Engagement</div>
         <div class="art-desc">A practical, scenario-based guide to choosing the right connectivity mode — beyond the marketing brochure.</div>
-        <div class="art-footer"><span class="art-time">~6 min read</span><span class="art-badge soon">Coming Soon</span></div>
-      </a>
-      <a class="art-card reveal d2" href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank">
+        <div class="art-footer">
+          <span class="art-time">6 min read</span>
+          <span class="art-badge soon">Coming Soon</span>
+        </div>
+      </div>
+
+      <div class="art-card reveal" onclick="openArticle('a6')">
         <div class="art-arrow">↗</div>
-        <div class="art-topic">Open Source · Fabric</div>
+        <div class="art-topic">Open Source · Microsoft Fabric</div>
         <div class="art-title">FUAM: The Tenant Monitoring Tool Every Fabric Admin Needs</div>
-        <div class="art-desc">Deploying the open-source Fabric Unified Admin Monitoring solution — with a step-by-step guide for enterprise teams.</div>
-        <div class="art-footer"><span class="art-time">~12 min read</span><span class="art-badge soon">Coming Soon</span></div>
-      </a>
+        <div class="art-desc">Deploying Fabric Unified Admin Monitoring for your enterprise — a hands-on guide.</div>
+        <div class="art-footer">
+          <span class="art-time">12 min read</span>
+          <span class="art-badge soon">Coming Soon</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
+<!-- ARTICLE OVERLAY & PANELS -->
+<div class="art-overlay" id="artOverlay"></div>
+
+  <div class="art-panel" id="panel-a1">
+    <div class="art-panel-inner">
+      <div class="art-panel-header">
+        <button class="art-close" onclick="closeArticle()" aria-label="Close">✕</button>
+        <div class="art-panel-topic">Fabric & Architecture</div>
+        <div class="art-counter">1 / 6</div>
+      </div>
+      <div class="art-panel-body">
+        <h1 class="art-panel-title">Why Most Fabric Migrations Fail — And How We Made Ours Stick</h1>
+        <div class="art-panel-meta">
+          <span>Phanindra Gaddam</span>
+          <span>·</span>
+          <span>8 min read</span>
+          <span>·</span>
+          <span>Power BI Architect</span>
+        </div>
+        <div class="art-panel-divider"></div>
+        <div class="art-panel-content">
+<p>I've watched organisations announce Fabric migrations with fanfare, only to quietly shelve them six months later. Having led a successful Denodo → Databricks → Microsoft Fabric migration at Becton Dickinson, I can tell you exactly why most of them stall.</p>
+<p><strong>It's almost never a technology problem.</strong></p>
+
+<h3>The Four Reasons Migrations Fail</h3>
+
+<h4>1. They migrate reports, not architecture</h4>
+<p>The most common mistake: teams take their existing mess — badly designed models, ungoverned datasets, report sprawl — and move it verbatim into Fabric. They treat the migration as a lift-and-shift when it's actually an opportunity to redesign.</p>
+<p>At BD, we used the migration as a forcing function to redesign the entire semantic layer from scratch. Every model was rebuilt against a Medallion Lakehouse architecture. Yes, it took longer. But we never had to redo it.</p>
+
+<h4>2. They underestimate data platform dependencies</h4>
+<p>Fabric doesn't exist in isolation. Ours sat downstream of Databricks, which replaced Denodo, which had replaced SSRS before that. Each layer had assumptions baked in — join logic, aggregation rules, slowly changing dimensions — that the Power BI layer had inherited and forgotten.</p>
+<p>Before you touch Fabric, you need a clear map of every upstream dependency. We spent two weeks just documenting what Denodo was doing that nobody had written down.</p>
+
+<blockquote>The data debt you ignore during migration will find you later. It just shows up in the report layer as 'wrong numbers'.</blockquote>
+
+<h4>3. They don't plan for Direct Lake fallback scenarios</h4>
+<p>Direct Lake is transformative — until it isn't. There are real scenarios where the engine falls back to DirectQuery mode silently. If your model isn't designed with that in mind, you'll see unexpected performance hits post-go-live.</p>
+<p>We built our models to be Direct Lake-first but tested every measure under DirectQuery fallback conditions. That discipline saved us from several nasty surprises.</p>
+
+<h4>4. Governance comes after, not before</h4>
+<p>Teams want to move fast, so governance is deprioritised. Then three months in, you have 60 workspaces with inconsistent naming, shared credentials, no refresh monitoring, and senior stakeholders asking why the dashboard numbers don't match.</p>
+<p>We built workspace design standards, naming conventions, and service principal governance before we migrated a single report. It added two weeks to planning. It saved months of firefighting.</p>
+
+<h3>What We Did Differently</h3>
+<p>Here's the actual sequence that worked at Becton Dickinson:</p>
+<ul>
+<li>Documented all upstream Denodo logic before touching Fabric</li>
+<li>Designed the Medallion Lakehouse structure (Bronze → Silver → Gold) in Databricks first</li>
+<li>Built governance and workspace standards before migrating reports</li>
+<li>Rebuilt — not migrated — the semantic layer using Direct Lake with DirectQuery fallback testing</li>
+<li>Established automated monitoring via pipeline scripts before go-live</li>
+<li>Trained 200+ users on the new platform before switching off the old one</li>
+</ul>
+
+<div class="art-tip">💡 <strong>Key Takeaway:</strong> Treat a Fabric migration like a platform redesign, not a lift-and-shift. The extra planning time pays back in months of avoided rework.</div>
+
+<p>The migration is now in production, supporting cross-functional analytics across Finance, Supply Chain, Quality, and Commercial. The standards we set are still the ones the organisation uses today.</p>
+<p>What migration mistakes have you encountered? Drop them in the comments on LinkedIn — the patterns tend to repeat across industries.</p>
+<p><em>#MicrosoftFabric #PowerBI #DataArchitecture #LakehouseArchitecture #EnterpriseBI #Databricks</em></p>
+</div>
+        <div class="art-panel-footer">
+          <div class="art-panel-nav">
+            <span></span>
+            <button class="art-nav-btn art-nav-li" onclick="window.open('https://www.linkedin.com/in/phanindra-gaddam-0886b153/','_blank')">Follow on LinkedIn →</button>
+            <button class="art-nav-btn" onclick="openArticle('a2')" aria-label="Next">Next →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="art-panel" id="panel-a2">
+    <div class="art-panel-inner">
+      <div class="art-panel-header">
+        <button class="art-close" onclick="closeArticle()" aria-label="Close">✕</button>
+        <div class="art-panel-topic">Performance Optimisation</div>
+        <div class="art-counter">2 / 6</div>
+      </div>
+      <div class="art-panel-body">
+        <h1 class="art-panel-title">Zero Throttling at Scale: Eliminating Power BI Bottlenecks Across 100+ Workspaces</h1>
+        <div class="art-panel-meta">
+          <span>Phanindra Gaddam</span>
+          <span>·</span>
+          <span>10 min read</span>
+          <span>·</span>
+          <span>Power BI Architect</span>
+        </div>
+        <div class="art-panel-divider"></div>
+        <div class="art-panel-content">
+<p>When I joined the Becton Dickinson engagement, the Power BI environment was struggling. Executive dashboards were timing out. Dataset refreshes were failing overnight. The Capacity Metrics App showed CU spikes nobody could explain. The business was losing confidence in the platform.</p>
+<p>Eighteen months later, we had zero throttling incidents across 100+ workspaces. Here's the systematic approach that got us there.</p>
+
+<h3>Diagnosing Before Optimising</h3>
+<p>The biggest mistake in performance work is jumping to solutions before understanding causes. I've seen teams spend weeks optimising DAX when the actual problem was a misconfigured incremental refresh policy loading 3 years of data every night.</p>
+<p>My diagnostic framework has three layers:</p>
+<ul>
+<li><strong>Capacity layer</strong> — CU consumption patterns, throttling events, peak vs. off-peak profiles</li>
+<li><strong>Model layer</strong> — table sizes, cardinality, relationship patterns, storage mode choices</li>
+<li><strong>Query layer</strong> — slow measures, high-cardinality visuals, inefficient filter contexts</li>
+</ul>
+
+<blockquote>You can't optimise what you haven't measured. The Capacity Metrics App is the starting point, not an optional add-on.</blockquote>
+
+<h3>The Seven Levers I Pull</h3>
+
+<h4>1. Incremental Refresh Policy Redesign</h4>
+<p>Roughly 40% of the refresh failures I encounter are caused by poorly designed incremental refresh policies — either loading too much historical data, using non-foldable queries, or missing the RangeStart/RangeEnd parameter pattern entirely.</p>
+<p>At BD, we audited every dataset's refresh policy and standardised on a 3-day incremental window with 2-year historical partitions. Refresh times dropped by over 60% on the largest models.</p>
+
+<h4>2. Storage Mode Strategy</h4>
+<p>Most teams put everything in Import mode because it's the default. For large enterprise environments, you need a deliberate mixed-mode strategy: Import for fact tables that can be fully loaded; Direct Lake for large Delta tables in Fabric; Aggregation tables for executive-layer summaries that need sub-second response.</p>
+
+<h4>3. DAX Measure Audit</h4>
+<p>I use DAX Studio's Server Timings to profile every measure on an executive dashboard. The usual suspects are CALCULATE with complex filter arguments, SUMX iterating large tables, and time intelligence patterns that trigger full table scans.</p>
+<p>The fix is usually not complicated — often it's moving from row-context iteration to filter context, or pre-calculating an aggregation at the model level.</p>
+
+<h4>4. Gateway Architecture and Scaling</h4>
+<p>On-premises data gateway becomes a bottleneck faster than most architects expect. At BD, we had a single gateway handling mixed workloads — scheduled refreshes, DirectQuery, API calls — on the same cluster.</p>
+<p>We separated into dedicated gateway clusters by workload type. Latency on DirectQuery reports dropped immediately.</p>
+
+<h4>5. Pre-Staging for Executive Reports</h4>
+<p>Executive dashboards are the worst place to run live queries. The solution is pre-staging: materialising the aggregated results that executive reports need into a dedicated staging table, refreshed overnight. The dashboard reads from a tiny, pre-aggregated table at lightning speed.</p>
+
+<h4>6. Workspace Isolation and Capacity Assignment</h4>
+<p>Not all workspaces deserve the same capacity. We tiered our workspaces: executive and mission-critical reports on dedicated Premium capacity; development and testing workspaces on shared capacity. This prevented a poorly-written dev dataset from consuming CUs needed by production.</p>
+
+<h4>7. Automated Monitoring Before Problems Surface</h4>
+<p>We built PowerShell-based monitoring that checked refresh status, flagged datasets with &gt;90 minute refresh times, and alerted when CU consumption exceeded 80% of capacity headroom. Problems were being caught and fixed at 3am by automated alerts, not at 9am by angry emails.</p>
+
+<div class="art-tip">✅ <strong>The Result:</strong> Across 100+ workspaces: zero unplanned executive dashboard outages for 12 consecutive months. Average refresh time reduction of 55%. CU consumption stable through month-end peaks.</div>
+
+<p>What's the most stubborn performance issue you've faced in Power BI? Happy to share more detail on any of these approaches.</p>
+<p><em>#PowerBI #PerformanceOptimisation #DAX #MicrosoftFabric #EnterpriseBI #CapacityPlanning</em></p>
+</div>
+        <div class="art-panel-footer">
+          <div class="art-panel-nav">
+            <button class="art-nav-btn" onclick="openArticle('a1')" aria-label="Previous">← Prev</button>
+            <button class="art-nav-btn art-nav-li" onclick="window.open('https://www.linkedin.com/in/phanindra-gaddam-0886b153/','_blank')">Follow on LinkedIn →</button>
+            <button class="art-nav-btn" onclick="openArticle('a3')" aria-label="Next">Next →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="art-panel" id="panel-a3">
+    <div class="art-panel-inner">
+      <div class="art-panel-header">
+        <button class="art-close" onclick="closeArticle()" aria-label="Close">✕</button>
+        <div class="art-panel-topic">Governance & Security</div>
+        <div class="art-counter">3 / 6</div>
+      </div>
+      <div class="art-panel-body">
+        <h1 class="art-panel-title">The Governance Framework That Scaled Across 100+ Power BI Workspaces</h1>
+        <div class="art-panel-meta">
+          <span>Phanindra Gaddam</span>
+          <span>·</span>
+          <span>7 min read</span>
+          <span>·</span>
+          <span>Power BI Architect</span>
+        </div>
+        <div class="art-panel-divider"></div>
+        <div class="art-panel-content">
+<p>When I took ownership of the Power BI platform at Becton Dickinson, there were no governance standards. Every team had created workspaces their own way — inconsistent naming, shared credentials, no lifecycle management, RLS applied differently in every model.</p>
+<p>Building a governance framework that actually sticks across a 100+ workspace enterprise is harder than it sounds. Here's what worked.</p>
+
+<h3>Why Most Governance Frameworks Don't Stick</h3>
+<p>Governance frameworks fail for one of three reasons: they're too complex to follow, they're enforced only at deployment time and never maintained, or they exist in a document nobody reads.</p>
+<p>The framework we built at BD had three design principles: it had to be <strong>automatable, auditable, and explainable</strong> to a business stakeholder in under two minutes.</p>
+
+<h3>The Five Pillars</h3>
+
+<h4>1. Workspace Taxonomy</h4>
+<p>We defined four workspace tiers: Development, Test, Production, and Admin/Monitoring. Every workspace was named using a consistent convention: <code>[BU]-[Domain]-[Tier]</code>. For example: <code>FIN-FinancialReporting-PROD</code> or <code>SCM-SupplyChain-DEV</code>.</p>
+<p>This sounds trivial. It isn't. When you have 100+ workspaces and need to find all finance production workspaces at 11pm during an outage, naming conventions save you.</p>
+
+<h4>2. Service Principal Strategy</h4>
+<p>We eliminated shared user credentials from all automated processes. Every pipeline, every scheduled refresh, every API call used a dedicated service principal with scoped permissions. Service principals were registered in Azure Entra ID, their secrets rotated on a schedule, and their permissions documented in a living register.</p>
+
+<h4>3. RLS/OLS Design Standards</h4>
+<p>Row-level and object-level security was applied using a standard pattern across all models: security roles defined at the model level, assigned via Entra security groups — never individual users. When someone changed teams, you updated their group membership, not 15 individual report permissions.</p>
+
+<blockquote>Assign security roles to groups, not individuals. This is the single biggest governance lever most teams are ignoring.</blockquote>
+
+<h4>4. Lifecycle Management and Deployment Pipelines</h4>
+<p>We enforced a DEV → TEST → PROD promotion process using Fabric deployment pipelines. No direct edits to production workspaces. Every change went through the pipeline, creating an automatic audit trail.</p>
+
+<h4>5. Automated Compliance Monitoring</h4>
+<p>Governance without monitoring is just hope. We built PowerShell scripts that ran nightly, checking every workspace against our standards: correct naming, service principal usage, RLS applied where required, no personal email addresses in workspace access lists. Non-compliant workspaces were flagged in a monitoring dashboard.</p>
+
+<div class="art-tip">💡 <strong>Key Insight:</strong> Governance that requires humans to manually check compliance will always decay. Automate the checking. Make compliance the path of least resistance.</div>
+
+<p>The framework we built is still the standard the organisation uses today — years after I designed it. That's the real test of whether governance works: does it outlast the person who built it?</p>
+<p><em>#PowerBI #DataGovernance #MicrosoftFabric #EnterpriseAnalytics #SecurityArchitecture</em></p>
+</div>
+        <div class="art-panel-footer">
+          <div class="art-panel-nav">
+            <button class="art-nav-btn" onclick="openArticle('a2')" aria-label="Previous">← Prev</button>
+            <button class="art-nav-btn art-nav-li" onclick="window.open('https://www.linkedin.com/in/phanindra-gaddam-0886b153/','_blank')">Follow on LinkedIn →</button>
+            <button class="art-nav-btn" onclick="openArticle('a4')" aria-label="Next">Next →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="art-panel" id="panel-a4">
+    <div class="art-panel-inner">
+      <div class="art-panel-header">
+        <button class="art-close" onclick="closeArticle()" aria-label="Close">✕</button>
+        <div class="art-panel-topic">DAX & Semantic Modelling</div>
+        <div class="art-counter">4 / 6</div>
+      </div>
+      <div class="art-panel-body">
+        <h1 class="art-panel-title">Persona-Based BI Architecture: Separating Executive, Operational & Self-Service Layers</h1>
+        <div class="art-panel-meta">
+          <span>Phanindra Gaddam</span>
+          <span>·</span>
+          <span>9 min read</span>
+          <span>·</span>
+          <span>Power BI Architect</span>
+        </div>
+        <div class="art-panel-divider"></div>
+        <div class="art-panel-content">
+<p>The single biggest architectural mistake I see in enterprise Power BI environments is this: one giant semantic model, shared by executives, operational managers, analysts, and self-service users alike.</p>
+<p>It's understandable. One model sounds simpler. In practice, it becomes a monster — slow, fragile, and serving nobody particularly well.</p>
+
+<h3>The Three Personas and What They Actually Need</h3>
+
+<h4>Executive Layer</h4>
+<p>Executives need KPIs, trends, and exception reporting. They open a dashboard at 8am, want a sub-second response, and need zero complexity. They do not need 47 columns from the transactions table.</p>
+<p>The executive layer should be built on pre-aggregated, materialised data. It should be Import mode. It should be refreshed nightly. It should have no more than 15 measures. It should never fall back to DirectQuery.</p>
+
+<h4>Operational Layer</h4>
+<p>Operational managers need current data, drill-through, and the ability to filter by region, business unit, and time period. This layer tolerates a slightly longer load time. It can use Direct Lake or DirectQuery for near-real-time data where needed.</p>
+
+<h4>Self-Service / Analyst Layer</h4>
+<p>Analysts need flexibility. They want to write their own measures, explore data, and build exploratory reports. They should have access to the Lakehouse SQL endpoint or a well-documented semantic model they can build on top of.</p>
+<p>Critically, analyst exploration should never affect executive dashboard performance. Isolate the workloads.</p>
+
+<blockquote>When you build one model for everyone, you optimise for nobody. Persona-based architecture is how you give every user exactly what they need.</blockquote>
+
+<h3>How We Implemented This at BD</h3>
+<p>At Becton Dickinson, we implemented a three-layer model architecture:</p>
+<ul>
+<li>Gold Lakehouse tables in Databricks (single source of truth)</li>
+<li>Executive semantic model — Import, pre-aggregated, &lt;15 measures, refreshed nightly</li>
+<li>Operational semantic model — Direct Lake, full grain, curated measures, near-real-time</li>
+<li>Analyst Lakehouse endpoint — SQL endpoint access for ad-hoc queries and custom reports</li>
+</ul>
+<p>Each layer was a separate Fabric item in a separate workspace with separate capacity allocation. Executive model on the most reliable capacity; analyst workloads isolated so their exploration didn't affect production.</p>
+
+<h4>The DAX Consequence</h4>
+<p>Persona-based architecture also simplifies your DAX dramatically. When the executive model has only 15 measures over pre-aggregated data, every measure is fast. You stop writing defensive DAX to handle scenarios that don't exist in the executive context.</p>
+
+<div class="art-tip">🎯 <strong>Try This:</strong> Take your largest semantic model. List every measure. Tag each one: Executive, Operational, or Analyst. If more than 30% are Analyst-level measures appearing in an Executive report, you have a persona problem.</div>
+
+<p>After implementing persona-based architecture at BD, executive dashboard load times dropped to under 2 seconds. Have you tried separating your semantic layers by persona?</p>
+<p><em>#PowerBI #DAX #SemanticModeling #MicrosoftFabric #DataArchitecture #EnterpriseBI</em></p>
+</div>
+        <div class="art-panel-footer">
+          <div class="art-panel-nav">
+            <button class="art-nav-btn" onclick="openArticle('a3')" aria-label="Previous">← Prev</button>
+            <button class="art-nav-btn art-nav-li" onclick="window.open('https://www.linkedin.com/in/phanindra-gaddam-0886b153/','_blank')">Follow on LinkedIn →</button>
+            <button class="art-nav-btn" onclick="openArticle('a5')" aria-label="Next">Next →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="art-panel" id="panel-a5">
+    <div class="art-panel-inner">
+      <div class="art-panel-header">
+        <button class="art-close" onclick="closeArticle()" aria-label="Close">✕</button>
+        <div class="art-panel-topic">Direct Lake</div>
+        <div class="art-counter">5 / 6</div>
+      </div>
+      <div class="art-panel-body">
+        <h1 class="art-panel-title">Direct Lake vs Import vs Live Connect: The Decision Framework I Use in Every Enterprise Engagement</h1>
+        <div class="art-panel-meta">
+          <span>Phanindra Gaddam</span>
+          <span>·</span>
+          <span>6 min read</span>
+          <span>·</span>
+          <span>Power BI Architect</span>
+        </div>
+        <div class="art-panel-divider"></div>
+        <div class="art-panel-content">
+<p>Every few weeks someone asks me: "Should I use Direct Lake or Import mode?" The honest answer is: it depends — but not in the vague, unhelpful way that answer usually means.</p>
+<p>After designing semantic models across Fabric, Databricks, Snowflake, and SQL Server environments, I've developed a decision framework I use consistently. Here it is.</p>
+
+<h3>The Quick Reference</h3>
+<table class="art-table">
+<thead><tr><th>Mode</th><th>Best For</th><th>Watch Out For</th><th>When to Avoid</th></tr></thead>
+<tbody>
+<tr><td><strong>Import</strong></td><td>Executive dashboards, KPI models, &lt;1B rows, complex DAX</td><td>Data freshness lag, model size limits, refresh capacity</td><td>Real-time requirements, very large tables</td></tr>
+<tr><td><strong>Direct Lake</strong></td><td>Large Fabric Lakehouses, Delta tables, near-real-time, Fabric-native</td><td>Fallback to DirectQuery, DAX limitations, Fabric-only</td><td>Non-Fabric sources, highly complex DAX patterns</td></tr>
+<tr><td><strong>DirectQuery</strong></td><td>Real-time data, regulatory requirements, huge data volumes</td><td>Slow if DAX not optimised, gateway dependency</td><td>Complex DAX, high concurrency without aggregations</td></tr>
+<tr><td><strong>Live Connect</strong></td><td>Centralised reuse of shared semantic models</td><td>No custom measures, source model dependency</td><td>When you need model customisation</td></tr>
+</tbody>
+</table>
+
+<h3>The Four Questions I Ask</h3>
+
+<h4>1. How fresh does the data need to be?</h4>
+<p>If the answer is 'within minutes', Import is off the table for most large models. If 'within an hour or nightly', Import with incremental refresh is usually the best performance choice. If 'real-time', DirectQuery or Direct Lake with near-real-time refresh.</p>
+
+<h4>2. Where does the data live?</h4>
+<p>Direct Lake is only available for data in Microsoft Fabric Lakehouses (OneLake). If your data is in Databricks, Snowflake, or on-premises SQL Server, Direct Lake is not an option. This eliminates the choice for many hybrid architectures.</p>
+
+<h4>3. How complex is your DAX?</h4>
+<p>Import mode handles the most complex DAX patterns. Direct Lake handles most standard patterns but some complex filter contexts can trigger DirectQuery fallback. If your model has heavy time intelligence on very large tables, test Direct Lake thoroughly before committing.</p>
+
+<h4>4. What is the concurrency profile?</h4>
+<p>How many users are hitting the report simultaneously? Import mode is extremely efficient under high concurrency because data is in-memory. DirectQuery under high concurrency can hammer your source system.</p>
+
+<blockquote>There is no universally 'best' connectivity mode. There is only the right mode for your specific data volume, freshness requirement, DAX complexity, and user concurrency profile.</blockquote>
+
+<div class="art-tip">🔧 <strong>My Default for New Fabric Projects:</strong> Direct Lake for operational and analytical models on Fabric Lakehouses. Import (with incremental refresh) for executive summary models. This gives you freshness at the operational layer and performance at the executive layer.</div>
+
+<p><em>#PowerBI #DirectLake #MicrosoftFabric #SemanticModel #DataArchitecture #DAX</em></p>
+</div>
+        <div class="art-panel-footer">
+          <div class="art-panel-nav">
+            <button class="art-nav-btn" onclick="openArticle('a4')" aria-label="Previous">← Prev</button>
+            <button class="art-nav-btn art-nav-li" onclick="window.open('https://www.linkedin.com/in/phanindra-gaddam-0886b153/','_blank')">Follow on LinkedIn →</button>
+            <button class="art-nav-btn" onclick="openArticle('a6')" aria-label="Next">Next →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="art-panel" id="panel-a6">
+    <div class="art-panel-inner">
+      <div class="art-panel-header">
+        <button class="art-close" onclick="closeArticle()" aria-label="Close">✕</button>
+        <div class="art-panel-topic">Open Source · Microsoft Fabric</div>
+        <div class="art-counter">6 / 6</div>
+      </div>
+      <div class="art-panel-body">
+        <h1 class="art-panel-title">FUAM: The Tenant Monitoring Tool Every Fabric Admin Needs</h1>
+        <div class="art-panel-meta">
+          <span>Phanindra Gaddam</span>
+          <span>·</span>
+          <span>12 min read</span>
+          <span>·</span>
+          <span>Power BI Architect</span>
+        </div>
+        <div class="art-panel-divider"></div>
+        <div class="art-panel-content">
+<p>If you're a Power BI or Fabric administrator for a large organisation, you're probably monitoring your tenant across at least five different places: the Admin Portal, the Capacity Metrics App, Workspace Monitoring, the Purview Hub, and the Usage Metrics Report.</p>
+<p>That fragmentation is exactly the problem FUAM (Fabric Unified Admin Monitoring) was built to solve. I recently deployed it for enterprise use and documented the full process.</p>
+
+<h3>What FUAM Actually Does</h3>
+<p>FUAM is a free, open-source solution built entirely on Microsoft Fabric. It pulls data from the Power BI REST APIs and centralises it into a Fabric Lakehouse, then surfaces everything through a Power BI report. One place to see:</p>
+<ul>
+<li>Every workspace, capacity, and user in your tenant</li>
+<li>Activity logs — who opened which report, when, and how often</li>
+<li>Full inventory of all reports, datasets, dashboards, and Fabric items (via Scanner API)</li>
+<li>Tenant settings snapshots</li>
+<li>Capacity Refreshable telemetry and refresh history</li>
+<li>Git connection status for all workspaces</li>
+</ul>
+
+<blockquote>FUAM isn't a Microsoft product — it's community-built. But for enterprise Fabric admins, it fills a genuine gap that Microsoft hasn't addressed with a single first-party solution.</blockquote>
+
+<h3>The Architecture in Plain English</h3>
+<p>FUAM uses three Fabric building blocks: Pipelines call the Microsoft REST APIs on a schedule; Notebooks transform the raw data; the Lakehouse stores everything in Delta Parquet. A Semantic Model with DirectLake connects to the Lakehouse, and a Power BI report surfaces the insights.</p>
+<p>The deployment is automated via a single Jupyter notebook. You run it once and it creates every Fabric item automatically.</p>
+
+<h3>What Caught Me Out During Deployment</h3>
+
+<h4>Service Principal Permissions Are Precise</h4>
+<p>The Service Principal needs exactly two tenant admin settings enabled: 'Service principals can use Fabric APIs' and 'Service principals can access read-only admin APIs'. Do not add other API permissions in Azure Entra ID — the documentation specifically warns that additional permissions can cause pipeline errors.</p>
+
+<h4>The Activity API Has Edge Cases</h4>
+<p>Microsoft's Activity API occasionally rejects requests for the full 30-day window. If your Load_Activities pipeline step fails, set the <code>activity_days_in_scope</code> parameter to 28 and re-run.</p>
+
+<h4>Semantic Model Refresh Order Matters</h4>
+<p>The pipeline populates the Lakehouse, but the Power BI report reads from the Semantic Model. Schedule the semantic model refresh 30–60 minutes after the pipeline completes — not simultaneously. I learned this the hard way when the first scheduled run showed stale data.</p>
+
+<h4>Secret Expiry Will Break Everything Eventually</h4>
+<p>The Service Principal client secret has an expiry date. Set a calendar reminder to renew it before it expires and update both Fabric connections when you do.</p>
+
+<h3>The Business Value</h3>
+<p>Once deployed, FUAM gives Fabric administrators a historical, auditable view of everything happening in their tenant. Questions that used to require manual investigation now have immediate answers:</p>
+<ul>
+<li>Which reports haven't been viewed in 90 days? (Report rationalisation)</li>
+<li>Which datasets are refreshing but nobody is using? (Capacity waste)</li>
+<li>Which workspaces have no governance standards applied? (Security audit)</li>
+<li>What changed in tenant settings last month? (Change management)</li>
+</ul>
+
+<div class="art-tip">📖 <strong>Get Started:</strong> My complete enterprise deployment guide — including Service Principal setup, pipeline parameters, scheduling, and troubleshooting — is available on my GitHub linked below.</div>
+
+<p>Are you running FUAM or a similar monitoring solution? I'd love to compare notes on what metrics matter most for your governance reporting.</p>
+<p><em>#MicrosoftFabric #PowerBI #FabricAdmin #FUAM #DataGovernance #OpenSource</em></p>
+</div>
+        <div class="art-panel-footer">
+          <div class="art-panel-nav">
+            <button class="art-nav-btn" onclick="openArticle('a5')" aria-label="Previous">← Prev</button>
+            <button class="art-nav-btn art-nav-li" onclick="window.open('https://www.linkedin.com/in/phanindra-gaddam-0886b153/','_blank')">Follow on LinkedIn →</button>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <!-- CONTACT -->
 <section id="contact">
