@@ -8,7 +8,10 @@
 <meta property="og:description" content="Enterprise BI Architect · Microsoft Fabric · Databricks · 13+ Years"/>
 <meta property="og:url" content="https://phang7.github.io/PBI"/>
 <title>Phanindra Gaddam — Power BI Architect</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/></noscript>
 <style>
 :root{
   --bg:#070B14;--surface:#0D1525;--surface2:#111c33;
@@ -220,9 +223,9 @@ footer{border-top:1px solid var(--border);padding:2.5rem 0;position:relative;z-i
 .back-top:hover{border-color:var(--accent);background:rgba(59,158,255,.1)}
 
 /* REVEAL */
-.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
-.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
 
 /* RESPONSIVE */
 @media(max-width:960px){
@@ -698,21 +701,33 @@ window.addEventListener('scroll', () => {
 });
 
 // ── REVEAL ON SCROLL ─────────────────────────────────────────
-const ro = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.08 });
-document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
-// Reveal elements already in viewport on page load
-setTimeout(() => {
-  document.querySelectorAll('.reveal').forEach(el => {
+function revealVisible() {
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
     const r = el.getBoundingClientRect();
-    if(r.top < window.innerHeight) el.classList.add('visible');
+    if(r.top < window.innerHeight + 60) el.classList.add('visible');
   });
-}, 80);
-// Safety net: reveal everything after 1.5s
+}
+
+// Reveal immediately on load (handles hero section)
+revealVisible();
+setTimeout(revealVisible, 100);
+setTimeout(revealVisible, 400);
+
+// Fallback: reveal ALL after 800ms no matter what
 setTimeout(() => {
   document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
-}, 1500);
+}, 800);
+
+// Reveal on scroll
+window.addEventListener('scroll', revealVisible, { passive: true });
+
+// IntersectionObserver as bonus layer
+if('IntersectionObserver' in window) {
+  const ro = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+}
 
 // ── MOBILE MENU ──────────────────────────────────────────────
 function toggleMenu() {
