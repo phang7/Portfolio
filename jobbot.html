@@ -3,827 +3,428 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>PG Job Scanner — Power BI Architect</title>
+<title>PG Job Scanner — Power BI Roles</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-:root{
-  --bg:#06080F;--sur:#0C1220;--sur2:#111827;--sur3:#1a2235;
-  --bdr:rgba(100,180,255,.1);--bdr2:rgba(100,180,255,.18);
-  --acc:#3B9EFF;--ac2:#00E5C3;--ac3:#F5C842;--red:#FF5E5E;
-  --txt:#DDE8FF;--mut:#6B7FA8;--r:8px;
-}
+:root{--bg:#06080F;--sur:#0C1220;--sur2:#111827;--sur3:#1a2235;--bdr:rgba(100,180,255,.1);--bdr2:rgba(100,180,255,.2);--acc:#3B9EFF;--ac2:#00E5C3;--ac3:#F5C842;--red:#FF5E5E;--txt:#DDE8FF;--mut:#6B7FA8}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 70% 0%,rgba(59,158,255,.05),transparent),radial-gradient(ellipse 60% 40% at 10% 80%,rgba(0,229,195,.04),transparent);pointer-events:none;z-index:0}
-
-/* NAV */
-nav{position:sticky;top:0;z-index:50;background:rgba(6,8,15,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);padding:.9rem 2rem;display:flex;align-items:center;justify-content:space-between}
-.nav-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--txt)}
-.nav-brand span{color:var(--acc)}
-.nav-status{display:flex;align-items:center;gap:.5rem;font-family:'DM Mono',monospace;font-size:.7rem;color:var(--mut)}
-.status-dot{width:6px;height:6px;border-radius:50%;background:var(--ac2);animation:pulse 2s ease infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
-
-/* LAYOUT */
-.page{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:2rem}
+body{background:var(--bg);color:var(--txt);font-family:"DM Sans",sans-serif;font-weight:300;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 70% 0%,rgba(59,158,255,.05),transparent),radial-gradient(ellipse 60% 40% at 10% 80%,rgba(0,229,195,.04),transparent);pointer-events:none;z-index:0}
+nav{position:sticky;top:0;z-index:50;background:rgba(6,8,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);padding:.85rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:"Syne",sans-serif;font-weight:800;font-size:1.05rem;color:var(--txt);text-decoration:none}
+.brand span{color:var(--acc)}
+.back-link{font-family:"DM Mono",monospace;font-size:.7rem;color:var(--mut);text-decoration:none;transition:color .2s}
+.back-link:hover{color:var(--acc)}
+.page{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:1.5rem 2rem}
 
 /* SEARCH PANEL */
-.search-panel{background:var(--sur);border:1px solid var(--bdr);border-radius:12px;padding:1.8rem;margin-bottom:2rem;position:relative;overflow:hidden}
-.search-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--acc),var(--ac2))}
-.panel-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:.3rem}
-.panel-sub{font-size:.83rem;color:var(--mut);margin-bottom:1.4rem}
-.search-grid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:1rem;align-items:end}
-.fg{display:flex;flex-direction:column;gap:.4rem}
-label{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
-input,select{background:var(--sur2);border:1px solid var(--bdr);border-radius:var(--r);padding:.65rem 1rem;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s;-webkit-appearance:none;width:100%}
-input:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(59,158,255,.1)}
+.spanel{background:var(--sur);border:1px solid var(--bdr);border-radius:12px;padding:1.8rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.spanel::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--acc),var(--ac2))}
+.ptit{font-family:"Syne",sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:.25rem}
+.psub{font-size:.82rem;color:var(--mut);margin-bottom:1.2rem}
+.sgrid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:.9rem;align-items:end}
+.fg{display:flex;flex-direction:column;gap:.35rem}
+label{font-family:"DM Mono",monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+select,input{background:var(--sur2);border:1px solid var(--bdr);border-radius:8px;padding:.62rem .9rem;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:.87rem;outline:none;transition:border-color .2s;-webkit-appearance:none;width:100%}
+select:focus,input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(59,158,255,.1)}
 select option{background:var(--sur2)}
-.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.68rem 1.5rem;border-radius:var(--r);font-family:'DM Mono',monospace;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border:none;transition:all .2s;white-space:nowrap}
-.btn-primary{background:var(--acc);color:#000;font-weight:500}
-.btn-primary:hover{background:#6ab8ff;transform:translateY(-1px)}
-.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.btn-outline{background:transparent;color:var(--txt);border:1px solid var(--bdr2)}
-.btn-outline:hover{border-color:var(--acc);color:var(--acc)}
-.btn-sm{padding:.45rem 1rem;font-size:.7rem}
-.btn-teal{background:var(--ac2);color:#000;font-weight:500}
-.btn-teal:hover{background:#33ffe0}
-.btn-gold{background:var(--ac3);color:#000;font-weight:500}
-.btn-gold:hover{background:#ffd84d}
+.btn{display:inline-flex;align-items:center;gap:.45rem;padding:.65rem 1.4rem;border-radius:8px;font-family:"DM Mono",monospace;font-size:.76rem;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;border:none;transition:all .2s;white-space:nowrap}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.bp{background:var(--acc);color:#000;font-weight:500}.bp:hover:not(:disabled){background:#6ab8ff;transform:translateY(-1px)}
+.bo{background:transparent;color:var(--txt);border:1px solid var(--bdr2)}.bo:hover{border-color:var(--acc);color:var(--acc)}
+.bt{background:var(--ac2);color:#000;font-weight:500}.bt:hover{background:#33ffe0}
+.bg{background:var(--ac3);color:#000;font-weight:500}.bg:hover{background:#ffd84d}
+.bsm{padding:.4rem .9rem;font-size:.7rem}
 
-/* KEYWORD TAGS */
-.tag-row{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.8rem}
-.kw-tag{display:flex;align-items:center;gap:.3rem;font-family:'DM Mono',monospace;font-size:.68rem;padding:.22rem .65rem;border-radius:100px;background:rgba(59,158,255,.1);color:var(--acc);border:1px solid rgba(59,158,255,.2)}
-.kw-tag.active{background:rgba(59,158,255,.2);border-color:rgba(59,158,255,.4)}
+/* FILTERS */
+.filter-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.6rem}
+.filter-title{font-family:"Syne",sans-serif;font-weight:700;font-size:.95rem;color:var(--txt)}
+.filter-btns{display:flex;gap:.4rem;flex-wrap:wrap}
 
-/* STATS BAR */
-.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
-.stat-card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:1rem 1.2rem;text-align:center}
-.stat-num{font-family:'Syne',sans-serif;font-weight:700;font-size:1.8rem;color:var(--acc);line-height:1}
-.stat-num.green{color:var(--ac2)}
-.stat-num.gold{color:var(--ac3)}
-.stat-num.red{color:var(--red)}
-.stat-lbl{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;margin-top:.3rem}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;margin-bottom:1.5rem}
+.sc{background:var(--sur);border:1px solid var(--bdr);border-radius:8px;padding:.9rem 1.1rem;text-align:center}
+.sn{font-family:"Syne",sans-serif;font-weight:700;font-size:1.6rem;line-height:1}
+.sn.blue{color:var(--acc)}.sn.green{color:var(--ac2)}.sn.gold{color:var(--ac3)}
+.sl{font-family:"DM Mono",monospace;font-size:.62rem;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;margin-top:.25rem}
 
-/* RESULTS */
-.results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
-.results-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem}
-.filter-row{display:flex;gap:.5rem}
+/* JOB CARDS */
+.jcard{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;padding:1.3rem;margin-bottom:.7rem;transition:border-color .2s,transform .15s;position:relative;overflow:hidden;cursor:default}
+.jcard:hover{border-color:var(--bdr2);transform:translateY(-2px)}
+.jcard.hi{border-left:3px solid var(--ac2)}
+.jcard.me{border-left:3px solid var(--ac3)}
+.jh{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.6rem;flex-wrap:wrap}
+.jtit{font-family:"Syne",sans-serif;font-weight:700;font-size:.97rem;color:var(--txt);margin-bottom:.18rem;line-height:1.3}
+.jco{font-size:.83rem;color:var(--acc);font-weight:500}
+.jmeta{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.7rem}
+.mp{font-family:"DM Mono",monospace;font-size:.63rem;padding:.16rem .55rem;border-radius:100px;background:rgba(255,255,255,.05);color:var(--mut);border:1px solid var(--bdr)}
+.mp.h{background:rgba(0,229,195,.08);color:var(--ac2);border-color:rgba(0,229,195,.2)}
+.mp.s{background:rgba(245,200,66,.08);color:var(--ac3);border-color:rgba(245,200,66,.2)}
+.mp.r{background:rgba(59,158,255,.08);color:var(--acc);border-color:rgba(59,158,255,.2)}
+.jdesc{font-size:.82rem;color:var(--mut);line-height:1.6;margin-bottom:.9rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.jacts{display:flex;gap:.45rem;flex-wrap:wrap}
+.mbadge{font-family:"DM Mono",monospace;font-size:.66rem;padding:.22rem .65rem;border-radius:100px;flex-shrink:0}
+.mhi{background:rgba(0,229,195,.1);color:var(--ac2);border:1px solid rgba(0,229,195,.22)}
+.mme{background:rgba(245,200,66,.1);color:var(--ac3);border:1px solid rgba(245,200,66,.22)}
+.mlo{background:rgba(255,94,94,.08);color:var(--red);border:1px solid rgba(255,94,94,.15)}
 
-.job-card{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;padding:1.4rem;margin-bottom:.8rem;transition:border-color .2s,transform .15s;position:relative;overflow:hidden}
-.job-card:hover{border-color:var(--bdr2);transform:translateY(-2px)}
-.job-card.high-match{border-color:rgba(0,229,195,.3)}
-.job-card.high-match::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ac2)}
-.job-card.medium-match::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ac3)}
-.job-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.7rem}
-.job-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:var(--txt);margin-bottom:.2rem;line-height:1.3}
-.job-company{font-size:.85rem;color:var(--acc);font-weight:500}
-.job-meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.8rem}
-.meta-pill{font-family:'DM Mono',monospace;font-size:.65rem;padding:.18rem .6rem;border-radius:100px;background:rgba(255,255,255,.05);color:var(--mut);border:1px solid var(--bdr)}
-.meta-pill.h1b{background:rgba(0,229,195,.08);color:var(--ac2);border-color:rgba(0,229,195,.2)}
-.meta-pill.salary{background:rgba(245,200,66,.08);color:var(--ac3);border-color:rgba(245,200,66,.2)}
-.meta-pill.remote{background:rgba(59,158,255,.08);color:var(--acc);border-color:rgba(59,158,255,.2)}
-.job-desc{font-size:.83rem;color:var(--mut);line-height:1.6;margin-bottom:1rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.job-actions{display:flex;gap:.5rem;flex-wrap:wrap}
-.match-badge{display:inline-flex;align-items:center;gap:.3rem;font-family:'DM Mono',monospace;font-size:.68rem;padding:.25rem .7rem;border-radius:100px;flex-shrink:0;margin-top:.2rem}
-.match-high{background:rgba(0,229,195,.12);color:var(--ac2);border:1px solid rgba(0,229,195,.25)}
-.match-med{background:rgba(245,200,66,.1);color:var(--ac3);border:1px solid rgba(245,200,66,.2)}
-.match-low{background:rgba(255,94,94,.08);color:var(--red);border:1px solid rgba(255,94,94,.15)}
+/* EMPTY / LOADING */
+.empty{text-align:center;padding:3.5rem 2rem;color:var(--mut)}
+.empty-icon{font-size:2.5rem;margin-bottom:1rem;opacity:.4}
+.pulse-row{display:flex;flex-direction:column;gap:.7rem;margin-top:.5rem}
+.pulse-card{height:120px;background:var(--sur);border:1px solid var(--bdr);border-radius:10px;animation:shimmer 1.5s ease infinite}
+@keyframes shimmer{0%,100%{opacity:.4}50%{opacity:.8}}
 
 /* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:100;opacity:0;pointer-events:none;transition:opacity .3s}
-.modal-overlay.open{opacity:1;pointer-events:all}
-.modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-48%);width:min(720px,95vw);max-height:85vh;background:var(--sur);border:1px solid var(--bdr2);border-radius:14px;z-index:101;display:flex;flex-direction:column;overflow:hidden;transition:transform .3s}
-.modal-overlay.open .modal{transform:translate(-50%,-50%)}
-.modal-header{padding:1.2rem 1.5rem;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:relative}
-.modal-header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--acc),var(--ac2))}
-.modal-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem}
-.modal-close{background:rgba(255,255,255,.06);border:1px solid var(--bdr);border-radius:50%;width:28px;height:28px;color:var(--mut);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:all .2s}
-.modal-close:hover{background:rgba(255,94,94,.15);color:var(--red);border-color:var(--red)}
-.modal-body{padding:1.5rem;overflow-y:auto;flex:1}
-.modal-body::-webkit-scrollbar{width:4px}
-.modal-body::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
-.modal-tabs{display:flex;gap:.3rem;margin-bottom:1.2rem;background:var(--sur2);border-radius:var(--r);padding:.3rem}
-.tab{padding:.45rem 1rem;border-radius:6px;font-family:'DM Mono',monospace;font-size:.72rem;cursor:pointer;color:var(--mut);transition:all .2s;border:none;background:transparent;text-transform:uppercase;letter-spacing:.06em}
-.tab.active{background:var(--acc);color:#000;font-weight:500}
-.tab-panel{display:none}
-.tab-panel.active{display:block}
-textarea.draft{width:100%;background:var(--sur2);border:1px solid var(--bdr);border-radius:var(--r);padding:1rem;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.85rem;line-height:1.7;resize:vertical;min-height:300px;outline:none;transition:border-color .2s}
-textarea.draft:focus{border-color:var(--acc)}
-.info-row{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1rem}
-.info-item{display:flex;gap:.8rem;padding:.7rem;background:var(--sur2);border-radius:var(--r);border:1px solid var(--bdr)}
-.info-lbl{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--mut);text-transform:uppercase;width:100px;flex-shrink:0;padding-top:.1rem}
-.info-val{font-size:.85rem;color:var(--txt);line-height:1.5}
-.info-val a{color:var(--acc)}
-.contact-box{background:rgba(59,158,255,.05);border:1px solid rgba(59,158,255,.15);border-radius:var(--r);padding:1rem;margin-bottom:1rem;font-size:.85rem;color:var(--mut);line-height:1.6}
-.contact-box strong{color:var(--txt)}
-.modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--bdr);display:flex;justify-content:flex-end;gap:.6rem;flex-shrink:0}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.76);backdrop-filter:blur(8px);z-index:100;opacity:0;pointer-events:none;transition:opacity .3s}
+.ov.open{opacity:1;pointer-events:all}
+.modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-46%);width:min(740px,95vw);max-height:88vh;background:var(--sur);border:1px solid var(--bdr2);border-radius:14px;z-index:101;display:flex;flex-direction:column;overflow:hidden;transition:transform .3s}
+.ov.open .modal{transform:translate(-50%,-50%)}
+.mhdr{padding:1.1rem 1.4rem;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:relative}
+.mhdr::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--acc),var(--ac2))}
+.mtit{font-family:"Syne",sans-serif;font-weight:700;font-size:.97rem;padding-right:1rem;line-height:1.3}
+.mcls{background:rgba(255,255,255,.06);border:1px solid var(--bdr);border-radius:50%;width:28px;height:28px;color:var(--mut);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;transition:all .2s}
+.mcls:hover{background:rgba(255,94,94,.15);color:var(--red);border-color:var(--red)}
+.mbody{padding:1.4rem;overflow-y:auto;flex:1}
+.mbody::-webkit-scrollbar{width:4px}
+.mbody::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
+.tabs{display:flex;gap:.3rem;margin-bottom:1.1rem;background:var(--sur2);border-radius:8px;padding:.28rem}
+.tab{padding:.42rem .9rem;border-radius:6px;font-family:"DM Mono",monospace;font-size:.7rem;cursor:pointer;color:var(--mut);transition:all .2s;border:none;background:transparent;text-transform:uppercase;letter-spacing:.05em}
+.tab.on{background:var(--acc);color:#000;font-weight:500}
+.tp{display:none}
+.tp.on{display:block}
+.irow{display:flex;flex-direction:column;gap:.55rem;margin-bottom:.8rem}
+.ii{display:flex;gap:.8rem;padding:.65rem;background:var(--sur2);border-radius:8px;border:1px solid var(--bdr)}
+.il{font-family:"DM Mono",monospace;font-size:.66rem;color:var(--mut);text-transform:uppercase;width:95px;flex-shrink:0;padding-top:.1rem}
+.iv{font-size:.83rem;color:var(--txt);line-height:1.5}
+.iv a{color:var(--acc)}
+textarea.dr{width:100%;background:var(--sur2);border:1px solid var(--bdr);border-radius:8px;padding:.9rem;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:.84rem;line-height:1.72;resize:vertical;min-height:320px;outline:none;transition:border-color .2s}
+textarea.dr:focus{border-color:var(--acc)}
+.cbox{background:rgba(59,158,255,.05);border:1px solid rgba(59,158,255,.15);border-radius:8px;padding:.95rem;margin-bottom:.9rem;font-size:.83rem;color:var(--mut);line-height:1.65}
+.cbox strong{color:var(--txt)}
+.mft{padding:.9rem 1.4rem;border-top:1px solid var(--bdr);display:flex;justify-content:flex-end;gap:.55rem;flex-shrink:0}
+.draft-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:.7rem}
+.draft-note{font-size:.8rem;color:var(--mut)}
 
-/* LOADING */
-.loading{text-align:center;padding:4rem 2rem}
-.spinner{width:40px;height:40px;border:3px solid var(--bdr);border-top-color:var(--acc);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{font-family:'DM Mono',monospace;font-size:.8rem;color:var(--mut)}
-
-/* EMPTY */
-.empty{text-align:center;padding:4rem 2rem;color:var(--mut)}
-.empty-icon{font-size:3rem;margin-bottom:1rem;opacity:.4}
-
-/* PROGRESS */
-.progress-bar{height:3px;background:var(--bdr);border-radius:2px;overflow:hidden;margin-top:.8rem}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--acc),var(--ac2));border-radius:2px;width:0%;transition:width .4s ease}
-
-@media(max-width:768px){
-  .search-grid{grid-template-columns:1fr}
-  .stats-bar{grid-template-columns:1fr 1fr}
-  .job-header{flex-direction:column}
-}
+@media(max-width:768px){.sgrid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.jh{flex-direction:column}.filter-bar{flex-direction:column;align-items:flex-start}}
 </style>
 </head>
 <body>
-
 <nav>
-  <div class="nav-brand">PG<span>.</span>JobScanner</div>
-  <div class="nav-status">
-    <span class="status-dot"></span>
-    <span id="navStatus">Ready to scan</span>
-  </div>
+  <a href="index.html" class="brand">PG<span>.</span>dev</a>
+  <a href="index.html" class="back-link">&#8592; Back to Portfolio</a>
 </nav>
 
 <div class="page">
-
-  <!-- SEARCH PANEL -->
-  <div class="search-panel">
-    <div class="panel-title">Power BI Architect Job Scanner</div>
-    <div class="panel-sub">Finds matching roles across multiple sources · AI-scores each match · Generates tailored outreach</div>
-    <div class="search-grid">
+  <div class="spanel">
+    <div class="ptit">Power BI Job Scanner</div>
+    <div class="psub">25 curated roles · AI-scored against your profile · Tailored cover letters &amp; outreach emails · Works on any device</div>
+    <div class="sgrid">
       <div class="fg">
-        <label>Primary Role</label>
-        <select id="roleSelect">
-          <option>All Power BI Roles</option>
-          <option>Power BI Architect</option>
-          <option>Microsoft Fabric Architect</option>
-          <option>Senior Power BI Developer</option>
-          <option>Power BI Engineer</option>
-          <option>BI Architect / Lead</option>
-          <option>Data Analytics Manager</option>
-          <option>Power BI Consultant</option>
-          <option>Fabric Analytics Engineer</option>
-          <option>Data Engineer (Power BI)</option>
-          <option>BI Developer</option>
-          <option>Analytics Lead</option>
+        <label>Role Category</label>
+        <select id="roleFilter">
+          <option value="all">All Power BI Roles (25)</option>
+          <option value="arch">Architect / Lead</option>
+          <option value="dev">Developer / Engineer</option>
+          <option value="consult">Consultant</option>
+          <option value="manager">Analytics Manager / Lead</option>
+          <option value="fabric">Fabric / Specialist</option>
         </select>
       </div>
       <div class="fg">
-        <label>Location</label>
-        <select id="locationSelect">
-          <option>Remote</option>
-          <option>New York, NY</option>
-          <option>New Jersey</option>
-          <option>Anywhere USA</option>
-          <option>Hybrid (NJ/NYC Area)</option>
+        <label>Match Level</label>
+        <select id="matchFilter">
+          <option value="all">All Matches</option>
+          <option value="high">Strong Match Only</option>
+          <option value="medium">Good Match Only</option>
         </select>
       </div>
       <div class="fg">
-        <label>H1B Filter</label>
-        <select id="h1bSelect">
-          <option value="sponsor">Sponsors H1B / Transfer</option>
-          <option value="any">Any (will check manually)</option>
+        <label>H1B Sponsorship</label>
+        <select id="h1bFilter">
+          <option value="all">All Companies</option>
+          <option value="yes">Confirmed H1B Sponsors Only</option>
         </select>
       </div>
-      <button class="btn btn-primary" id="scanBtn" onclick="startScan()">
-        ⚡ Scan Jobs
-      </button>
-    </div>
-    <div class="tag-row" id="kwTags"></div>
-    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-  </div>
-
-  <!-- STATS -->
-  <div class="stats-bar">
-    <div class="stat-card">
-      <div class="stat-num" id="statTotal">—</div>
-      <div class="stat-lbl">Jobs Found</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num green" id="statHigh">—</div>
-      <div class="stat-lbl">Strong Match</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num gold" id="statH1b">—</div>
-      <div class="stat-lbl">H1B Sponsors</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num" id="statSalary">—</div>
-      <div class="stat-lbl">Avg Salary</div>
+      <button class="btn bp" onclick="runScan()">&#9889; Scan Jobs</button>
     </div>
   </div>
 
-  <!-- RESULTS -->
-  <div>
-    <div class="results-header">
-      <div class="results-title" id="resultsTitle">Click "Scan Jobs" to start</div>
-      <div class="filter-row">
-        <button class="btn btn-outline btn-sm" onclick="filterJobs('all')" id="f-all">All</button>
-        <button class="btn btn-outline btn-sm" onclick="filterJobs('high')" id="f-high">Strong Match</button>
-        <button class="btn btn-outline btn-sm" onclick="filterJobs('h1b')" id="f-h1b">H1B Sponsor</button>
-      </div>
-    </div>
-    <div id="jobResults">
-      <div class="empty">
-        <div class="empty-icon">🔍</div>
-        <div>Configure your search above and click Scan Jobs</div>
-        <div style="font-size:.8rem;margin-top:.5rem;color:var(--mut)">AI will score each role against your Power BI Architect profile</div>
-      </div>
+  <div class="stats">
+    <div class="sc"><div class="sn blue" id="stTotal">25</div><div class="sl">Total Roles</div></div>
+    <div class="sc"><div class="sn green" id="stHigh">14</div><div class="sl">Strong Match</div></div>
+    <div class="sc"><div class="sn gold" id="stH1b">23</div><div class="sl">H1B Sponsors</div></div>
+    <div class="sc"><div class="sn" id="stSal">$134K</div><div class="sl">Avg Salary</div></div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="filter-title" id="rTitle">Showing all 25 Power BI roles</div>
+    <div class="filter-btns">
+      <button class="btn bo bsm" onclick="quickFilter('all')" id="qf-all">All</button>
+      <button class="btn bo bsm" onclick="quickFilter('high')" id="qf-high">&#9650; Strong Match</button>
+      <button class="btn bo bsm" onclick="quickFilter('h1b')" id="qf-h1b">&#10003; H1B Sponsor</button>
+      <button class="btn bo bsm" onclick="quickFilter('nj')" id="qf-nj">&#128205; NJ / Remote</button>
     </div>
   </div>
 
+  <div id="results"></div>
 </div>
 
 <!-- MODAL -->
-<div class="modal-overlay" id="modalOverlay">
+<div class="ov" id="ov">
   <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title" id="modalTitle">Job Details</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="mhdr">
+      <div class="mtit" id="mtit">Job Details</div>
+      <button class="mcls" onclick="closeM()">&#10005;</button>
     </div>
-    <div class="modal-body">
-      <div class="modal-tabs">
-        <button class="tab active" onclick="switchTab('details')">Details</button>
-        <button class="tab" onclick="switchTab('cover')">Cover Letter</button>
-        <button class="tab" onclick="switchTab('email')">Outreach Email</button>
-        <button class="tab" onclick="switchTab('contact')">How to Find Contact</button>
+    <div class="mbody">
+      <div class="tabs">
+        <button class="tab on" onclick="switchTab(this,'td')">Details</button>
+        <button class="tab" onclick="switchTab(this,'tc')">Cover Letter</button>
+        <button class="tab" onclick="switchTab(this,'te')">Outreach Email</button>
+        <button class="tab" onclick="switchTab(this,'tt')">Find Contact</button>
       </div>
-      <div class="tab-panel active" id="tab-details">
-        <div class="info-row" id="jobInfoRows"></div>
-      </div>
-      <div class="tab-panel" id="tab-cover">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem">
-          <div style="font-size:.83rem;color:var(--mut)">Tailored to this specific role using your profile</div>
-          <button class="btn btn-outline btn-sm" onclick="regenerateDraft('cover')">↻ Regenerate</button>
+      <div class="tp on" id="td"><div class="irow" id="drows"></div></div>
+      <div class="tp" id="tc">
+        <div class="draft-hdr">
+          <div class="draft-note">Tailored to this role — edit as needed before sending</div>
+          <button class="btn bo bsm" onclick="buildDraft('cover')">&#8635; Refresh</button>
         </div>
-        <div id="coverLoading" style="text-align:center;padding:2rem;display:none"><div class="spinner"></div><div class="loading-text">Drafting cover letter...</div></div>
-        <textarea class="draft" id="coverDraft" placeholder="Click a job card then open this tab to generate..."></textarea>
+        <textarea class="dr" id="coverTA"></textarea>
       </div>
-      <div class="tab-panel" id="tab-email">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem">
-          <div style="font-size:.83rem;color:var(--mut)">Short, direct recruiter outreach email</div>
-          <button class="btn btn-outline btn-sm" onclick="regenerateDraft('email')">↻ Regenerate</button>
+      <div class="tp" id="te">
+        <div class="draft-hdr">
+          <div class="draft-note">Short cold outreach — copy, find recruiter email, send</div>
+          <button class="btn bo bsm" onclick="buildDraft('email')">&#8635; Refresh</button>
         </div>
-        <div id="emailLoading" style="text-align:center;padding:2rem;display:none"><div class="spinner"></div><div class="loading-text">Drafting outreach email...</div></div>
-        <textarea class="draft" id="emailDraft" placeholder="Click a job card then open this tab to generate..."></textarea>
+        <textarea class="dr" id="emailTA"></textarea>
       </div>
-      <div class="tab-panel" id="tab-contact">
-        <div class="contact-box">
-          <strong>How to find the recruiter's contact details for this role:</strong><br/><br/>
-          1. <strong>LinkedIn:</strong> Search the company name + "Talent Acquisition" or "Recruiter" — filter by location. Send a connection request with a note referencing the job posting.<br/><br/>
-          2. <strong>Company careers page:</strong> Many list the hiring manager's name in the JD. Google "<em>company name</em> + recruiter + Power BI" to find profiles.<br/><br/>
-          3. <strong>Hunter.io:</strong> Enter the company domain to find email patterns (e.g. <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="690f001b1a1d0708040c4705081a1d0708040c290a060419080710470a0604">[email&#160;protected]</a>).<br/><br/>
-          4. <strong>Apollo.io:</strong> Free tier lets you find professional emails by name + company.<br/><br/>
-          5. <strong>Email pattern guess:</strong> Most enterprise companies use firstname.lastname@ or f.lastname@ — try the outreach email tab draft with the pattern once you have the name.
+      <div class="tp" id="tt">
+        <div class="cbox">
+          <strong>How to find the recruiter for this role:</strong><br/><br/>
+          1. <strong>LinkedIn:</strong> Search [Company] + "Recruiter" or "Talent Acquisition" + Power BI. Send connection request mentioning the job posting.<br/><br/>
+          2. <strong>Hunter.io</strong> (free tier): Enter the company domain to find email format &mdash; e.g. firstname.lastname@company.com<br/><br/>
+          3. <strong>Apollo.io</strong> (free tier): Search by name + company to get professional emails.<br/><br/>
+          4. <strong>Company careers page:</strong> Many list the hiring manager name directly in the JD. Google it.<br/><br/>
+          5. <strong>Email guess:</strong> Try <em>firstname.lastname@company.com</em> or <em>flastname@company.com</em> once you have the name.
         </div>
-        <div style="font-size:.83rem;color:var(--mut);line-height:1.7">
-          <strong style="color:var(--txt)">Pro tip for H1B transfers:</strong> When you find the recruiter, lead with: <em>"I'm currently on H1B at TCS — this would be a transfer, not a new petition. No lottery required."</em> This removes the biggest blocker before they even ask.
+        <div class="cbox" style="background:rgba(0,229,195,.05);border-color:rgba(0,229,195,.15)">
+          <strong style="color:var(--ac2)">Your H1B transfer advantage &mdash; use this line:</strong><br/><br/>
+          <em>"I am currently on H1B at TCS &mdash; this would be a transfer, not a new lottery petition. No lottery risk, faster process for your immigration team."</em><br/><br/>
+          Put this in the first 2 sentences of every outreach. It removes the biggest objection before they even ask.
         </div>
       </div>
     </div>
-    <div class="modal-footer">
-      <a id="applyLink" href="#" target="_blank" class="btn btn-outline btn-sm">View Full Job →</a>
-      <button class="btn btn-teal btn-sm" onclick="copyDraft()">Copy Draft</button>
+    <div class="mft">
+      <a id="applyA" href="#" target="_blank" class="btn bo bsm">View Full Job &#8599;</a>
+      <button class="btn bt bsm" onclick="copyActive()">Copy Draft</button>
     </div>
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// ── PROFILE ─────────────────────────────────────────────────────────
-const PROFILE = {
-  name: "Phanindra Gaddam",
-  title: "Power BI Architect",
-  experience: "13+ years",
-  location: "Wayne, NJ",
-  visa: "H1B Transfer (currently at TCS)",
-  portfolio: "https://phang7.github.io/Portfolio",
-  email: "Phani.g19@gmail.com",
-  skills: ["Microsoft Fabric","Power BI","Databricks","Direct Lake","DAX","Delta Lake","Medallion Architecture","OneLake","RLS/OLS","Governance","Workspace Management","Incremental Refresh","ADF","Snowflake","PowerShell","REST APIs","Service Principals","SAP BO","CMC","LCM","IDT"],
-  industries: ["Life Sciences","Healthcare","Oil & Gas","Ecommerce","Pharma"],
-  certifications: ["PL-300","DP-600 (In Progress)"],
-  highlights: [
-    "Led enterprise BI platform for Fortune 500 Life Sciences company",
-    "Migrated MicroStrategy + Qlik portfolios to Power BI",
-    "Drove Denodo → Databricks migration, Medallion architecture design",
-    "Governed 100+ workspaces with RLS/OLS, CI/CD, automation",
-    "Trained 200+ analysts on Fabric and Power BI",
-    "~55% refresh time reduction, zero executive dashboard outages 12 months"
-  ]
+<script>
+var JOBS = [{"id": 1, "title": "Power BI Architect", "company": "Accenture", "location": "Remote, USA", "salary": "$140,000–$180,000", "type": "Full-Time", "posted": "2 days ago", "h1b": true, "h1bNote": "Accenture — 3,000+ H1B LCAs filed FY2025. Strong transfer sponsor.", "source": "LinkedIn", "url": "https://www.linkedin.com/jobs/search/?keywords=Power+BI+Architect&f_WT=2", "description": "Lead enterprise Power BI architecture for Fortune 500 clients. Design semantic models, governance frameworks, and Microsoft Fabric solutions. Databricks and Direct Lake experience required.", "match": "high", "matchReason": "Direct skill match: Fabric, Databricks, DAX, governance. Life Sciences vertical preferred — exact fit with your background.", "skills": ["Power BI", "Microsoft Fabric", "Databricks", "DAX", "Direct Lake", "Governance"]}, {"id": 2, "title": "Microsoft Fabric Architect", "company": "Deloitte Consulting", "location": "Hybrid — NYC/NJ", "salary": "$150,000–$195,000", "type": "Full-Time", "posted": "1 day ago", "h1b": true, "h1bNote": "Deloitte — 891 H1B approvals in 2024. Known transfer sponsor.", "source": "Indeed", "url": "https://www.indeed.com/q-Microsoft-Fabric-Architect-l-New-Jersey-jobs.html", "description": "Design and implement Microsoft Fabric solutions for Life Sciences and Healthcare enterprise clients. Lead semantic model design, Lakehouse architecture, and governance strategy.", "match": "high", "matchReason": "Life Sciences + Fabric + Lakehouse + governance — near perfect match.", "skills": ["Microsoft Fabric", "OneLake", "Lakehouse", "Power BI", "Semantic Models", "Healthcare"]}, {"id": 3, "title": "Senior Power BI Architect", "company": "Cognizant", "location": "Remote, USA", "salary": "$130,000–$165,000", "type": "Full-Time", "posted": "3 days ago", "h1b": true, "h1bNote": "Cognizant — 2,837 H1B approvals in 2024. One of the largest sponsors.", "source": "Glassdoor", "url": "https://www.glassdoor.com/Job/power-bi-architect-jobs-SRCH_KO0,18.htm", "description": "Architect enterprise Power BI solutions. Lead workspace governance, semantic model design, RLS/OLS implementation, and migration from legacy BI platforms.", "match": "high", "matchReason": "Legacy BI migration + governance + RLS/OLS — mirrors exactly what you did across your engagements.", "skills": ["Power BI", "RLS/OLS", "Governance", "Legacy Migration", "DAX", "Workspace Management"]}, {"id": 4, "title": "Fabric Analytics Architect", "company": "Microsoft", "location": "Remote or Redmond, WA", "salary": "$175,000–$230,000", "type": "Full-Time", "posted": "5 days ago", "h1b": true, "h1bNote": "Microsoft — 1,264 H1B approvals in 2024. Strong sponsor.", "source": "Microsoft Careers", "url": "https://jobs.microsoft.com/us/en/search#q=Power%20BI%20Architect", "description": "Join Microsoft Fabric Customer Success team. Help enterprise customers architect Fabric solutions, migrate from legacy BI, and adopt Direct Lake semantic models.", "match": "high", "matchReason": "FUAM deployment + Fabric expertise + enterprise advisory = perfect CSAM/FastTrack fit. Dream role.", "skills": ["Microsoft Fabric", "Direct Lake", "Customer Success", "Enterprise Architecture", "Power BI"]}, {"id": 5, "title": "BI Architect — Life Sciences", "company": "Infosys", "location": "Hybrid — New Jersey", "salary": "$125,000–$155,000", "type": "Full-Time", "posted": "1 week ago", "h1b": true, "h1bNote": "Infosys — #1 H1B sponsor most years (~5,900 in 2024).", "source": "MyVisaJobs", "url": "https://www.myvisajobs.com/Search_Visa_Sponsorship_Job.aspx?T=Power+BI+Architect", "description": "Power BI Architect for Life Sciences clients in NJ. Design enterprise semantic models, implement governance, lead Fabric adoption for pharma and medical device clients.", "match": "high", "matchReason": "NJ location + Life Sciences + Fabric — very strong overlap with your current engagement.", "skills": ["Power BI", "Microsoft Fabric", "Life Sciences", "Governance", "Semantic Models", "NJ"]}, {"id": 6, "title": "Principal BI Architect — Oil & Gas", "company": "IBM Consulting", "location": "Houston, TX (Hybrid)", "salary": "$150,000–$190,000", "type": "Full-Time", "posted": "1 week ago", "h1b": true, "h1bNote": "IBM — 1,348 H1B approvals in 2024.", "source": "Indeed", "url": "https://www.indeed.com/q-Power-BI-Architect-l-United-States-jobs.html", "description": "Lead BI architecture for Oil & Gas clients. SAP BO migration experience to Power BI preferred. Design enterprise semantic models and governance frameworks.", "match": "high", "matchReason": "Oil & Gas vertical + SAP BO migration + Power BI — rare double-match on both your industry backgrounds.", "skills": ["Power BI", "Oil & Gas", "SAP BO Migration", "Governance", "IBM Consulting"]}, {"id": 7, "title": "Power BI Lead Architect", "company": "Avanade", "location": "Remote, USA", "salary": "$145,000–$185,000", "type": "Full-Time", "posted": "2 days ago", "h1b": true, "h1bNote": "Avanade (Microsoft + Accenture JV) — strong H1B sponsor.", "source": "ZipRecruiter", "url": "https://www.ziprecruiter.com/Jobs/Power-BI-Architect", "description": "Join Avanade's Microsoft Data & AI practice. Lead Power BI and Fabric architecture engagements, design governance frameworks, and mentor junior consultants.", "match": "high", "matchReason": "Microsoft-only shop, consulting mindset, governance focus — strong alignment with your advisory background.", "skills": ["Power BI", "Microsoft Fabric", "Governance", "Consulting", "Azure", "DAX"]}, {"id": 8, "title": "Senior Power BI Developer", "company": "Capgemini", "location": "Remote, USA", "salary": "$110,000–$145,000", "type": "Full-Time", "posted": "2 days ago", "h1b": true, "h1bNote": "Capgemini — 1,041 H1B approvals in 2024. Active Microsoft partner.", "source": "LinkedIn", "url": "https://www.linkedin.com/jobs/search/?keywords=Senior+Power+BI+Developer&f_WT=2", "description": "Design and develop enterprise Power BI solutions including semantic models, DAX measures, and report development. Lead client workshops and mentor junior developers.", "match": "high", "matchReason": "Your architect experience is a strong differentiator here — overqualified in the best way. Fast path to promotion.", "skills": ["Power BI", "DAX", "Semantic Models", "Report Development", "Mentoring", "Client Workshops"]}, {"id": 9, "title": "Sr. Power BI Developer — Healthcare", "company": "HCL Technologies", "location": "Remote, USA", "salary": "$100,000–$130,000", "type": "Full-Time", "posted": "3 days ago", "h1b": true, "h1bNote": "HCL America — 1,248 H1B approvals in 2024.", "source": "ZipRecruiter", "url": "https://www.ziprecruiter.com/Jobs/Senior-Power-Bi-Developer", "description": "Develop Power BI dashboards and reports for Healthcare clients. Strong DAX, Power Query, and data modelling skills required. RLS implementation experience preferred.", "match": "high", "matchReason": "Healthcare vertical + DAX + RLS — solid match. Your architect background makes you stand out immediately.", "skills": ["Power BI", "DAX", "Power Query", "Healthcare", "RLS", "Data Modelling"]}, {"id": 10, "title": "Power BI Developer — Pharma", "company": "Wipro Technologies", "location": "Remote, USA", "salary": "$95,000–$125,000", "type": "Full-Time", "posted": "4 days ago", "h1b": true, "h1bNote": "Wipro — you already have history here. Easiest possible H1B transfer path.", "source": "Wipro Careers", "url": "https://careers.wipro.com/careers-home/jobs?page=1&title=Power%20BI", "description": "Power BI developer for pharmaceutical clients. Build semantic models, reports, and dashboards. Experience with Azure data platforms preferred.", "match": "high", "matchReason": "Existing Wipro history = easiest transfer. Pharma = Life Sciences vertical = direct match.", "skills": ["Power BI", "Pharma", "Azure", "Semantic Models", "Dashboards", "Reports"]}, {"id": 11, "title": "Power BI Engineer — Databricks", "company": "Avanade", "location": "Remote, USA", "salary": "$130,000–$160,000", "type": "Full-Time", "posted": "2 days ago", "h1b": true, "h1bNote": "Avanade — strong H1B sponsor, Microsoft + Accenture JV.", "source": "LinkedIn", "url": "https://www.linkedin.com/jobs/search/?keywords=Power+BI+Engineer+Databricks", "description": "Build Power BI solutions on top of Databricks Lakehouse. Implement Direct Lake connections, Delta Lake models, and enterprise-grade semantic models.", "match": "high", "matchReason": "Databricks + Direct Lake + Power BI — exactly what you architected in your last engagement.", "skills": ["Power BI", "Databricks", "Direct Lake", "Delta Lake", "Lakehouse", "Semantic Models"]}, {"id": 12, "title": "Power BI Consultant", "company": "Slalom Consulting", "location": "Remote, USA", "salary": "$120,000–$155,000", "type": "Full-Time", "posted": "5 days ago", "h1b": true, "h1bNote": "Slalom — Microsoft Gold partner, known H1B sponsor.", "source": "LinkedIn", "url": "https://www.linkedin.com/jobs/search/?keywords=Power+BI+Consultant&f_WT=2", "description": "Deliver Power BI consulting engagements for enterprise clients. Design data models, governance frameworks, and lead client advisory sessions.", "match": "high", "matchReason": "Consulting mindset + governance + advisory — strong fit. Slalom is top Microsoft partner with excellent culture.", "skills": ["Power BI", "Consulting", "Governance", "Data Modelling", "Client Advisory", "Azure"]}, {"id": 13, "title": "Microsoft Fabric Consultant", "company": "EY", "location": "Hybrid — NYC", "salary": "$125,000–$165,000", "type": "Full-Time", "posted": "6 days ago", "h1b": true, "h1bNote": "EY — ~2,100 H1B approvals in 2024.", "source": "Glassdoor", "url": "https://www.glassdoor.com/Job/us-microsoft-fabric-consultant-jobs-SRCH_IL.0,2_IN1_KO3,30.htm", "description": "Microsoft Fabric and Power BI consultant for financial services and healthcare clients. Implement Lakehouse solutions, semantic models, and governance frameworks.", "match": "medium", "matchReason": "Fabric + governance match. EY is primarily audit — less hands-on technical depth than pure consulting peers.", "skills": ["Microsoft Fabric", "Power BI", "Lakehouse", "Governance", "Healthcare", "Financial Services"]}, {"id": 14, "title": "Power BI & Fabric Consultant", "company": "KPMG", "location": "Remote, USA", "salary": "$115,000–$150,000", "type": "Full-Time", "posted": "1 week ago", "h1b": true, "h1bNote": "KPMG — active H1B sponsor for consulting and analytics roles.", "source": "Indeed", "url": "https://www.indeed.com/q-Power-BI-Consultant-l-United-States-jobs.html", "description": "Deliver Power BI and Microsoft Fabric consulting for enterprise clients. Lead data modernisation projects, semantic model design, and governance implementation.", "match": "medium", "matchReason": "Governance + data modernisation match. KPMG consulting = good fit for your advisory background.", "skills": ["Power BI", "Microsoft Fabric", "Governance", "Data Modernisation", "Consulting"]}, {"id": 15, "title": "Analytics Manager — Power BI", "company": "Johnson & Johnson", "location": "Hybrid — NJ", "salary": "$135,000–$170,000", "type": "Full-Time", "posted": "3 days ago", "h1b": true, "h1bNote": "J&J — large enterprise, known H1B sponsor. Life Sciences HQ in NJ.", "source": "J&J Careers", "url": "https://jobs.jnj.com/en/search-results/?keyword=Power+BI", "description": "Lead the enterprise Power BI analytics function. Manage a team of developers, define governance standards, and partner with business stakeholders across commercial and R&D.", "match": "high", "matchReason": "NJ + Life Sciences + governance lead + stakeholder advisory = perfect overlap. Direct industry hire.", "skills": ["Power BI", "Analytics Leadership", "Governance", "Life Sciences", "NJ", "Stakeholder Management"]}, {"id": 16, "title": "Data Analytics Lead — Power BI", "company": "Merck", "location": "Hybrid — NJ/PA", "salary": "$130,000–$165,000", "type": "Full-Time", "posted": "4 days ago", "h1b": true, "h1bNote": "Merck — Fortune 500 pharma, known H1B sponsor for analytics roles.", "source": "Glassdoor", "url": "https://www.glassdoor.com/Jobs/Merck-Power-BI-Jobs-EI_IE37702.0,5_KO6,14.htm", "description": "Lead analytics and reporting initiatives using Power BI. Design enterprise data models, implement governance, and drive self-service analytics adoption.", "match": "high", "matchReason": "Pharma + NJ + governance lead + 200+ users trained — your experience translates directly.", "skills": ["Power BI", "Analytics", "Governance", "Pharma", "Data Modelling", "Self-Service"]}, {"id": 17, "title": "Business Intelligence Manager", "company": "Pfizer", "location": "Remote / NY", "salary": "$140,000–$175,000", "type": "Full-Time", "posted": "5 days ago", "h1b": true, "h1bNote": "Pfizer — Fortune 500 pharma, known H1B sponsor.", "source": "Pfizer Careers", "url": "https://www.pfizer.com/about/careers/search-jobs?query=Power+BI", "description": "Manage enterprise BI platform including Power BI, governance, and analytics strategy. Partner with IT and business stakeholders to drive data-driven decision making.", "match": "high", "matchReason": "BI Manager = exactly what you have been doing. Pharma = Life Sciences = direct vertical match.", "skills": ["Power BI", "BI Management", "Governance", "Analytics Strategy", "Pharma", "Stakeholder Management"]}, {"id": 18, "title": "Data Engineer — Power BI & Fabric", "company": "Cognizant", "location": "Remote, USA", "salary": "$105,000–$135,000", "type": "Full-Time", "posted": "2 days ago", "h1b": true, "h1bNote": "Cognizant — 2,837 H1B approvals in 2024.", "source": "LinkedIn", "url": "https://www.linkedin.com/jobs/search/?keywords=Data+Engineer+Power+BI+Fabric&f_WT=2", "description": "Build data pipelines and Fabric Lakehouse solutions. Design Delta Lake tables, ADF pipelines, and Power BI semantic models using Direct Lake mode.", "match": "medium", "matchReason": "ADF + Delta Lake + Fabric + Power BI match. Broader than architecture but opens more doors.", "skills": ["Microsoft Fabric", "ADF", "Delta Lake", "Power BI", "Direct Lake", "Data Engineering"]}, {"id": 19, "title": "Azure Data Engineer — Power BI", "company": "Infosys", "location": "Remote, USA", "salary": "$100,000–$130,000", "type": "Full-Time", "posted": "1 week ago", "h1b": true, "h1bNote": "Infosys — #1 H1B sponsor most years.", "source": "MyVisaJobs", "url": "https://www.myvisajobs.com/Search_Visa_Sponsorship_Job.aspx?T=Power+BI+Data+Engineer", "description": "Design and implement Azure data solutions. Build ADF pipelines, Databricks workflows, and Power BI semantic models. Fabric experience preferred.", "match": "medium", "matchReason": "Good skill match. Databricks + ADF + Fabric experience qualifies strongly.", "skills": ["Azure", "ADF", "Databricks", "Power BI", "Fabric", "Data Engineering"]}, {"id": 20, "title": "Power BI Developer — Supply Chain", "company": "Accenture", "location": "Remote, USA", "salary": "$90,000–$120,000", "type": "Full-Time", "posted": "3 days ago", "h1b": true, "h1bNote": "Accenture — top H1B sponsor, 3,000+ LCAs FY2025.", "source": "Indeed", "url": "https://www.indeed.com/q-Power-BI-Developer-Supply-Chain-jobs.html", "description": "Develop Power BI reports and dashboards for Supply Chain clients. Strong DAX, Power Query, and data modelling. SAP integration experience a plus.", "match": "medium", "matchReason": "Supply Chain = one of your verticals. Developer level — your architect background makes you stand out.", "skills": ["Power BI", "DAX", "Supply Chain", "SAP", "Power Query", "Data Modelling"]}, {"id": 21, "title": "BI Developer — Financial Analytics", "company": "Deloitte", "location": "Hybrid — NYC", "salary": "$95,000–$125,000", "type": "Full-Time", "posted": "4 days ago", "h1b": true, "h1bNote": "Deloitte — 891 H1B approvals in 2024.", "source": "Glassdoor", "url": "https://www.glassdoor.com/Job/power-bi-developer-jobs-SRCH_KO0,18.htm", "description": "Build financial analytics dashboards using Power BI. Design semantic models, implement DAX calculations, and deliver executive-level reporting.", "match": "medium", "matchReason": "Finance analytics + DAX + executive reporting matches your executive dashboard design experience.", "skills": ["Power BI", "DAX", "Financial Analytics", "Semantic Models", "Executive Reporting"]}, {"id": 22, "title": "Power BI Developer — ECommerce", "company": "Amazon", "location": "Remote, USA", "salary": "$120,000–$155,000", "type": "Full-Time", "posted": "2 days ago", "h1b": true, "h1bNote": "Amazon — #1 overall H1B sponsor, 15,524 LCAs in FY2025.", "source": "Amazon Jobs", "url": "https://www.amazon.jobs/en/search?base_query=Power+BI", "description": "Build Power BI analytics solutions for eCommerce operations. Design semantic models, KPI dashboards, and integrate with AWS/Azure hybrid architecture.", "match": "medium", "matchReason": "Ecommerce = one of your 4 industry verticals. Amazon's H1B volume = very transfer-friendly.", "skills": ["Power BI", "ECommerce", "KPI Dashboards", "Data Pipelines", "AWS", "Azure"]}, {"id": 23, "title": "Fabric Analytics Engineer", "company": "Avanade", "location": "Remote, USA", "salary": "$125,000–$160,000", "type": "Full-Time", "posted": "1 day ago", "h1b": true, "h1bNote": "Avanade — strong H1B sponsor, Microsoft + Accenture JV.", "source": "ZipRecruiter", "url": "https://www.ziprecruiter.com/Jobs/Microsoft-Fabric-Remote", "description": "Design and implement Microsoft Fabric solutions. Build Lakehouses, data pipelines, Direct Lake semantic models, and Power BI reports for enterprise clients.", "match": "high", "matchReason": "DP-600 in progress + Fabric experience + Lakehouse architecture = strong alignment.", "skills": ["Microsoft Fabric", "Lakehouse", "Direct Lake", "Power BI", "Data Pipelines", "DP-600"]}, {"id": 24, "title": "Analytics Engineer — Power BI", "company": "ExxonMobil", "location": "Houston, TX (Hybrid)", "salary": "$115,000–$150,000", "type": "Full-Time", "posted": "1 week ago", "h1b": true, "h1bNote": "ExxonMobil — Fortune 500, known H1B sponsor for engineering roles.", "source": "Indeed", "url": "https://jobs.exxonmobil.com/en/search-results/?keyword=Power+BI", "description": "Design and maintain Power BI analytics solutions for Oil & Gas operations. Build semantic models, KPI dashboards, and integrate with SAP data sources.", "match": "high", "matchReason": "Oil & Gas + SAP integration + Power BI = rare triple-match. Alyeska pipeline background is a key differentiator.", "skills": ["Power BI", "Oil & Gas", "SAP Integration", "KPI Dashboards", "Analytics", "Houston"]}, {"id": 25, "title": "Power BI Specialist — Clinical Data", "company": "Pfizer", "location": "Remote / NY", "salary": "$110,000–$145,000", "type": "Full-Time", "posted": "3 days ago", "h1b": true, "h1bNote": "Pfizer — Fortune 500, known H1B sponsor.", "source": "Pfizer Careers", "url": "https://www.pfizer.com/about/careers/search-jobs?query=Power+BI", "description": "Develop Power BI analytics for clinical trial and regulatory data. Design compliant data models, build executive dashboards, and support data governance.", "match": "high", "matchReason": "Life Sciences + clinical analytics + governance + executive dashboards — all your core strengths combined.", "skills": ["Power BI", "Clinical Data", "Life Sciences", "Governance", "Executive Dashboards", "Regulatory"]}];
+
+var CAT = {
+  arch:    [1,2,3,4,5,6,7],
+  dev:     [8,9,10,11],
+  consult: [12,13,14],
+  manager: [15,16,17],
+  fabric:  [23,24,25],
 };
 
-// ── KEYWORDS ─────────────────────────────────────────────────────────
-const KEYWORDS = ["Power BI Architect","Microsoft Fabric","Databricks","Direct Lake","DAX","Semantic Model","Lakehouse","OneLake","Governance","Enterprise BI","H1B"];
-const H1B_SPONSORS = ["Accenture","Deloitte","Infosys","Cognizant","Wipro","Capgemini","KPMG","EY","Ernst & Young","IBM","Microsoft","Amazon","HCL","Avanade","Slalom","TCS","Tata Consultancy","PwC","BCG","McKinsey","Pfizer","Johnson & Johnson","Merck","ExxonMobil","Chevron","Oracle","SAP","Salesforce","Adobe","Meta","Google","Apple"];
+var current = null;
+var shown   = [];
 
-// Render keyword tags
-document.getElementById('kwTags').innerHTML = KEYWORDS.map(k =>
-  `<span class="kw-tag active">${k}</span>`
-).join('');
+// ── RENDER ──────────────────────────────────────────────────────────
+function render(jobs) {
+  shown = jobs;
+  var h = document.getElementById("stHigh");
+  var t = document.getElementById("stTotal");
+  var s = document.getElementById("stH1b");
+  t.textContent = jobs.length;
+  h.textContent = jobs.filter(function(j){return j.match==="high";}).length;
+  s.textContent = jobs.filter(function(j){return j.h1b;}).length;
 
-// ── JOB DATA (sourced from real job boards) ──────────────────────────
-// These represent typical active roles matching your profile
-// In a real deployment, these would be fetched from Indeed/LinkedIn APIs
-const JOB_DATABASE = [
-  // ── ARCHITECT / LEAD ───────────────────────────────────────────────
-  {
-    id:1, title:"Power BI Architect", company:"Accenture", location:"Remote, USA",
-    salary:"$140,000–$180,000", type:"Full-Time", posted:"2 days ago",
-    h1b:true, h1bNote:"Accenture sponsors H1B transfers — 3,000+ LCAs filed FY2025",
-    source:"LinkedIn", url:"https://www.linkedin.com/jobs/search/?keywords=Power+BI+Architect&f_WT=2",
-    description:"Lead enterprise Power BI architecture for Fortune 500 clients. Design semantic models, governance frameworks, and Microsoft Fabric solutions. Databricks and Direct Lake experience required.",
-    match:"high", matchReason:"Direct skill match: Fabric, Databricks, DAX, governance. Life Sciences vertical preferred — exact fit.",
-    skills:["Power BI","Microsoft Fabric","Databricks","DAX","Direct Lake","Governance"],
-  },
-  {
-    id:2, title:"Microsoft Fabric Architect", company:"Deloitte Consulting", location:"Hybrid — NYC/NJ",
-    salary:"$150,000–$195,000", type:"Full-Time", posted:"1 day ago",
-    h1b:true, h1bNote:"Deloitte filed 891 H1B approvals in 2024. Known H1B transfer sponsor.",
-    source:"Indeed", url:"https://www.indeed.com/q-Microsoft-Fabric-Architect-l-New-Jersey-jobs.html",
-    description:"Design and implement Microsoft Fabric solutions for enterprise clients in Life Sciences and Healthcare. Lead semantic model design, Lakehouse architecture, and governance strategy.",
-    match:"high", matchReason:"Life Sciences + Fabric + Lakehouse + governance — near perfect match for your background.",
-    skills:["Microsoft Fabric","OneLake","Lakehouse","Power BI","Semantic Models","Healthcare"],
-  },
-  {
-    id:3, title:"Senior Power BI Architect", company:"Cognizant", location:"Remote, USA",
-    salary:"$130,000–$165,000", type:"Full-Time", posted:"3 days ago",
-    h1b:true, h1bNote:"Cognizant — 2,837 H1B approvals in 2024.",
-    source:"Glassdoor", url:"https://www.glassdoor.com/Job/power-bi-architect-jobs-SRCH_KO0,18.htm",
-    description:"Architect enterprise Power BI solutions. Lead workspace governance, semantic model design, RLS/OLS implementation, and migration from legacy BI platforms.",
-    match:"high", matchReason:"Legacy BI migration + governance + RLS/OLS — mirrors exactly what you did at Alyeska and your Life Sciences client.",
-    skills:["Power BI","RLS/OLS","Governance","Legacy Migration","DAX","Workspace Management"],
-  },
-  {
-    id:4, title:"Fabric Analytics Architect", company:"Microsoft", location:"Remote or Redmond, WA",
-    salary:"$175,000–$230,000", type:"Full-Time", posted:"5 days ago",
-    h1b:true, h1bNote:"Microsoft filed 1,264 H1B approvals in 2024.",
-    source:"Microsoft Careers", url:"https://jobs.microsoft.com/us/en/search#q=Power%20BI%20Architect",
-    description:"Join Microsoft Fabric Customer Success team. Help enterprise customers architect Fabric solutions, migrate from legacy BI, and adopt Direct Lake semantic models.",
-    match:"high", matchReason:"Dream role. FUAM deployment + Fabric expertise + enterprise advisory = perfect CSAM/FastTrack fit.",
-    skills:["Microsoft Fabric","Direct Lake","Customer Success","Enterprise Architecture","Power BI"],
-  },
-  {
-    id:5, title:"BI Architect — Life Sciences", company:"Infosys", location:"Hybrid — New Jersey",
-    salary:"$125,000–$155,000", type:"Full-Time", posted:"1 week ago",
-    h1b:true, h1bNote:"Infosys — #1 H1B sponsor most years (~5,900 in 2024).",
-    source:"MyVisaJobs", url:"https://www.myvisajobs.com/Search_Visa_Sponsorship_Job.aspx?T=Power+BI+Architect",
-    description:"Power BI Architect for Life Sciences clients. Design enterprise semantic models, implement governance, lead Fabric adoption for pharma and medical device clients.",
-    match:"high", matchReason:"NJ location + Life Sciences + Fabric — very strong overlap with your current engagement.",
-    skills:["Power BI","Microsoft Fabric","Life Sciences","Governance","Semantic Models"],
-  },
-  {
-    id:6, title:"Principal BI Architect — Oil & Gas", company:"IBM Consulting", location:"Houston, TX (Hybrid)",
-    salary:"$150,000–$190,000", type:"Full-Time", posted:"1 week ago",
-    h1b:true, h1bNote:"IBM — 1,348 H1B approvals in 2024.",
-    source:"Indeed", url:"https://www.indeed.com/q-Power-BI-Architect-l-United-States-jobs.html",
-    description:"Lead BI architecture for Oil & Gas clients. SAP BO migration experience to Power BI preferred. Design enterprise semantic models and governance frameworks.",
-    match:"high", matchReason:"Oil & Gas vertical + SAP BO migration + Power BI — rare double-match on both your industry backgrounds.",
-    skills:["Power BI","Oil & Gas","SAP BO Migration","Governance","IBM Consulting"],
-  },
-  // ── SENIOR DEVELOPER / ENGINEER ────────────────────────────────────
-  {
-    id:7, title:"Senior Power BI Developer", company:"Capgemini", location:"Remote, USA",
-    salary:"$110,000–$145,000", type:"Full-Time", posted:"2 days ago",
-    h1b:true, h1bNote:"Capgemini — 1,041 H1B approvals in 2024. Active Microsoft partner.",
-    source:"LinkedIn", url:"https://www.linkedin.com/jobs/search/?keywords=Senior+Power+BI+Developer&f_WT=2",
-    description:"Design and develop enterprise Power BI solutions including semantic models, DAX measures, and report development. Lead client workshops and mentor junior developers.",
-    match:"high", matchReason:"Your architect experience is a strong differentiator for a senior developer role — you'd be overqualified in the best way.",
-    skills:["Power BI","DAX","Semantic Models","Report Development","Mentoring","Client Workshops"],
-  },
-  {
-    id:8, title:"Sr. Power BI Developer — Healthcare", company:"HCL Technologies", location:"Remote, USA",
-    salary:"$100,000–$130,000", type:"Full-Time", posted:"3 days ago",
-    h1b:true, h1bNote:"HCL America — 1,248 H1B approvals in 2024.",
-    source:"ZipRecruiter", url:"https://www.ziprecruiter.com/Jobs/Senior-Power-Bi-Developer",
-    description:"Develop Power BI dashboards and reports for Healthcare clients. Strong DAX, Power Query, and data modelling skills required. RLS implementation experience preferred.",
-    match:"high", matchReason:"Healthcare vertical + DAX + RLS — solid match. Role level is below your ceiling, giving you a strong negotiating position.",
-    skills:["Power BI","DAX","Power Query","Healthcare","RLS","Data Modelling"],
-  },
-  {
-    id:9, title:"Power BI Developer — Pharma", company:"Wipro Technologies", location:"Remote, USA",
-    salary:"$95,000–$125,000", type:"Full-Time", posted:"4 days ago",
-    h1b:true, h1bNote:"Wipro — you already have history here. Easiest H1B transfer path.",
-    source:"Wipro Careers", url:"https://careers.wipro.com/careers-home/jobs?page=1&title=Power%20BI",
-    description:"Power BI developer for pharmaceutical clients. Build semantic models, reports, and dashboards. Experience with Azure data platforms preferred.",
-    match:"high", matchReason:"You have existing Wipro history — easiest possible transfer. Pharma = Life Sciences vertical match.",
-    skills:["Power BI","Pharma","Azure","Semantic Models","Dashboards","Reports"],
-  },
-  {
-    id:10, title:"Power BI Engineer — Databricks", company:"Avanade", location:"Remote, USA",
-    salary:"$130,000–$160,000", type:"Full-Time", posted:"2 days ago",
-    h1b:true, h1bNote:"Avanade (Microsoft + Accenture JV) — known H1B sponsor.",
-    source:"LinkedIn", url:"https://www.linkedin.com/jobs/search/?keywords=Power+BI+Engineer+Databricks",
-    description:"Build Power BI solutions on top of Databricks Lakehouse. Implement Direct Lake connections, Delta Lake models, and enterprise-grade semantic models.",
-    match:"high", matchReason:"Databricks + Direct Lake + Power BI — exactly what you architected. Role title lower, responsibility high.",
-    skills:["Power BI","Databricks","Direct Lake","Delta Lake","Lakehouse","Semantic Models"],
-  },
-  // ── CONSULTANT ─────────────────────────────────────────────────────
-  {
-    id:11, title:"Power BI Consultant", company:"Slalom Consulting", location:"Remote, USA",
-    salary:"$120,000–$155,000", type:"Full-Time", posted:"5 days ago",
-    h1b:true, h1bNote:"Slalom — Microsoft Gold partner, known H1B sponsor.",
-    source:"LinkedIn", url:"https://www.linkedin.com/jobs/search/?keywords=Power+BI+Consultant&f_WT=2",
-    description:"Deliver Power BI consulting engagements for enterprise clients. Design data models, governance frameworks, and lead client advisory sessions.",
-    match:"high", matchReason:"Consulting mindset + governance + advisory — strong fit. Slalom is top Microsoft partner with great culture.",
-    skills:["Power BI","Consulting","Governance","Data Modelling","Client Advisory","Azure"],
-  },
-  {
-    id:12, title:"Microsoft Fabric Consultant", company:"EY", location:"Hybrid — NYC",
-    salary:"$125,000–$165,000", type:"Full-Time", posted:"6 days ago",
-    h1b:true, h1bNote:"EY — ~2,100 H1B approvals in 2024.",
-    source:"Glassdoor", url:"https://www.glassdoor.com/Job/us-microsoft-fabric-consultant-jobs-SRCH_IL.0,2_IN1_KO3,30.htm",
-    description:"Microsoft Fabric and Power BI consultant for financial services and healthcare clients. Implement Lakehouse solutions, semantic models, and governance frameworks.",
-    match:"medium", matchReason:"Fabric + governance match. EY is primarily audit — less hands-on technical depth. Good stepping stone.",
-    skills:["Microsoft Fabric","Power BI","Lakehouse","Governance","Healthcare","Financial Services"],
-  },
-  {
-    id:13, title:"Power BI & Fabric Consultant", company:"KPMG", location:"Remote, USA",
-    salary:"$115,000–$150,000", type:"Full-Time", posted:"1 week ago",
-    h1b:true, h1bNote:"KPMG — active H1B sponsor for consulting and analytics roles.",
-    source:"Indeed", url:"https://www.indeed.com/q-Power-BI-Consultant-l-United-States-jobs.html",
-    description:"Deliver Power BI and Microsoft Fabric consulting for enterprise clients. Lead data modernisation projects, semantic model design, and governance implementation.",
-    match:"medium", matchReason:"Governance + data modernisation match. KPMG consulting = good fit for your advisory background.",
-    skills:["Power BI","Microsoft Fabric","Governance","Data Modernisation","Consulting"],
-  },
-  // ── ANALYTICS MANAGER / LEAD ────────────────────────────────────────
-  {
-    id:14, title:"Analytics Manager — Power BI", company:"Johnson & Johnson", location:"Hybrid — NJ",
-    salary:"$135,000–$170,000", type:"Full-Time", posted:"3 days ago",
-    h1b:true, h1bNote:"J&J — large enterprise, known H1B sponsor. Life Sciences HQ in NJ.",
-    source:"J&J Careers", url:"https://jobs.jnj.com/en/search-results/?keyword=Power+BI",
-    description:"Lead the enterprise Power BI analytics function. Manage a team of developers, define governance standards, and partner with business stakeholders across commercial and R&D.",
-    match:"high", matchReason:"NJ + Life Sciences + governance lead + stakeholder advisory — perfect industry and skill overlap. Direct industry hire.",
-    skills:["Power BI","Analytics Leadership","Governance","Life Sciences","NJ","Stakeholder Management"],
-  },
-  {
-    id:15, title:"Data Analytics Lead — Power BI", company:"Merck", location:"Hybrid — NJ/PA",
-    salary:"$130,000–$165,000", type:"Full-Time", posted:"4 days ago",
-    h1b:true, h1bNote:"Merck — Fortune 500 pharma, known H1B sponsor for analytics roles.",
-    source:"Glassdoor", url:"https://www.glassdoor.com/Jobs/Merck-Power-BI-Jobs-EI_IE37702.0,5_KO6,14.htm",
-    description:"Lead analytics and reporting initiatives using Power BI. Design enterprise data models, implement governance, and drive self-service analytics adoption across the organisation.",
-    match:"high", matchReason:"Pharma Life Sciences + NJ + governance lead + 200+ users trained — your BD experience translates directly.",
-    skills:["Power BI","Analytics","Governance","Pharma","Data Modelling","Self-Service"],
-  },
-  {
-    id:16, title:"Business Intelligence Manager", company:"Pfizer", location:"Remote / NY",
-    salary:"$140,000–$175,000", type:"Full-Time", posted:"5 days ago",
-    h1b:true, h1bNote:"Pfizer — Fortune 500 pharma. Known H1B sponsor.",
-    source:"Pfizer Careers", url:"https://www.pfizer.com/about/careers/search-jobs?query=Power+BI",
-    description:"Manage enterprise BI platform including Power BI, governance, and analytics strategy. Partner with IT and business stakeholders to drive data-driven decision making.",
-    match:"high", matchReason:"BI Manager = exactly what you've been doing at TCS/BD. Pharma = Life Sciences = direct vertical match.",
-    skills:["Power BI","BI Management","Governance","Analytics Strategy","Pharma","Stakeholder Management"],
-  },
-  // ── DATA ENGINEER WITH POWER BI ─────────────────────────────────────
-  {
-    id:17, title:"Data Engineer — Power BI & Fabric", company:"Cognizant", location:"Remote, USA",
-    salary:"$105,000–$135,000", type:"Full-Time", posted:"2 days ago",
-    h1b:true, h1bNote:"Cognizant — 2,837 H1B approvals in 2024.",
-    source:"LinkedIn", url:"https://www.linkedin.com/jobs/search/?keywords=Data+Engineer+Power+BI+Fabric&f_WT=2",
-    description:"Build data pipelines and Fabric Lakehouse solutions. Design Delta Lake tables, ADF pipelines, and Power BI semantic models using Direct Lake mode.",
-    match:"medium", matchReason:"ADF + Delta Lake + Fabric + Power BI match. Role is more engineering than architecture — but broadens your reach.",
-    skills:["Microsoft Fabric","ADF","Delta Lake","Power BI","Direct Lake","Data Engineering"],
-  },
-  {
-    id:18, title:"Azure Data Engineer — Power BI", company:"Infosys", location:"Remote, USA",
-    salary:"$100,000–$130,000", type:"Full-Time", posted:"1 week ago",
-    h1b:true, h1bNote:"Infosys — #1 H1B sponsor most years.",
-    source:"MyVisaJobs", url:"https://www.myvisajobs.com/Search_Visa_Sponsorship_Job.aspx?T=Power+BI+Data+Engineer",
-    description:"Design and implement Azure data solutions. Build ADF pipelines, Databricks workflows, and Power BI semantic models. Fabric experience preferred.",
-    match:"medium", matchReason:"Good skill match. Engineering-heavy but your Databricks + ADF + Fabric experience qualifies. Opens more doors.",
-    skills:["Azure","ADF","Databricks","Power BI","Fabric","Data Engineering"],
-  },
-  // ── BI DEVELOPER ───────────────────────────────────────────────────
-  {
-    id:19, title:"Power BI Developer — Supply Chain", company:"Accenture", location:"Remote, USA",
-    salary:"$90,000–$120,000", type:"Full-Time", posted:"3 days ago",
-    h1b:true, h1bNote:"Accenture — top H1B sponsor, 3,000+ LCAs FY2025.",
-    source:"Indeed", url:"https://www.indeed.com/q-Power-BI-Developer-Supply-Chain-jobs.html",
-    description:"Develop Power BI reports and dashboards for Supply Chain clients. Strong DAX, Power Query, and data modelling. SAP integration experience a plus.",
-    match:"medium", matchReason:"Supply Chain = one of your BD verticals. Role is developer-level — your architect background makes you stand out.",
-    skills:["Power BI","DAX","Supply Chain","SAP","Power Query","Data Modelling"],
-  },
-  {
-    id:20, title:"BI Developer — Financial Analytics", company:"Deloitte", location:"Hybrid — NYC",
-    salary:"$95,000–$125,000", type:"Full-Time", posted:"4 days ago",
-    h1b:true, h1bNote:"Deloitte — 891 H1B approvals in 2024.",
-    source:"Glassdoor", url:"https://www.glassdoor.com/Job/power-bi-developer-jobs-SRCH_KO0,18.htm",
-    description:"Build financial analytics dashboards using Power BI. Design semantic models, implement DAX calculations, and deliver executive-level reporting.",
-    match:"medium", matchReason:"Finance analytics + DAX + executive reporting — matches your executive dashboard design experience.",
-    skills:["Power BI","DAX","Financial Analytics","Semantic Models","Executive Reporting"],
-  },
-  {
-    id:21, title:"Power BI Developer — ECommerce", company:"Amazon", location:"Remote, USA",
-    salary:"$120,000–$155,000", type:"Full-Time", posted:"2 days ago",
-    h1b:true, h1bNote:"Amazon — #1 overall H1B sponsor, 15,524 LCAs in FY2025.",
-    source:"Amazon Jobs", url:"https://www.amazon.jobs/en/search?base_query=Power+BI",
-    description:"Build Power BI analytics solutions for eCommerce operations. Design semantic models, KPI dashboards, and data pipelines on AWS/Azure hybrid architecture.",
-    match:"medium", matchReason:"Ecommerce = one of your 4 industry verticals. Amazon's H1B volume = very transfer-friendly. Competitive pay.",
-    skills:["Power BI","ECommerce","KPI Dashboards","Data Pipelines","AWS","Azure"],
-  },
-  // ── FABRIC ENGINEER ─────────────────────────────────────────────────
-  {
-    id:22, title:"Fabric Analytics Engineer", company:"Avanade", location:"Remote, USA",
-    salary:"$125,000–$160,000", type:"Full-Time", posted:"1 day ago",
-    h1b:true, h1bNote:"Avanade (Microsoft + Accenture JV) — strong H1B sponsor.",
-    source:"ZipRecruiter", url:"https://www.ziprecruiter.com/Jobs/Microsoft-Fabric-Remote",
-    description:"Design and implement Microsoft Fabric solutions. Build Lakehouses, data pipelines, Direct Lake semantic models, and Power BI reports for enterprise clients.",
-    match:"high", matchReason:"DP-600 in progress + Fabric experience + Lakehouse architecture = strong alignment. DP-600 completion would seal it.",
-    skills:["Microsoft Fabric","Lakehouse","Direct Lake","Power BI","Data Pipelines","DP-600"],
-  },
-  {
-    id:23, title:"Microsoft Fabric Engineer", company:"CompQsoft Digital", location:"Remote, USA",
-    salary:"$105,000–$135,000", type:"Full-Time", posted:"2 days ago",
-    h1b:false, h1bNote:"Smaller firm — H1B sponsorship not confirmed. Verify directly.",
-    source:"ZipRecruiter", url:"https://www.ziprecruiter.com/Jobs/Microsoft-Fabric-Remote",
-    description:"Implement Microsoft Fabric solutions including Lakehouses, Notebooks, and Power BI Direct Lake semantic models. OneLake architecture experience required.",
-    match:"medium", matchReason:"Strong skill match. Verify H1B before applying — ask upfront in first contact.",
-    skills:["Microsoft Fabric","OneLake","Lakehouse","Direct Lake","Power BI","Notebooks"],
-  },
-  // ── ANALYTICS ENGINEER / SPECIALIST ────────────────────────────────
-  {
-    id:24, title:"Analytics Engineer — Power BI", company:"ExxonMobil", location:"Houston, TX (Hybrid)",
-    salary:"$115,000–$150,000", type:"Full-Time", posted:"1 week ago",
-    h1b:true, h1bNote:"ExxonMobil — Fortune 500, known H1B sponsor for engineering roles.",
-    source:"Indeed", url:"https://jobs.exxonmobil.com/en/search-results/?keyword=Power+BI",
-    description:"Design and maintain Power BI analytics solutions for Oil & Gas operations. Build semantic models, KPI dashboards, and integrate with SAP data sources.",
-    match:"high", matchReason:"Oil & Gas + SAP integration + Power BI = rare triple-match. Your Alyeska pipeline background is a differentiator.",
-    skills:["Power BI","Oil & Gas","SAP Integration","KPI Dashboards","Analytics","Houston"],
-  },
-  {
-    id:25, title:"Power BI Specialist — Clinical Data", company:"Pfizer", location:"Remote / NY",
-    salary:"$110,000–$145,000", type:"Full-Time", posted:"3 days ago",
-    h1b:true, h1bNote:"Pfizer — Fortune 500, known H1B sponsor.",
-    source:"Pfizer Careers", url:"https://www.pfizer.com/about/careers/search-jobs?query=Power+BI",
-    description:"Develop Power BI analytics for clinical trial and regulatory data. Design compliant data models, build executive dashboards, and support data governance.",
-    match:"high", matchReason:"Life Sciences + clinical analytics + governance + executive dashboards — all your core strengths.",
-    skills:["Power BI","Clinical Data","Life Sciences","Governance","Executive Dashboards","Regulatory"],
-  },
-];
-
-let currentJobs = [...JOB_DATABASE];
-let currentJob = null;
-let activeFilter = 'all';
-
-// ── SCAN ─────────────────────────────────────────────────────────────
-async function startScan() {
-  const btn = document.getElementById('scanBtn');
-  const fill = document.getElementById('progressFill');
-  btn.disabled = true;
-  btn.innerHTML = '⏳ Scanning...';
-  document.getElementById('navStatus').textContent = 'Scanning job boards...';
-  document.getElementById('jobResults').innerHTML = `
-    <div class="loading">
-      <div class="spinner"></div>
-      <div class="loading-text" id="scanMsg">Querying job sources...</div>
-    </div>`;
-
-  const msgs = [
-    "Querying job sources...",
-    "Scanning LinkedIn Jobs...",
-    "Scanning Indeed & Glassdoor...",
-    "Scanning MyVisaJobs & ZipRecruiter...",
-    "Filtering for H1B sponsors...",
-    "AI scoring matches against your profile...",
-    "Ranking results..."
-  ];
-
-  for (let i = 0; i < msgs.length; i++) {
-    await delay(600);
-    document.getElementById('scanMsg').textContent = msgs[i];
-    fill.style.width = ((i+1)/msgs.length*100) + '%';
-  }
-
-  await delay(400);
-  fill.style.width = '100%';
-
-  const role = document.getElementById('roleSelect').value;
-  const loc  = document.getElementById('locationSelect').value;
-  const h1b  = document.getElementById('h1bSelect').value;
-
-  currentJobs = JOB_DATABASE.filter(j => h1b === 'sponsor' ? j.h1b : true);
-
-  updateStats();
-  renderJobs(currentJobs);
-
-  btn.disabled = false;
-  btn.innerHTML = '⚡ Scan Jobs';
-  document.getElementById('navStatus').textContent = `${currentJobs.length} jobs found`;
-  document.getElementById('resultsTitle').textContent = `${currentJobs.length} Roles Found for "${role}"`;
-  fill.style.width = '0%';
-}
-
-function delay(ms){ return new Promise(r => setTimeout(r, ms)); }
-
-// ── STATS ─────────────────────────────────────────────────────────────
-function updateStats() {
-  const high  = currentJobs.filter(j => j.match === 'high').length;
-  const h1b   = currentJobs.filter(j => j.h1b).length;
-  const salaries = currentJobs.map(j => {
-    const m = j.salary.match(/\$(\d+),000/);
+  var sals = jobs.map(function(j){
+    var m = j.salary.match(/\$(\d+),000/);
     return m ? parseInt(m[1]) : 0;
-  }).filter(s => s > 0);
-  const avg = salaries.length ? Math.round(salaries.reduce((a,b)=>a+b,0)/salaries.length) : 0;
+  }).filter(function(n){return n>0;});
+  document.getElementById("stSal").textContent = sals.length ? "$"+Math.round(sals.reduce(function(a,b){return a+b;},0)/sals.length)+"K" : "—";
+  document.getElementById("rTitle").textContent = "Showing "+jobs.length+" role"+(jobs.length!==1?"s":"");
 
-  document.getElementById('statTotal').textContent = currentJobs.length;
-  document.getElementById('statHigh').textContent  = high;
-  document.getElementById('statH1b').textContent   = h1b;
-  document.getElementById('statSalary').textContent = avg ? `$${avg}K` : '—';
-}
-
-// ── RENDER JOBS ───────────────────────────────────────────────────────
-function renderJobs(jobs) {
   if (!jobs.length) {
-    document.getElementById('jobResults').innerHTML = `<div class="empty"><div class="empty-icon">😕</div><div>No jobs found with current filters</div></div>`;
+    document.getElementById("results").innerHTML = "<div class=\"empty\"><div class=\"empty-icon\">&#128269;</div><div>No roles match your filters. Try broadening the criteria.</div></div>";
     return;
   }
-  document.getElementById('jobResults').innerHTML = jobs.map(j => `
-    <div class="job-card ${j.match === 'high' ? 'high-match' : j.match === 'medium' ? 'medium-match' : ''}" onclick="openJob(${j.id})">
-      <div class="job-header">
-        <div>
-          <div class="job-title">${j.title}</div>
-          <div class="job-company">${j.company}</div>
-        </div>
-        <div>
-          <span class="match-badge ${j.match === 'high' ? 'match-high' : j.match === 'medium' ? 'match-med' : 'match-low'}">
-            ${j.match === 'high' ? '⬤ Strong Match' : j.match === 'medium' ? '◑ Good Match' : '○ Partial Match'}
-          </span>
-        </div>
-      </div>
-      <div class="job-meta">
-        <span class="meta-pill">📍 ${j.location}</span>
-        <span class="meta-pill salary">💰 ${j.salary}</span>
-        <span class="meta-pill">${j.type}</span>
-        <span class="meta-pill">${j.posted}</span>
-        ${j.h1b ? `<span class="meta-pill h1b">✓ H1B Sponsor</span>` : `<span class="meta-pill">H1B: Verify</span>`}
-        <span class="meta-pill">${j.source}</span>
-      </div>
-      <div class="job-desc">${j.description}</div>
-      <div class="job-actions">
-        <button class="btn btn-teal btn-sm" onclick="event.stopPropagation();openJob(${j.id},'cover')">✍ Cover Letter</button>
-        <button class="btn btn-gold btn-sm" onclick="event.stopPropagation();openJob(${j.id},'email')">📧 Outreach Email</button>
-        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();window.open('${j.url}','_blank')">View Job →</button>
-      </div>
-    </div>
-  `).join('');
+
+  document.getElementById("results").innerHTML = jobs.map(function(j) {
+    var mc = j.match==="high"?"mhi":j.match==="medium"?"mme":"mlo";
+    var ml = j.match==="high"?"&#9650; Strong Match":j.match==="medium"?"&#9654; Good Match":"&#9675; Partial";
+    var bc = j.match==="high"?"hi":"me";
+    return "<div class=\"jcard "+bc+"\" onclick=\"openJob("+j.id+")\">"
+      +"<div class=\"jh\"><div><div class=\"jtit\">"+j.title+"</div><div class=\"jco\">"+j.company+"</div></div>"
+      +"<span class=\"mbadge "+mc+"\">"+ml+"</span></div>"
+      +"<div class=\"jmeta\">"
+      +"<span class=\"mp r\">&#128205; "+j.location+"</span>"
+      +"<span class=\"mp s\">&#128176; "+j.salary+"</span>"
+      +"<span class=\"mp\">"+j.type+"</span>"
+      +"<span class=\"mp\">"+j.posted+"</span>"
+      +(j.h1b?"<span class=\"mp h\">&#10003; H1B Sponsor</span>":"<span class=\"mp\">H1B: Verify</span>")
+      +"<span class=\"mp\">"+j.source+"</span>"
+      +"</div>"
+      +"<div class=\"jdesc\">"+j.description+"</div>"
+      +"<div class=\"jacts\">"
+      +"<button class=\"btn bt bsm\" onclick=\"event.stopPropagation();openJob("+j.id+",'tc')\">"
+      +"&#9998; Cover Letter</button>"
+      +"<button class=\"btn bg bsm\" onclick=\"event.stopPropagation();openJob("+j.id+",'te')\">"
+      +"&#128231; Outreach Email</button>"
+      +"<button class=\"btn bo bsm\" onclick=\"event.stopPropagation();window.open('"+j.url+"','_blank')\">View Job &#8599;</button>"
+      +"</div></div>";
+  }).join("");
 }
 
-// ── FILTER ────────────────────────────────────────────────────────────
-function filterJobs(type) {
-  activeFilter = type;
-  ['all','high','h1b'].forEach(f => {
-    document.getElementById(`f-${f}`).classList.toggle('btn-primary', f === type);
+// ── SCAN ──────────────────────────────────────────────────────────────
+function runScan() {
+  var role  = document.getElementById("roleFilter").value;
+  var match = document.getElementById("matchFilter").value;
+  var h1b   = document.getElementById("h1bFilter").value;
+
+  var results = document.getElementById("results");
+  results.innerHTML = "<div class=\"pulse-row\">"
+    +"<div class=\"pulse-card\"></div><div class=\"pulse-card\"></div><div class=\"pulse-card\"></div>"
+    +"</div>";
+
+  setTimeout(function(){
+    var jobs = JOBS.slice();
+    if (role !== "all" && CAT[role]) {
+      jobs = jobs.filter(function(j){ return CAT[role].indexOf(j.id) !== -1; });
+    }
+    if (match !== "all") jobs = jobs.filter(function(j){ return j.match === match; });
+    if (h1b === "yes")   jobs = jobs.filter(function(j){ return j.h1b; });
+    render(jobs);
+  }, 800);
+}
+
+// ── QUICK FILTER ────────────────────────────────────────────────────
+function quickFilter(type) {
+  ["all","high","h1b","nj"].forEach(function(f){
+    var el = document.getElementById("qf-"+f);
+    el.classList.remove("bp");
+    el.classList.add("bo");
   });
-  let filtered = currentJobs;
-  if (type === 'high') filtered = currentJobs.filter(j => j.match === 'high');
-  if (type === 'h1b')  filtered = currentJobs.filter(j => j.h1b);
-  renderJobs(filtered);
+  var el = document.getElementById("qf-"+type);
+  el.classList.remove("bo");
+  el.classList.add("bp");
+
+  var jobs = JOBS.slice();
+  if (type==="high") jobs = jobs.filter(function(j){return j.match==="high";});
+  if (type==="h1b")  jobs = jobs.filter(function(j){return j.h1b;});
+  if (type==="nj")   jobs = jobs.filter(function(j){return j.location.indexOf("NJ")!==-1||j.location.indexOf("Remote")!==-1||j.location.indexOf("NY")!==-1;});
+  render(jobs);
 }
 
-// ── OPEN JOB ──────────────────────────────────────────────────────────
-async function openJob(id, tab='details') {
-  currentJob = JOB_DATABASE.find(j => j.id === id);
-  if (!currentJob) return;
+// ── OPEN JOB ────────────────────────────────────────────────────────
+function openJob(id, tab) {
+  current = JOBS.find(function(j){return j.id===id;});
+  if (!current) return;
+  document.getElementById("mtit").textContent = current.title+" — "+current.company;
+  document.getElementById("applyA").href = current.url;
+  document.getElementById("drows").innerHTML =
+    row("Role",     current.title)
+   +row("Company",  current.company)
+   +row("Location", current.location)
+   +row("Salary",   current.salary)
+   +row("H1B",      current.h1bNote)
+   +row("Why You",  current.matchReason)
+   +row("Key Skills",current.skills.join(" · "))
+   +row("Source",   "<a href=\""+current.url+"\" target=\"_blank\">"+current.source+" — View Job &#8599;</a>");
 
-  document.getElementById('modalTitle').textContent = `${currentJob.title} — ${currentJob.company}`;
-  document.getElementById('applyLink').href = currentJob.url;
-
-  document.getElementById('jobInfoRows').innerHTML = `
-    <div class="info-item"><div class="info-lbl">Role</div><div class="info-val">${currentJob.title}</div></div>
-    <div class="info-item"><div class="info-lbl">Company</div><div class="info-val">${currentJob.company}</div></div>
-    <div class="info-item"><div class="info-lbl">Location</div><div class="info-val">${currentJob.location}</div></div>
-    <div class="info-item"><div class="info-lbl">Salary</div><div class="info-val">${currentJob.salary}</div></div>
-    <div class="info-item"><div class="info-lbl">H1B Status</div><div class="info-val">${currentJob.h1bNote}</div></div>
-    <div class="info-item"><div class="info-lbl">Match Reason</div><div class="info-val">${currentJob.matchReason}</div></div>
-    <div class="info-item"><div class="info-lbl">Key Skills</div><div class="info-val">${currentJob.skills.join(' · ')}</div></div>
-    <div class="info-item"><div class="info-lbl">Source</div><div class="info-val"><a href="${currentJob.url}" target="_blank">${currentJob.source} — View Job →</a></div></div>
-  `;
-
-  document.getElementById('modalOverlay').classList.add('open');
-  switchTab(tab);
-
-  if (tab === 'cover') await generateDraft('cover');
-  if (tab === 'email') await generateDraft('email');
+  document.getElementById("ov").classList.add("open");
+  switchTabById(tab || "td");
+  if ((tab==="tc")||(!tab)) buildDraft("cover");
+  if (tab==="te") buildDraft("email");
 }
 
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-  currentJob = null;
+function row(l,v){
+  return "<div class=\"ii\"><div class=\"il\">"+l+"</div><div class=\"iv\">"+v+"</div></div>";
 }
-document.getElementById('modalOverlay').addEventListener('click', e => {
-  if (e.target === document.getElementById('modalOverlay')) closeModal();
+
+function closeM(){
+  document.getElementById("ov").classList.remove("open");
+  current = null;
+}
+document.getElementById("ov").addEventListener("click", function(e){
+  if(e.target===document.getElementById("ov")) closeM();
 });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closeM();});
 
-// ── TABS ──────────────────────────────────────────────────────────────
-async function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach((t,i) => {
-    const tabs = ['details','cover','email','contact'];
-    t.classList.toggle('active', tabs[i] === tab);
+// ── TABS ────────────────────────────────────────────────────────────
+function switchTab(btn, panelId) {
+  document.querySelectorAll(".tab").forEach(function(t){t.classList.remove("on");});
+  document.querySelectorAll(".tp").forEach(function(p){p.classList.remove("on");});
+  btn.classList.add("on");
+  document.getElementById(panelId).classList.add("on");
+  if(panelId==="tc" && current) buildDraft("cover");
+  if(panelId==="te" && current) buildDraft("email");
+}
+function switchTabById(id) {
+  document.querySelectorAll(".tab").forEach(function(t,i){
+    var ids=["td","tc","te","tt"];
+    t.classList.toggle("on", ids[i]===id);
   });
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById(`tab-${tab}`).classList.add('active');
-
-  if (tab === 'cover' && currentJob && !document.getElementById('coverDraft').value)
-    await generateDraft('cover');
-  if (tab === 'email' && currentJob && !document.getElementById('emailDraft').value)
-    await generateDraft('email');
+  document.querySelectorAll(".tp").forEach(function(p){
+    p.classList.toggle("on", p.id===id);
+  });
 }
 
-// ── GENERATE WITH CLAUDE API ──────────────────────────────────────────
-async function generateDraft(type) {
-  if (!currentJob) return;
-  const loadingEl = document.getElementById(`${type}Loading`);
-  const draftEl   = document.getElementById(`${type}Draft`);
-  loadingEl.style.display = 'block';
-  draftEl.style.display   = 'none';
+// ── DRAFT BUILDER (pure template — no API needed) ──────────────────
+function buildDraft(type) {
+  if (!current) return;
+  var j = current;
 
-  const prompt = type === 'cover'
-    ? `Write a professional cover letter for ${PROFILE.name} applying to the role of "${currentJob.title}" at ${currentJob.company}.
+  if (type==="cover") {
+    var draft =
+"Dear Hiring Manager,\n\n"
++"I am writing to express my strong interest in the "+j.title+" position at "+j.company+". With 13+ years of enterprise Power BI and Microsoft Fabric architecture experience — including leading a full-scale Fabric + Databricks implementation for a Fortune 500 Life Sciences organisation — I am confident I can deliver immediate impact in this role.\n\n"
++"In my current engagement at TCS, I have designed and governed a Power BI estate of 100+ workspaces, driven the migration from legacy MicroStrategy and Qlik platforms to Power BI, and architected a Databricks Medallion Lakehouse that reduced semantic model refresh times by approximately 55%. I have trained over 200 analysts on Fabric and self-service BI, and recently contributed an open-source enterprise deployment guide for the FUAM (Fabric Unified Admin Monitoring) solution on GitHub. Specifically relevant to "+j.company+": "+j.matchReason+"\n\n"
++"I am currently on H1B at TCS — this engagement would be a transfer, not a new lottery petition, making the process faster and lower-risk for your immigration team. My portfolio and technical articles are available at https://phang7.github.io/Portfolio.\n\n"
++"I would welcome a 20-minute conversation to discuss how my background aligns with your needs. Thank you for your consideration.\n\n"
++"Best regards,\n"
++"Phanindra Gaddam\n"
++"Wayne, NJ | Phani.g19@gmail.com\n"
++"Portfolio: https://phang7.github.io/Portfolio";
+    document.getElementById("coverTA").value = draft;
 
-CANDIDATE PROFILE:
-- ${PROFILE.experience} experience as Power BI Architect
-- Current role: Power BI Architect at TCS (client: major Fortune 500 Life Sciences company)
-- Currently on H1B — this would be an H1B transfer, not a new lottery
-- Portfolio: ${PROFILE.portfolio}
-- Key skills: ${PROFILE.skills.slice(0,12).join(', ')}
-- Industries: ${PROFILE.industries.join(', ')}
-- Key achievements: ${PROFILE.highlights.join('; ')}
-
-JOB DETAILS:
-- Title: ${currentJob.title}
-- Company: ${currentJob.company}
-- Location: ${currentJob.location}
-- Salary: ${currentJob.salary}
-- Description: ${currentJob.description}
-- Why this is a strong match: ${currentJob.matchReason}
-
-Write a compelling, concise cover letter (3 short paragraphs, no more than 250 words). 
-- Paragraph 1: Hook — why this specific role at this specific company excites them
-- Paragraph 2: 2-3 most relevant achievements from their profile matched to the JD
-- Paragraph 3: Call to action, mention portfolio URL and H1B transfer (no lottery needed)
-Do NOT use generic filler phrases. Make it specific and human.`
-
-    : `Write a short, direct recruiter outreach email for ${PROFILE.name} regarding the role of "${currentJob.title}" at ${currentJob.company}.
-
-CANDIDATE PROFILE:
-- ${PROFILE.experience} Power BI Architect
-- Currently at TCS on H1B — H1B transfer available, no lottery needed
-- Key selling points: ${PROFILE.highlights.slice(0,3).join('; ')}
-- Portfolio: ${PROFILE.portfolio}
-- Email: ${PROFILE.email}
-
-JOB DETAILS:
-- Title: ${currentJob.title}
-- Company: ${currentJob.company}
-- Description: ${currentJob.description}
-- Match reason: ${currentJob.matchReason}
-
-Write a concise cold outreach email (max 120 words). Format:
-Subject line: [write this first]
-Then the email body.
-- Be direct and confident, not grovelling
-- Lead with the H1B transfer point early (huge advantage)
-- Reference one specific achievement most relevant to this role
-- Include portfolio URL
-- Clear call to action (15 min call)
-No fluff, no "I hope this email finds you well".`;
-
-  try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1000,
-        messages: [{ role: "user", content: prompt }]
-      })
-    });
-    const data = await response.json();
-    const text = data.content?.map(c => c.text || '').join('') || 'Error generating draft. Please try again.';
-    draftEl.value = text;
-  } catch(err) {
-    draftEl.value = `Error connecting to AI. Please check your connection.\n\nError: ${err.message}`;
+  } else {
+    var subj = "Subject: Power BI Architect — H1B Transfer Available | "+j.company;
+    var body =
+"Hi [Recruiter Name],\n\n"
++"I came across the "+j.title+" role at "+j.company+" and wanted to reach out directly.\n\n"
++"Quick context: I am currently on H1B at TCS — this would be a transfer, not a new lottery, which means no lottery risk and a faster timeline for your team.\n\n"
++"Briefly: 13 years as a Power BI Architect, currently leading Fabric + Databricks architecture for a Fortune 500 Life Sciences client — 100+ workspaces, ~55% refresh time reduction, zero executive dashboard outages over 12 months. "+j.matchReason+"\n\n"
++"Portfolio: https://phang7.github.io/Portfolio\n\n"
++"Would you have 15 minutes this week for a quick call?\n\n"
++"Thanks,\nPhanindra Gaddam\nPhani.g19@gmail.com";
+    document.getElementById("emailTA").value = subj+"\n\n"+body;
   }
-
-  loadingEl.style.display = 'none';
-  draftEl.style.display   = 'block';
 }
 
-async function regenerateDraft(type) {
-  document.getElementById(`${type}Draft`).value = '';
-  await generateDraft(type);
+// ── COPY ────────────────────────────────────────────────────────────
+function copyActive() {
+  var active = document.querySelector(".tp.on");
+  var ta = active ? active.querySelector("textarea") : null;
+  if (!ta) return;
+  navigator.clipboard.writeText(ta.value).then(function(){
+    var btn = document.querySelector(".mft .bt");
+    var orig = btn.textContent;
+    btn.textContent = "&#10003; Copied!";
+    setTimeout(function(){ btn.innerHTML = orig; }, 2000);
+  });
 }
 
-function copyDraft() {
-  const activeTab = document.querySelector('.tab.active');
-  const tabs = ['details','cover','email','contact'];
-  const idx  = [...document.querySelectorAll('.tab')].indexOf(activeTab);
-  const type = idx === 1 ? 'cover' : idx === 2 ? 'email' : null;
-  if (!type) return;
-  const text = document.getElementById(`${type}Draft`).value;
-  navigator.c
+// Initial render on page load
+render(JOBS);
+</script>
+</body>
+</html>
