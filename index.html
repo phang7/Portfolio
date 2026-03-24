@@ -478,10 +478,10 @@ footer{border-top:1px solid var(--bdr);padding:2.5rem 0;position:relative;z-inde
       <h1 class="art-panel-title">Why Most Fabric Migrations Fail &mdash; And How We Made Ours Stick</h1>
       <div class="art-panel-meta"><span>Phanindra Gaddam</span><span>&#183;</span><span>8 min read</span><span>&#183;</span><span>Power BI Architect</span></div>
       <div class="art-panel-divider"></div>
-      <div class="art-panel-content"><p>I've watched organisations announce Fabric migrations with fanfare, only to quietly shelve them six months later. Having led a successful Denodo &rarr; Databricks &rarr; Microsoft Fabric migration at Becton Dickinson, I can tell you exactly why most of them stall. It's almost never a technology problem.</p>
+      <div class="art-panel-content"><p>I've watched organisations announce Fabric migrations with fanfare, only to quietly shelve them six months later. Having led a successful Denodo &rarr; Databricks &rarr; Microsoft Fabric migration at a global enterprise client, I can tell you exactly why most of them stall. It's almost never a technology problem.</p>
 <h3>The Four Reasons Migrations Fail</h3>
 <h4>1. They migrate reports, not architecture</h4>
-<p>The most common mistake: teams take their existing mess &mdash; badly designed models, ungoverned datasets, report sprawl &mdash; and move it verbatim into Fabric. At BD, we used the migration as a forcing function to redesign the entire semantic layer from scratch against a Medallion Lakehouse architecture.</p>
+<p>The most common mistake: teams take their existing mess &mdash; badly designed models, ungoverned datasets, report sprawl &mdash; and move it verbatim into Fabric. At our client, we used the migration as a forcing function to redesign the entire semantic layer from scratch against a Medallion Lakehouse architecture.</p>
 <h4>2. They underestimate data platform dependencies</h4>
 <p>Fabric doesn't exist in isolation. Ours sat downstream of Databricks, which replaced Denodo, which had replaced SSRS. Each layer had assumptions baked in that the Power BI layer had inherited and forgotten. We spent two weeks documenting what Denodo was doing that nobody had written down.</p>
 <blockquote>The data debt you ignore during migration will find you later. It shows up in the report layer as 'wrong numbers'.</blockquote>
@@ -510,13 +510,13 @@ footer{border-top:1px solid var(--bdr);padding:2.5rem 0;position:relative;z-inde
       <h1 class="art-panel-title">Zero Throttling at Scale: Eliminating Power BI Bottlenecks Across 100+ Workspaces</h1>
       <div class="art-panel-meta"><span>Phanindra Gaddam</span><span>&#183;</span><span>10 min read</span><span>&#183;</span><span>Power BI Architect</span></div>
       <div class="art-panel-divider"></div>
-      <div class="art-panel-content"><p>When I joined the Becton Dickinson engagement, executive dashboards were timing out, dataset refreshes were failing overnight, and the business was losing confidence in the platform. Eighteen months later, we had zero throttling incidents across 100+ workspaces.</p>
+      <div class="art-panel-content"><p>When I joined a major Life Sciences client engagement, executive dashboards were timing out, dataset refreshes were failing overnight, and the business was losing confidence in the platform. Eighteen months later, we had zero throttling incidents across 100+ workspaces.</p>
 <h3>Diagnose Before Optimising</h3>
 <p>My diagnostic framework has three layers: <strong>Capacity layer</strong> (CU consumption, throttling events), <strong>Model layer</strong> (table sizes, cardinality, storage modes), and <strong>Query layer</strong> (slow measures, inefficient filter contexts).</p>
 <blockquote>You can't optimise what you haven't measured. The Capacity Metrics App is the starting point, not an optional add-on.</blockquote>
 <h3>The Seven Levers</h3>
 <h4>1. Incremental Refresh Policy Redesign</h4>
-<p>Roughly 40% of refresh failures come from poorly designed incremental refresh policies. At BD, we standardised on a 3-day incremental window with 2-year historical partitions. Refresh times dropped by over 60% on the largest models.</p>
+<p>Roughly 40% of refresh failures come from poorly designed incremental refresh policies. At our client, we standardised on a 3-day incremental window with 2-year historical partitions. Refresh times dropped by over 60% on the largest models.</p>
 <h4>2. Storage Mode Strategy</h4>
 <p>Import for executive fact tables; Direct Lake for large Delta tables in Fabric; Aggregation tables for sub-second executive summaries. Not one-size-fits-all.</p>
 <h4>3. DAX Measure Audit</h4>
@@ -548,7 +548,7 @@ footer{border-top:1px solid var(--bdr);padding:2.5rem 0;position:relative;z-inde
       <h1 class="art-panel-title">The Governance Framework That Scaled Across 100+ Power BI Workspaces</h1>
       <div class="art-panel-meta"><span>Phanindra Gaddam</span><span>&#183;</span><span>7 min read</span><span>&#183;</span><span>Power BI Architect</span></div>
       <div class="art-panel-divider"></div>
-      <div class="art-panel-content"><p>When I took ownership of the Power BI platform at Becton Dickinson, there were no governance standards. Every team had created workspaces their own way. Building a framework that actually sticks is harder than it sounds. Here's what worked.</p>
+      <div class="art-panel-content"><p>When I took ownership of the Power BI platform at a large Life Sciences client, there were no governance standards. Every team had created workspaces their own way. Building a framework that actually sticks is harder than it sounds. Here's what worked.</p>
 <h3>Why Most Frameworks Don't Stick</h3>
 <p>They fail for three reasons: too complex to follow, enforced only at deployment time, or they live in a document nobody reads. Our framework had one rule: it had to be <strong>automatable, auditable, and explainable</strong> in under two minutes.</p>
 <h3>The Five Pillars</h3>
@@ -592,11 +592,11 @@ footer{border-top:1px solid var(--bdr);padding:2.5rem 0;position:relative;z-inde
 <h4>Analyst / Self-Service Layer</h4>
 <p>Analysts need flexibility to write measures and explore. Give them the Lakehouse SQL endpoint. Critically &mdash; their exploration should never affect executive dashboard performance.</p>
 <blockquote>When you build one model for everyone, you optimise for nobody.</blockquote>
-<h3>How We Implemented at BD</h3>
+<h3>How We Implemented This at Our Client</h3>
 <ul><li>Gold Lakehouse tables in Databricks (single source of truth)</li><li>Executive semantic model &mdash; Import, pre-aggregated, &lt;15 measures, nightly refresh</li><li>Operational semantic model &mdash; Direct Lake, full grain, near-real-time</li><li>Analyst Lakehouse endpoint &mdash; SQL access for ad-hoc queries</li></ul>
 <p>Each layer: separate Fabric item, separate workspace, separate capacity allocation.</p>
 <div class="art-tip">&#127919; <strong>Try This:</strong> List every measure in your largest model. Tag each: Executive, Operational, or Analyst. If more than 30% are Analyst-level measures in an Executive report &mdash; you have a persona problem.</div>
-<p>After implementing this at BD, executive dashboard load times dropped to under 2 seconds.</p>
+<p>After implementing this, executive dashboard load times dropped to under 2 seconds.</p>
 <p><em>#PowerBI #DAX #SemanticModeling #MicrosoftFabric #DataArchitecture #DirectLake</em></p></div>
       <div class="art-panel-footer">
         <div class="art-panel-nav"><button class="art-nav-btn" onclick="openArticle('a3')">&#8592; Prev</button><a href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank" class="art-nav-btn art-nav-li">Follow on LinkedIn</a><button class="art-nav-btn" onclick="openArticle('a5')">Next &#8594;</button></div>
