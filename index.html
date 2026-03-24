@@ -464,6 +464,13 @@ footer{border-top:1px solid var(--bdr);padding:2.5rem 0;position:relative;z-inde
         <div class="art-desc">How a canvas Power App in Microsoft Teams eliminated ad-hoc refresh tickets &mdash; and what the refresh history report revealed about governance.</div>
         <div class="art-footer"><span class="art-time">7 min read</span><span class="art-badge live">&#9679; Live</span></div>
       </div>
+      <div class="art-card reveal" onclick="openArticle('a8')">
+        <div class="art-arrow">&#8599;</div>
+        <div class="art-topic">Microsoft Fabric &#183; Spark &#183; Governance</div>
+        <div class="art-title">Your Fabric Workspaces Are Running Deprecated Spark Runtimes. Do You Know Which Ones?</div>
+        <div class="art-desc">How a Power BI report on the Fabric Admin API gives live visibility of every workspace&#39;s Spark runtime &mdash; and targets the right admins automatically.</div>
+        <div class="art-footer"><span class="art-time">~8 min read</span><span class="art-badge live">&#9679; Live</span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -741,7 +748,7 @@ footer{border-top:1px solid var(--bdr);padding:2.5rem 0;position:relative;z-inde
     <div class="art-panel-header">
       <button class="art-close" onclick="closeArticle()">&#10005;</button>
       <div class="art-panel-topic">Power Apps &#183; Power Automate &#183; Power BI</div>
-      <div class="art-counter">7 / 7</div>
+      <div class="art-counter">7 / 8</div>
     </div>
     <div class="art-panel-body">
       <h1 class="art-panel-title">We Killed the &#8216;Please Refresh My Dataset&#8217; ServiceNow Ticket. Here&#8217;s How.</h1>
@@ -883,5 +890,79 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeArticle
     ).catch(function(){});
 })();
 </script>
+<div class="art-panel" id="panel-a8">
+  <div class="art-panel-inner">
+    <div class="art-panel-header">
+      <button class="art-close" onclick="closeArticle()">&#10005;</button>
+      <div class="art-panel-topic">Microsoft Fabric &#183; Spark &#183; Governance</div>
+      <div class="art-counter">8 / 8</div>
+    </div>
+    <div class="art-panel-body">
+      <h1 class="art-panel-title">Your Fabric Workspaces Are Running Deprecated Spark Runtimes. Do You Know Which Ones?</h1>
+      <div class="art-panel-meta"><span>Phanindra Gaddam</span><span>&#183;</span><span>~8 min read</span><span>&#183;</span><span>Power BI Architect</span></div>
+      <div class="art-panel-divider"></div>
+      <div class="art-panel-content"><p>Most Fabric administrators don't know. Microsoft has been moving through its Spark runtime deprecation schedule. Runtime 1.1 (Spark 3.3) was retired and disabled on March 31, 2025. Runtime 1.2 (Spark 3.4) has its end-of-life clock ticking &mdash; disabled March 31, 2026. Runtime 1.3 (Spark 3.5, Delta Lake 3.2) is the current recommended GA version. Runtime 2.0 (Spark 4.0, Delta Lake 4.0) is now in Experimental Public Preview.</p>
+<p>The problem is not the deprecation schedule &mdash; Microsoft communicates it clearly. The problem is <strong>visibility</strong>. In an enterprise with dozens or hundreds of Fabric workspaces, how do you actually know which workspaces are running which runtime? And how do you reach the right people to fix it?</p>
+<p>I built a report to answer exactly that.</p>
+
+<h3>The Problem with Manual Runtime Checks</h3>
+<p>The straightforward approach: open each workspace, navigate to Workspace Settings &rarr; Data Engineering / Science &rarr; Spark Settings, check the version. In a small environment that is manageable. In an enterprise with 100+ workspaces across multiple business units, it is not &mdash; it is an afternoon of clicking, a spreadsheet that goes stale immediately, and no systematic way to act on what you find.</p>
+<p>The other challenge is ownership. Even if you identify that a workspace is still on Runtime 1.2, you need to find the admin and communicate the urgency without sending a generic blast email that everyone ignores.</p>
+
+<h3>The Solution: Fabric Admin API + Power BI Report</h3>
+<p>The Fabric Admin REST API exposes workspace-level settings including the configured Spark runtime version. I used a Power Automate flow on a scheduled daily trigger to call the API, write results to a SharePoint list, and feed that into a Power BI report. The result: a live, always-current view of every workspace in the tenant categorised by runtime status.</p>
+<p>The report has three core views:</p>
+<h4>Runtime Health Overview</h4>
+<p>A summary showing workspace counts by runtime version: how many on current Runtime 1.3, how many on deprecated Runtime 1.2 (deadline: March 2026), and how many on the already-disabled Runtime 1.1. One glance tells the platform health story.</p>
+<h4>Workspace Drill-Down</h4>
+<p>A filterable table showing every workspace by name, business unit, runtime version, last modified date, and workspace admin. Colour-coded: green for Runtime 1.3+, amber for Runtime 1.2 (deprecated but running), red for Runtime 1.1 (should not still be configured &mdash; problem flag). This view powers all the action.</p>
+<h4>Trend Over Time</h4>
+<p>The daily snapshot gives a running history. This shows whether deprecated-runtime workspaces are going up or down week-on-week. When it goes up, someone is creating new workspaces with old defaults &mdash; that is a process problem to fix at the source.</p>
+
+<h3>The Email Targeting Layer</h3>
+<p>The workspace drill-down includes the admin's name and email address &mdash; pulled from the same API call. When we identify workspaces on deprecated runtimes, we filter to that list and use Power Automate to send a targeted, personalised notification to each admin.</p>
+<p>The email is not a generic blast. It says: <em>"Your workspace FIN-FinancialReporting-PROD is currently running Fabric Runtime 1.2 (Spark 3.4), which will be deprecated on March 31, 2026. Here are the steps to upgrade to Runtime 1.3. Please complete this before [date]."</em></p>
+
+<blockquote>Workspace admins respond to messages about their specific workspace. They ignore messages about the estate in general. Specificity is what makes the email actually get actioned.</blockquote>
+
+<h3>What We Found on the First Run</h3>
+<p>The first run was eye-opening. A meaningful number of workspaces were on Runtime 1.2 &mdash; and several were still nominally configured for Runtime 1.1, which is already disabled. Without this report, those would have been invisible until a Notebook or Spark job failed silently one morning.</p>
+<p>Runtime 1.1 findings are particularly urgent: because it is already disabled, any workspace configured for it will experience silent job failures. Knowing which workspaces are affected lets you get ahead of support tickets before they arrive.</p>
+
+<h3>Why This Matters Beyond Compliance</h3>
+<ul>
+<li><strong>Security</strong> &mdash; Deprecated runtimes do not receive security patches. Spark 3.3 has known CVEs patched in 3.5.</li>
+<li><strong>Performance</strong> &mdash; Runtime 1.3 includes the Native Execution Engine at no additional cost. Workspaces on older runtimes are leaving free performance gains on the table.</li>
+<li><strong>Delta Lake compatibility</strong> &mdash; Runtime 1.3 brings Delta Lake 3.2 with significant improvements in table optimisation, liquid clustering, and V3 checkpointing. Runtime 2.0 brings Delta Lake 4.0 with even more.</li>
+<li><strong>Future-proofing</strong> &mdash; With Runtime 2.0 (Spark 4.0) now in preview, understanding your current runtime baseline is the first step to planning a controlled upgrade path.</li>
+</ul>
+
+<div class="art-tip">&#128161; <strong>The Governance Principle:</strong> Runtime version sprawl happens when there is no systematic visibility. You cannot govern what you cannot see. This report costs nothing to build &mdash; the Fabric Admin API is available to any Fabric Administrator, Power Automate is already in your tenant, and Power BI is what you do for a living.</div>
+
+<h3>Current Runtime Reference</h3>
+<div style="overflow-x:auto">
+<table class="art-table">
+<thead><tr><th>Runtime</th><th>Spark Version</th><th>Delta Lake</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td><strong>1.1</strong></td><td>Spark 3.3</td><td>Delta 2.2</td><td style="color:#FF5E5E">&#10007; Retired March 31, 2025</td></tr>
+<tr><td><strong>1.2</strong></td><td>Spark 3.4</td><td>Delta 2.4</td><td style="color:#F5C842">&#9888; Deprecated &mdash; disabled March 31, 2026</td></tr>
+<tr><td><strong>1.3</strong></td><td>Spark 3.5</td><td>Delta 3.2</td><td style="color:#00E5C3">&#10003; Current GA &mdash; Recommended</td></tr>
+<tr><td><strong>2.0</strong></td><td>Spark 4.0</td><td>Delta 4.0</td><td style="color:#3B9EFF">&#9670; Experimental Public Preview</td></tr>
+</tbody>
+</table>
+</div>
+<p>If you are managing a Fabric tenant right now, run the check. You may be surprised what you find.</p>
+<p><em>Have you started your Runtime 1.2 &rarr; 1.3 migration? What patterns have you seen in large tenant estates?</em></p>
+<p><em>#MicrosoftFabric #ApacheSpark #PowerBI #DataEngineering #FabricAdmin #DataGovernance #SparkRuntime #PowerAutomate</em></p></div>
+      <div class="art-panel-footer">
+        <div class="art-panel-nav">
+          <button class="art-nav-btn" onclick="openArticle('a7')">&#8592; Prev</button>
+          <a href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank" class="art-nav-btn art-nav-li">Follow on LinkedIn</a>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
