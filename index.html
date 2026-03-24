@@ -609,7 +609,7 @@ footer{border-top:1px solid var(--bdr);padding:2.5rem 0;position:relative;z-inde
     <div class="art-panel-header">
       <button class="art-close" onclick="closeArticle()">&#10005;</button>
       <div class="art-panel-topic">Direct Lake</div>
-      <div class="art-counter">5 / 6</div>
+      <div class="art-counter">5 / 7</div>
     </div>
     <div class="art-panel-body">
       <h1 class="art-panel-title">Direct Lake vs Import vs Live Connect: The Decision Framework</h1>
@@ -645,7 +645,7 @@ footer{border-top:1px solid var(--bdr);padding:2.5rem 0;position:relative;z-inde
     <div class="art-panel-header">
       <button class="art-close" onclick="closeArticle()">&#10005;</button>
       <div class="art-panel-topic">Open Source · Microsoft Fabric</div>
-      <div class="art-counter">6 / 6</div>
+      <div class="art-counter">6 / 7</div>
     </div>
     <div class="art-panel-body">
       <h1 class="art-panel-title">FUAM: The Tenant Monitoring Tool Every Fabric Admin Needs</h1>
@@ -735,6 +735,69 @@ footer{border-top:1px solid var(--bdr);padding:2.5rem 0;position:relative;z-inde
     </div>
   </div>
 </footer>
+<div class="art-panel" id="panel-a7">
+  <div class="art-panel-inner">
+    <div class="art-panel-header">
+      <button class="art-close" onclick="closeArticle()">&#10005;</button>
+      <div class="art-panel-topic">Power Apps &#183; Power Automate &#183; Power BI</div>
+      <div class="art-counter">7 / 7</div>
+    </div>
+    <div class="art-panel-body">
+      <h1 class="art-panel-title">We Killed the &#8216;Please Refresh My Dataset&#8217; ServiceNow Ticket. Here&#8217;s How.</h1>
+      <div class="art-panel-meta"><span>Phanindra Gaddam</span><span>&#183;</span><span>~7 min read</span><span>&#183;</span><span>Power BI Architect</span></div>
+      <div class="art-panel-divider"></div>
+      <div class="art-panel-content"><p>Every enterprise Power BI administrator has a version of this story.</p>
+<p>A business analyst has a critical board presentation in two hours. The overnight refresh ran at 2am. New source data landed at 9am. The report is showing yesterday's numbers. The analyst raises a ServiceNow ticket. The ticket routes to the BI team. Someone picks it up, navigates to the Power BI service, finds the right semantic model, clicks refresh, and responds to the ticket. Forty minutes gone. Sometimes more.</p>
+<p>Multiply that by fifteen analysts, three times a week. That was the situation I was asked to fix.</p>
+
+<h3>The Root Cause Was Architecture, Not Process</h3>
+<p>The instinct is to fix the ticketing workflow &mdash; faster routing, SLA enforcement, a dedicated refresh queue. That is the wrong instinct. You are optimising a process that should not exist.</p>
+<p>The real problem is that users in a governed Power BI environment cannot refresh Production semantic models directly. They do not have &mdash; and should not have &mdash; Contributor access to Production workspaces. That is correct governance design. But the side effect is that every ad-hoc refresh request becomes an IT dependency.</p>
+<blockquote>The question is not "how do we handle refresh tickets faster?" It is "how do we eliminate the need for a ticket entirely?"</blockquote>
+
+<h3>The Solution: A Power App in Microsoft Teams</h3>
+<p>I built a canvas Power App that presents users with a curated dropdown &mdash; a list of semantic models they are authorised to refresh. They select the model, optionally add a note (e.g. "Month-end data landed, need refresh before 10am standup"), and hit one button: <strong>Refresh Now</strong>.</p>
+<p>Behind the scenes, the button triggers a Power Automate flow. The flow calls the Power BI REST API's dataset refresh endpoint using a service principal scoped specifically to the workspaces and models it needs &mdash; nothing more. The flow then writes the request to a SharePoint list: who triggered it, which model, when, and what the status was.</p>
+<p>The app is published as a tab in the relevant Microsoft Teams channels. Users never leave Teams. No browser navigation, no Power BI service login, no ticket, no wait. They click a button and the refresh starts within seconds.</p>
+
+<h3>The Refresh History Report</h3>
+<p>The service principal's API calls return refresh status. I built a companion Power BI report on top of the SharePoint tracking list and the Power BI refresh history endpoint &mdash; showing every refresh event across all monitored semantic models: scheduled and ad-hoc refreshes, who triggered them, duration, success or failure, and error messages where applicable.</p>
+<p>This report serves three audiences simultaneously:</p>
+<ul>
+<li><strong>Business users</strong> &mdash; "Has my refresh completed yet?" answered instantly, without asking anyone.</li>
+<li><strong>BI administrators</strong> &mdash; full audit trail, and patterns: which models are triggered most ad-hoc (signal the scheduled cadence may need adjustment), which users are heaviest consumers.</li>
+<li><strong>IT governance</strong> &mdash; replaces manual ticket-counting with an accurate, always-current picture of refresh demand and platform load.</li>
+</ul>
+
+<h3>What Changed for the Business</h3>
+<p>Ad-hoc refresh tickets dropped to near zero within the first two weeks of rollout. The BI team reclaimed roughly three to four hours per week previously spent on manual refresh requests. For business users, a process that took between 20 minutes and two hours now takes under 60 seconds &mdash; self-served, from within Teams, without raising a single ticket.</p>
+<p>The qualitative shift matters more than the metrics. Users feel trusted. They have agency over their own data. The BI team is no longer a bottleneck between the analyst and their report.</p>
+
+<h3>A Few Things Worth Noting If You Build This</h3>
+<h4>Scope the service principal carefully</h4>
+<p>Use the Power BI REST API's <code>datasets/{datasetId}/refreshes</code> POST endpoint. Grant the service principal Dataset.ReadWrite.All at the workspace level &mdash; not the tenant level. Scope it as narrowly as possible.</p>
+<h4>Not every model should be in the dropdown</h4>
+<p>Expose only models where ad-hoc refresh is genuinely appropriate. Large models with complex refresh chains should still run through your pipeline orchestration. A one-click trigger for a 90-minute refresh a user does not understand is how you get capacity throttling complaints.</p>
+<h4>Build in a cooldown check</h4>
+<p>The Power Automate flow checks whether a refresh is already in progress before triggering a new one. Without that guard, enthusiastic users will queue five refreshes when the first one takes longer than expected.</p>
+
+<div class="art-tip">&#128161; <strong>The unexpected bonus:</strong> The refresh history report became a governance conversation starter. When leadership sees a dataset triggered manually twelve times a week, that signals the scheduled cadence is wrong, the source data SLA is unreliable, or the business process needs to change. The data tells a story no ticket system ever could.</div>
+
+<h3>The Bigger Principle</h3>
+<p>The best BI platform features make the right thing easy and the wrong thing unnecessary. Removing the ServiceNow ticket from the ad-hoc refresh workflow did not reduce governance &mdash; it strengthened it, because every refresh is now tracked, audited, and visible in a way that manual ticket handling never was.</p>
+<p>If your users are still raising tickets to refresh a dataset, you have not finished the architecture.</p>
+<p><em>What refresh pain points have you solved with Power Apps or Power Automate in your environment?</em></p>
+<p><em>#PowerBI #PowerApps #PowerAutomate #MicrosoftFabric #EnterpriseBI #DataGovernance #MicrosoftTeams #PowerPlatform</em></p></div>
+      <div class="art-panel-footer">
+        <div class="art-panel-nav">
+          <button class="art-nav-btn" onclick="openArticle('a6')">&#8592; Prev</button>
+          <a href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank" class="art-nav-btn art-nav-li">Follow on LinkedIn</a>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <a href="#hero" class="bktop" id="bkTop">&#8593;</a>
 <script>
 window.addEventListener('scroll',function(){
