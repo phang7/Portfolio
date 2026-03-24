@@ -278,7 +278,7 @@ textarea.draft:focus{border-color:var(--acc)}
           <strong>How to find the recruiter's contact details for this role:</strong><br/><br/>
           1. <strong>LinkedIn:</strong> Search the company name + "Talent Acquisition" or "Recruiter" — filter by location. Send a connection request with a note referencing the job posting.<br/><br/>
           2. <strong>Company careers page:</strong> Many list the hiring manager's name in the JD. Google "<em>company name</em> + recruiter + Power BI" to find profiles.<br/><br/>
-          3. <strong>Hunter.io:</strong> Enter the company domain to find email patterns (e.g. firstname.lastname@company.com).<br/><br/>
+          3. <strong>Hunter.io:</strong> Enter the company domain to find email patterns (e.g. <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="690f001b1a1d0708040c4705081a1d0708040c290a060419080710470a0604">[email&#160;protected]</a>).<br/><br/>
           4. <strong>Apollo.io:</strong> Free tier lets you find professional emails by name + company.<br/><br/>
           5. <strong>Email pattern guess:</strong> Most enterprise companies use firstname.lastname@ or f.lastname@ — try the outreach email tab draft with the pattern once you have the name.
         </div>
@@ -294,7 +294,7 @@ textarea.draft:focus{border-color:var(--acc)}
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── PROFILE ─────────────────────────────────────────────────────────
 const PROFILE = {
   name: "Phanindra Gaddam",
@@ -826,12 +826,4 @@ function copyDraft() {
   const type = idx === 1 ? 'cover' : idx === 2 ? 'email' : null;
   if (!type) return;
   const text = document.getElementById(`${type}Draft`).value;
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = document.querySelector('.modal-footer .btn-teal');
-    btn.textContent = '✓ Copied!';
-    setTimeout(() => { btn.textContent = 'Copy Draft'; }, 2000);
-  });
-}
-</script>
-</body>
-</html>
+  navigator.c
