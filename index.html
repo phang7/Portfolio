@@ -499,6 +499,13 @@ footer{border-top:1px solid var(--bdr);padding:2.5rem 0;position:relative;z-inde
         <div class="art-desc">Every ticket feels like a fire. Missing data, broken visuals, RLS ghosts, bookmark limits &mdash; here is the systematic triage process that turns chaos into confidence.</div>
         <div class="art-footer"><span class="art-time">~12 min read</span><span class="art-badge live">&#9679; Live</span></div>
       </div>
+      <div class="art-card reveal" onclick="openArticle('a12')">
+        <div class="art-arrow">&#8599;</div>
+        <div class="art-topic">Power BI &#183; UX Design &#183; Performance</div>
+        <div class="art-title">Bookmarks &amp; Page Navigation in Power BI: The Complete Guide to Building Them Right</div>
+        <div class="art-desc">How to build them, when to use them, how they silently kill performance, and the organisational habits that stop them becoming a maintenance nightmare.</div>
+        <div class="art-footer"><span class="art-time">~11 min read</span><span class="art-badge live">&#9679; Live</span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1346,7 +1353,7 @@ Get-DataGatewayInstaller -GatewayType Resource -Scope Organization
     <div class="art-panel-header">
       <button class="art-close" onclick="closeArticle()">&#10005;</button>
       <div class="art-panel-topic">Power BI Support &#183; Career Guide</div>
-      <div class="art-counter">11 / 11</div>
+      <div class="art-counter">11 / 12</div>
     </div>
     <div class="art-panel-body">
       <h1 class="art-panel-title">A Day in the Life of a Power BI Support Engineer: The Triage Playbook That Keeps You Sane</h1>
@@ -1474,6 +1481,152 @@ Get-DataGatewayInstaller -GatewayType Resource -Scope Organization
       <div class="art-panel-footer">
         <div class="art-panel-nav">
           <button class="art-nav-btn" onclick="openArticle('a10')">&#8592; Prev</button>
+          <a href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank" class="art-nav-btn art-nav-li">Follow on LinkedIn</a>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="art-panel" id="panel-a12">
+  <div class="art-panel-inner">
+    <div class="art-panel-header">
+      <button class="art-close" onclick="closeArticle()">&#10005;</button>
+      <div class="art-panel-topic">Power BI &#183; UX Design &#183; Performance</div>
+      <div class="art-counter">12 / 12</div>
+    </div>
+    <div class="art-panel-body">
+      <h1 class="art-panel-title">Bookmarks &amp; Page Navigation in Power BI: The Complete Guide to Building Them Right</h1>
+      <div class="art-panel-meta"><span>Phanindra Gaddam</span><span>&#183;</span><span>~11 min read</span><span>&#183;</span><span>Power BI Architect</span></div>
+      <div class="art-panel-divider"></div>
+      <div class="art-panel-content">
+<p>Bookmarks are one of the most powerful features in Power BI. They are also one of the most abused. I have reviewed reports with 40+ bookmarks wired to 15 navigation buttons, three toggle panels, a custom tooltip layer, and a help overlay &mdash; all on a single page &mdash; and the developer had no idea why the report took eight seconds to load and crashed the mobile app.</p>
+<p>This article covers everything you need to build bookmarks and page navigation correctly: how they work under the hood, when to use each approach, the performance traps, the 20-bookmark limit, and the organisational discipline that stops them becoming a maintenance nightmare six months after you ship the report.</p>
+<h3>What Bookmarks Actually Do Under the Hood</h3>
+<p>A bookmark is a snapshot of report state at a specific moment. When you create one, Power BI captures:</p>
+<ul>
+<li><strong>Filter state</strong> &mdash; every active filter on the page, including slicer selections, cross-filter states, and drillthrough context</li>
+<li><strong>Visual visibility</strong> &mdash; which visuals are visible and which are hidden</li>
+<li><strong>Spotlight and focus state</strong> &mdash; whether a visual is in focus mode</li>
+<li><strong>Sort order</strong> &mdash; the current sort applied to each visual</li>
+<li><strong>Page</strong> &mdash; which report page is active (for cross-page bookmarks)</li>
+</ul>
+<p>This is critical to understand because it means <strong>every bookmark is a full state snapshot</strong>, not a delta. When you trigger a bookmark, Power BI does not just toggle a visual &mdash; it restores the entire captured state. This has significant implications for performance and for unexpected behaviour when reports are updated after bookmarks are created.</p>
+<blockquote>A bookmark does not remember one thing. It remembers everything. That is both its power and its problem.</blockquote>
+<h3>Three Types of Bookmarks &mdash; Know Which One You Are Building</h3>
+<div style="overflow-x:auto"><table class="art-table"><thead><tr><th>Type</th><th>Created By</th><th>Visible To</th><th>Persists After Publish?</th><th>Best For</th></tr></thead><tbody>
+<tr><td><strong>Report Bookmark</strong></td><td>Developer in Desktop</td><td>All users</td><td>Yes &mdash; part of the report</td><td>Navigation, toggle panels, guided story</td></tr>
+<tr><td><strong>Personal Bookmark</strong></td><td>End user in Service</td><td>That user only</td><td>Yes &mdash; until report structure changes</td><td>Saving personal filter views</td></tr>
+<tr><td><strong>Default Bookmark</strong></td><td>End user in Service</td><td>That user only</td><td>Yes &mdash; overrides report defaults</td><td>Personalising report landing state</td></tr>
+</tbody></table></div>
+<p>Most developers only think about Report Bookmarks. Personal and Default bookmarks are created by your users independently and are invisible to you &mdash; but they interact with your report structure in ways that can break their experience when you publish updates.</p>
+<h3>How to Build Report Bookmarks Correctly</h3>
+<h4>Step 1 &mdash; Design your state map before touching a single bookmark</h4>
+<p>Before you create a single bookmark, draw or write down every state your report needs to support. If you are building a toggle between a chart view and a table view, you need exactly two states. If you are building a four-tab navigation, you need four states. Name each state clearly <em>before</em> you create the bookmark &mdash; bookmark names are how you will debug this six months from now.</p>
+<h4>Step 2 &mdash; Use Selection Pane + Bookmarks Pane together</h4>
+<p>Open both panes simultaneously: <strong>View &rarr; Selection</strong> and <strong>View &rarr; Bookmarks</strong>. The Selection Pane shows every object on the page with its visibility state (eye icon). This is your control panel. Before capturing a bookmark, explicitly set the visibility of every relevant visual in the Selection Pane. Do not rely on clicking visuals on the canvas &mdash; use the Selection Pane for precision.</p>
+<h4>Step 3 &mdash; Control exactly what each bookmark captures</h4>
+<p>When you right-click a bookmark, you get three capture options:</p>
+<ul>
+<li><strong>Data</strong> &mdash; captures filter and slicer state. Uncheck this if you want the bookmark to only control visual visibility, not reset filters.</li>
+<li><strong>Display</strong> &mdash; captures visibility, position, and format. Check this for show/hide toggles.</li>
+<li><strong>Current page</strong> &mdash; captures the active page. Uncheck this for within-page bookmarks.</li>
+</ul>
+<p>This is where most developers go wrong. They leave all three options checked for every bookmark, which means a visibility toggle also resets all the user's slicers. Unexpected, frustrating, and completely avoidable.</p>
+<div class="art-tip">&#128295; <strong>Golden Rule:</strong> For navigation bookmarks &mdash; uncheck Data, check Display. For filter-state bookmarks &mdash; check Data, uncheck Display. Never blindly leave all three on.</div>
+<h4>Step 4 &mdash; Name bookmarks systematically</h4>
+<p>Name every bookmark with a consistent prefix pattern. Examples:</p>
+<ul>
+<li><code>NAV_Overview</code>, <code>NAV_Sales</code>, <code>NAV_Finance</code> &mdash; for page navigation</li>
+<li><code>TOGGLE_ChartOn</code>, <code>TOGGLE_ChartOff</code> &mdash; for show/hide toggles</li>
+<li><code>FILTER_YTD</code>, <code>FILTER_QTD</code>, <code>FILTER_MTD</code> &mdash; for filter state presets</li>
+<li><code>HELP_Open</code>, <code>HELP_Close</code> &mdash; for overlay panels</li>
+</ul>
+<p>When a report has 15+ bookmarks with names like "Bookmark 1", "Bookmark 3 copy", and "New Bookmark" it is unmaintainable. The prefix convention makes the Bookmarks Pane scannable and makes button assignments unambiguous.</p>
+<h3>Page Navigation: When to Use It Instead of Bookmarks</h3>
+<p>Power BI has two ways to navigate between pages: <strong>actual page navigation</strong> (using page navigator visual or buttons with page navigation action) and <strong>bookmark-based pseudo-navigation</strong> (showing/hiding content groups to simulate tabs on a single page). They look identical to the user but behave very differently.</p>
+<div style="overflow-x:auto"><table class="art-table"><thead><tr><th></th><th>Real Page Navigation</th><th>Bookmark Navigation</th></tr></thead><tbody>
+<tr><td><strong>Performance</strong></td><td>Better &mdash; only active page loads</td><td>Worse &mdash; all content loads at once</td></tr>
+<tr><td><strong>Mobile</strong></td><td>Works natively</td><td>Often broken on mobile</td></tr>
+<tr><td><strong>URL sharing</strong></td><td>URL includes page name</td><td>No page context in URL</td></tr>
+<tr><td><strong>Cross-filter persistence</strong></td><td>Synced slicers required</td><td>Automatic &mdash; same page</td></tr>
+<tr><td><strong>Bookmark limit</strong></td><td>Not affected</td><td>Counts toward 20-user limit</td></tr>
+<tr><td><strong>Best for</strong></td><td>Distinct content areas</td><td>Tabs within same context</td></tr>
+</tbody></table></div>
+<h4>Use Real Page Navigation When:</h4>
+<ul>
+<li>The content is genuinely different (Overview vs Detailed Drill vs Admin)</li>
+<li>You have 4+ logical sections</li>
+<li>Users might share links to specific sections</li>
+<li>The report will be used on mobile or embedded</li>
+</ul>
+<h4>Use Bookmark Navigation When:</h4>
+<ul>
+<li>You are toggling between two views of the same data (chart vs table, bar vs line)</li>
+<li>You need a show/hide panel (filter panel, help overlay, detail card)</li>
+<li>Cross-filter context must persist across the "tabs"</li>
+<li>You have 3 or fewer toggle states</li>
+</ul>
+<h3>Building a Custom Page Navigator</h3>
+<p>The built-in Page Navigator visual (Insert &rarr; Buttons &rarr; Navigator &rarr; Page navigator) is the fastest way to add navigation but gives you limited style control. For a custom navigation bar:</p>
+<ul>
+<li>Insert a <strong>Button</strong> for each page (Insert &rarr; Buttons &rarr; Blank)</li>
+<li>Set the button text to the page name</li>
+<li>In the button Format pane &rarr; Action &rarr; Type: <strong>Page navigation</strong> &rarr; select destination page</li>
+<li>Style: use Fill colour to show the active state. For the "current page" button, use a distinct colour. This requires duplicating the nav bar on each page with the active button highlighted differently per page &mdash; tedious but gives pixel-perfect control.</li>
+<li>Group all nav buttons together in the Selection Pane. Lock the group so it cannot be accidentally moved.</li>
+</ul>
+<p><strong>Pro tip:</strong> Use the <strong>Sync Slicers</strong> feature (View &rarr; Sync slicers) to carry filter context across pages. Any slicer you sync will maintain its selection when the user navigates between pages, making multi-page navigation feel seamless.</p>
+<h3>How Bookmarks Kill Performance &mdash; And How to Prevent It</h3>
+<p>This is the section most articles skip. Bookmarks have real, measurable performance costs that compound as reports grow.</p>
+<h4>The Hidden Visuals Problem</h4>
+<p>When you hide a visual using a bookmark (setting visibility to hidden), the visual is hidden visually &mdash; but Power BI still loads and queries it on page load. A page with five hidden visuals in "off" bookmark states is still making five DAX queries that the user never sees. On a page with complex measures across large tables, this can add 3&ndash;5 seconds of invisible load time.</p>
+<p><strong>The fix:</strong> Use the <strong>Display</strong> property toggle (Format &rarr; General &rarr; Visibility) in combination with bookmarks, and consider whether the hidden content truly needs to exist on the page at all. If it is only shown in one rare scenario, consider a drillthrough page instead.</p>
+<h4>The Bookmark State Restoration Cost</h4>
+<p>Every time a bookmark is triggered, Power BI must restore the full captured state. If the bookmark includes filter state (Data checked), this means re-evaluating every measure on the page against the new filter context. On a page with 10 complex measures, triggering a bookmark is equivalent to applying a completely new filter &mdash; which means a full page re-render. A navigation bar that triggers bookmarks on every tab click will feel sluggish on large models.</p>
+<p><strong>The fix:</strong> For navigation-only bookmarks, uncheck Data. The bookmark will change visual visibility without re-evaluating any measures. Page load feels instant.</p>
+<h4>The Accumulation Problem</h4>
+<p>Each new bookmark adds a tiny overhead to the report file size and to the state management layer. Reports with 30+ bookmarks are noticeably heavier than those with 5. The overhead is not just file size &mdash; it is cognitive overhead for anyone who maintains the report and technical overhead in the rendering engine tracking all those states.</p>
+<h4>The Mobile and Embedded Breakage</h4>
+<p>Bookmark-based navigation frequently breaks in the Power BI mobile app and in embedded reports. The show/hide logic that works perfectly in the browser can behave unpredictably on touch screens. If the report will be used on mobile or embedded in a Teams tab or SharePoint, test every bookmark interaction on those surfaces before publishing. Better yet, use real page navigation instead.</p>
+<h3>The 20 Personal Bookmark Limit &mdash; And How It Affects Your Users</h3>
+<p>Each user can create a maximum of <strong>20 personal bookmarks per report</strong> in Power BI Service. Once they hit 20, the bookmark creation option silently fails or throws a vague error. This catches users by surprise, particularly power users who rely heavily on saved filter views.</p>
+<p>What makes this worse is that the limit applies <em>per report</em>, not globally. A user who works with three heavy-use reports can hit 20 bookmarks on each. The limit is not unreasonable for casual use but is painfully low for analysts who use Power BI as their primary analysis environment.</p>
+<p><strong>As a developer, you can mitigate this by:</strong></p>
+<ul>
+<li>Building the most common filter states as report bookmarks (accessible to all users, do not count toward the personal limit)</li>
+<li>Adding a clear "Reset to default view" button so users do not burn personal bookmarks on a "clean slate" state</li>
+<li>Documenting the 20-bookmark limit in your report's help overlay so users understand it before hitting it unexpectedly</li>
+</ul>
+<h3>How Bookmarks Become a Maintenance Nightmare</h3>
+<p>Here is the scenario I have seen play out in multiple organisations: A developer ships a report with 12 bookmarks. Six months later, a different developer adds a new visual to the page. The new visual is not captured in any of the 12 existing bookmarks because it did not exist when they were created &mdash; so its visibility state is unmanaged. Now when users trigger certain bookmarks, the new visual randomly appears or disappears in ways nobody intended.</p>
+<p>The developer who added the visual has to open all 12 bookmarks, update each one to capture the new visual's state, and re-publish. If they do not know bookmarks exist on the page, the bug persists until someone notices and files a support ticket.</p>
+<p><strong>Prevention discipline:</strong></p>
+<ul>
+<li><strong>Document every bookmark</strong> in a comment or README: what it does, what visuals it controls, what state each visual is in</li>
+<li><strong>Group visuals by bookmark group</strong> in the Selection Pane using descriptive names: "TOGGLE_ChartGroup", "NAV_TabGroup"</li>
+<li><strong>Audit bookmarks before every publish</strong> &mdash; open each one, verify the visual state is correct, update if needed</li>
+<li><strong>Set a personal bookmark limit in your team standards</strong> &mdash; I recommend no more than 8&ndash;10 report bookmarks per page. If you need more, the page is doing too much.</li>
+</ul>
+<h3>The Decision Framework: What to Use When</h3>
+<div style="background:var(--sur2);border:1px solid rgba(59,158,255,.2);border-radius:8px;padding:1.2rem 1.5rem;margin:1.2rem 0">
+<div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--acc);margin-bottom:1rem;letter-spacing:.1em">QUICK DECISION GUIDE</div>
+<div style="display:flex;flex-direction:column;gap:.6rem;font-size:.84rem;line-height:1.6">
+<div><span style="color:var(--ac2);font-weight:500">Navigating between distinct content areas?</span> &rarr; Use real page navigation + synced slicers</div>
+<div><span style="color:var(--ac2);font-weight:500">Toggling between two views of same data?</span> &rarr; Use bookmarks, uncheck Data, uncheck Current Page</div>
+<div><span style="color:var(--ac2);font-weight:500">Show/hide a filter or help panel?</span> &rarr; Use bookmarks, uncheck Data, check Display only</div>
+<div><span style="color:var(--ac2);font-weight:500">Saving a specific filter state?</span> &rarr; Use bookmarks, check Data, uncheck Display</div>
+<div><span style="color:var(--ac2);font-weight:500">Report going on mobile or embedded?</span> &rarr; Avoid bookmark navigation entirely, use real pages</div>
+<div><span style="color:var(--ac2);font-weight:500">More than 10 bookmarks on one page?</span> &rarr; Stop and redesign. The report is doing too much.</div>
+</div></div>
+<div class="art-tip">&#9888; <strong>The One Rule:</strong> Every bookmark you add is a maintenance obligation. Add them with intention, name them systematically, document what they control, and audit them before every publish. A report with five well-named, well-scoped bookmarks is more maintainable than one with twenty poorly named ones &mdash; and it will load faster too.</div>
+<p>Bookmarks done right are invisible to the user &mdash; the report just feels intuitive and responsive. Bookmarks done wrong are the support tickets that arrive every time a developer touches the report. The difference is almost entirely in the planning, not the implementation.</p>
+<p><em>What bookmark patterns have caused the most pain in your reports? I am particularly curious about embedded report scenarios where the mobile breakage is most acute.</em></p>
+<p><em>#PowerBI #MicrosoftFabric #ReportDesign #UXDesign #DataAnalytics #BusinessIntelligence #PowerBIDev #DataGovernance #EnterpriseBI</em></p>
+      </div>
+      <div class="art-panel-footer">
+        <div class="art-panel-nav">
+          <button class="art-nav-btn" onclick="openArticle('a11')">&#8592; Prev</button>
           <a href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank" class="art-nav-btn art-nav-li">Follow on LinkedIn</a>
           <span></span>
         </div>
