@@ -471,6 +471,20 @@ footer{border-top:1px solid var(--bdr);padding:2.5rem 0;position:relative;z-inde
         <div class="art-desc">How a Power BI report on the Fabric Admin API gives live visibility of every workspace&#39;s Spark runtime &mdash; and targets the right admins automatically.</div>
         <div class="art-footer"><span class="art-time">~8 min read</span><span class="art-badge live">&#9679; Live</span></div>
       </div>
+      <div class="art-card reveal" onclick="openArticle('a9')">
+        <div class="art-arrow">&#8599;</div>
+        <div class="art-topic">Gateway Architecture &#183; Power BI &#183; Governance</div>
+        <div class="art-title">Enterprise Gateway Management at Scale: Installation, Clustering, Load Balancing, Policy Control, and the Logging You Cannot Afford to Skip</div>
+        <div class="art-desc">A practitioner&#39;s deep-dive into managing all four gateway types, enforcing installation policy via PowerShell, tuning cluster load balancing through config, and using logs to diagnose issues before they become outages.</div>
+        <div class="art-footer"><span class="art-time">~12 min read</span><span class="art-badge live">&#9679; Live</span></div>
+      </div>
+      <div class="art-card reveal" onclick="openArticle('a9')">
+        <div class="art-arrow">&#8599;</div>
+        <div class="art-topic">Gateway Architecture &#183; Power BI &#183; Governance</div>
+        <div class="art-title">Enterprise Gateway Architecture: Installation, Load Balancing, Policy Control and Why Logging Saves You at 2am</div>
+        <div class="art-desc">A deep technical walkthrough of Personal, Standard, and VNet gateway deployment, config-file-level load balancing, PowerShell policy enforcement, and the real trade-offs of gateway logging.</div>
+        <div class="art-footer"><span class="art-time">~12 min read</span><span class="art-badge live">&#9679; Live</span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -748,7 +762,7 @@ footer{border-top:1px solid var(--bdr);padding:2.5rem 0;position:relative;z-inde
     <div class="art-panel-header">
       <button class="art-close" onclick="closeArticle()">&#10005;</button>
       <div class="art-panel-topic">Power Apps &#183; Power Automate &#183; Power BI</div>
-      <div class="art-counter">7 / 8</div>
+      <div class="art-counter">7 / 9</div>
     </div>
     <div class="art-panel-body">
       <h1 class="art-panel-title">We Killed the &#8216;Please Refresh My Dataset&#8217; ServiceNow Ticket. Here&#8217;s How.</h1>
@@ -895,7 +909,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeArticle
     <div class="art-panel-header">
       <button class="art-close" onclick="closeArticle()">&#10005;</button>
       <div class="art-panel-topic">Microsoft Fabric &#183; Spark &#183; Governance</div>
-      <div class="art-counter">8 / 8</div>
+      <div class="art-counter">8 / 9</div>
     </div>
     <div class="art-panel-body">
       <h1 class="art-panel-title">Your Fabric Workspaces Are Running Deprecated Spark Runtimes. Do You Know Which Ones?</h1>
@@ -957,6 +971,278 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeArticle
       <div class="art-panel-footer">
         <div class="art-panel-nav">
           <button class="art-nav-btn" onclick="openArticle('a7')">&#8592; Prev</button>
+          <a href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank" class="art-nav-btn art-nav-li">Follow on LinkedIn</a>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="art-panel" id="panel-a9">
+  <div class="art-panel-inner">
+    <div class="art-panel-header">
+      <button class="art-close" onclick="closeArticle()">&#10005;</button>
+      <div class="art-panel-topic">Gateway Architecture &#183; Power BI &#183; Governance</div>
+      <div class="art-counter">9 / 9</div>
+    </div>
+    <div class="art-panel-body">
+      <h1 class="art-panel-title">Enterprise Gateway Management at Scale: Installation, Clustering, Load Balancing, Policy Control, and the Logging You Cannot Afford to Skip</h1>
+      <div class="art-panel-meta"><span>Phanindra Gaddam</span><span>&#183;</span><span>~12 min read</span><span>&#183;</span><span>Power BI Architect</span></div>
+      <div class="art-panel-divider"></div>
+      <div class="art-panel-content"><p>Gateway management is one of those disciplines that enterprise Power BI architects routinely underestimate &mdash; right up until a production refresh fails at 7am and you have no idea which node in a three-member cluster is responsible, no logs configured to tell you, and no policy in place to stop someone from standing up a rogue personal gateway that bypasses everything you built.</p>
+<p>This article covers what I have implemented across a large enterprise tenant: all four gateway types, cluster high-availability with load balancing configured beyond the defaults, a PowerShell-based policy restriction tool to control who can install gateways, and the logging architecture that makes it possible to diagnose problems before they escalate into incidents.</p>
+
+<h3>Understanding the Four Gateway Types &mdash; and When Each One Actually Belongs</h3>
+<p>Most Power BI documentation treats gateway selection as a simple decision. In practice, each type has meaningful architectural implications.</p>
+
+<h4>Personal Mode Gateway</h4>
+<p>Single-user, Power BI only, runs as an interactive application (not a Windows service), supports only Import mode scheduled refresh. No DirectQuery, no clustering, no shared data sources, no high availability. <strong>From a governance perspective, personal gateways are your highest risk surface.</strong> They run on laptops that go offline, are installed by individuals without IT oversight, and create a proliferation of ungoverned data source connections across your tenant. We restrict personal gateway installation via policy (covered below) and only permit them for approved self-service use cases with documented justification.</p>
+
+<h4>Standard (Enterprise) Mode Gateway</h4>
+<p>This is the workhorse for enterprise deployments. Runs as a Windows service, supports multiple users and data sources, handles DirectQuery and Live Connection alongside Import refresh, supports clustering and high availability, and is manageable via PowerShell and the Fabric Admin APIs. All production workloads run through standard mode gateways in our environment. The gateway service account runs under a dedicated domain service account &mdash; not the default local PBIEgwService account &mdash; so permissions are managed at the Active Directory level and auditable through standard IT processes.</p>
+
+<h4>VNet (Virtual Network) Data Gateway</h4>
+<p>Microsoft-managed, no installation required, designed for data sources within Azure Virtual Networks. Unlike the on-premises gateway, it does not require inbound firewall ports &mdash; traffic stays within the Azure network boundary. We use VNet gateways specifically for Azure-hosted data sources within private VNets: Azure SQL Databases with private endpoints, Azure Synapse workspaces on isolated VNets, and Databricks clusters with VNet injection. The key limitation is that VNet gateways have a fixed hardware configuration that cannot be scaled or changed &mdash; there is no equivalent to clustering. For high-throughput scenarios on VNet-isolated sources, we use multiple VNet gateway instances and distribute semantic models across them manually.</p>
+
+<h4>Personal Mode vs Standard: The Decision We Enforce</h4>
+<p>The rule we implemented is simple: any data source used by more than one person or in any Production workspace must use a standard mode gateway cluster. Personal gateways are blocked by tenant policy for all users except a specific approved group. This is enforced through PowerShell, which brings us to the next section.</p>
+
+<h3>Restricting Gateway Installation via PowerShell Policy</h3>
+<p>One of the most underused capabilities in the Power BI gateway management toolkit is the ability to enforce a tenant-level installation policy programmatically. Without this, any user in your organisation can install a standard or personal gateway on any machine &mdash; creating ungoverned data paths that bypass your security architecture entirely.</p>
+<p>The <code>DataGateway</code> PowerShell module exposes <code>Set-DataGatewayTenantPolicy</code>, which allows a Fabric Administrator to restrict gateway installation to a specified list of approved users or groups:</p>
+
+<pre style="background:rgba(59,158,255,.07);border:1px solid rgba(59,158,255,.2);border-radius:6px;padding:1rem;font-family:'DM Mono',monospace;font-size:.78rem;color:var(--ac2);overflow-x:auto;line-height:1.7">
+# Restrict standard gateway installation to approved list only
+Set-DataGatewayTenantPolicy -ResourceGatewayInstallPolicy Restricted
+
+# Grant installation rights to the gateway admin group only
+Set-DataGatewayInstaller -PrincipalObjectId &lt;GroupObjectId&gt; -GatewayType Resource
+
+# Restrict personal gateway installation separately
+Set-DataGatewayTenantPolicy -PersonalGatewayInstallPolicy Restricted
+
+# Audit current policy
+Get-DataGatewayTenantPolicy
+
+# List all currently authorised gateway installers in the tenant
+Get-DataGatewayInstaller -GatewayType Resource -Scope Organization
+</pre>
+
+<p>We run the audit cmdlet as part of a weekly governance check, alongside <code>Get-DataGatewayCluster -Scope Organization</code> to enumerate all gateways across the tenant. Any new gateway that appears outside the approved list triggers an investigation and, if ungoverned, is removed via <code>Remove-DataGatewayCluster</code> and its installer permissions revoked.</p>
+<p>This is not hypothetical governance theatre. We have found personal gateways installed on developer workstations, connected directly to production SQL Server instances, with credentials stored under individual user accounts. The policy restriction prevents that from happening silently.</p>
+
+<h3>Gateway Clusters: High Availability Beyond the Defaults</h3>
+<p>Creating a gateway cluster is well-documented &mdash; install a standard gateway on a second server and join it to the existing cluster during registration. What is less documented is how to tune the cluster behaviour beyond what the Power BI service UI exposes.</p>
+
+<h4>The Default Load Balancing Behaviour</h4>
+<p>By default, when you enable "Distribute requests across all active gateways in this cluster" in the Power BI service, request distribution is <strong>random</strong>. That sounds fine until you have a cluster where Node A is on a 32-core server and Node B is on an 8-core VM that was provisioned as a temporary failover node and never upgraded. Random distribution in that scenario means 50% of requests go to an underspecified machine.</p>
+
+<h4>Tuning Load Balancing Through Config</h4>
+<p>The gateway cluster load balancing behaviour can be manipulated through the gateway configuration file <code>Microsoft.PowerBI.DataMovement.Pipeline.GatewayCore.dll.config</code>, located in <code>C:\Program Files\On-premises data gateway\</code> on each node. The key parameters for throttling are:</p>
+
+<pre style="background:rgba(59,158,255,.07);border:1px solid rgba(59,158,255,.2);border-radius:6px;padding:1rem;font-family:'DM Mono',monospace;font-size:.78rem;color:var(--ac2);overflow-x:auto;line-height:1.7">
+&lt;!-- CPU throttling threshold - gateway node excluded from
+     load balancing pool when CPU exceeds this % --&gt;
+&lt;setting name="CPUThreshold" serializeAs="String"&gt;
+    &lt;value&gt;75&lt;/value&gt;
+&lt;/setting&gt;
+
+&lt;!-- Memory throttling threshold in MB --&gt;
+&lt;setting name="MemoryThreshold" serializeAs="String"&gt;
+    &lt;value&gt;10240&lt;/value&gt;
+&lt;/setting&gt;
+
+&lt;!-- Max concurrent queries per node --&gt;
+&lt;setting name="ConcurrencyLimit" serializeAs="String"&gt;
+    &lt;value&gt;30&lt;/value&gt;
+&lt;/setting&gt;
+</pre>
+
+<p>By setting differentiated CPU and memory thresholds across nodes, you can create a weighted distribution: the high-spec nodes absorb traffic until they approach threshold, at which point the cluster spills over to secondary nodes. This is not true weighted round-robin, but it is a practical approximation when your cluster nodes have unequal capacity.</p>
+<p>We also implement <strong>workload separation</strong> by running two distinct gateway clusters: one cluster dedicated to scheduled Import refresh (fewer, large, memory-intensive queries), and a second cluster for DirectQuery and Live Connection (many, small, latency-sensitive queries). These two workload profiles have completely different resource characteristics and should not compete on the same nodes.</p>
+
+<blockquote>The concurrency limit per gateway node is 30 by default. If all nodes in a cluster hit their concurrency ceiling simultaneously, the next request fails outright. Plan your cluster size based on your peak concurrent query count, not your average.</blockquote>
+
+<h4>Important: Keep All Cluster Members on the Same Gateway Version</h4>
+<p>This is the most common self-inflicted cluster failure I have seen. When gateway updates roll out monthly, staggered patching is good practice &mdash; but leaving nodes on different major versions for more than a few days introduces unpredictable behaviour. Keep a strict policy: all nodes patched within 24 hours of each other, always.</p>
+
+<h3>Gateway Logging: The Discipline Most Teams Skip Until It Is Too Late</h3>
+<p>The gateway generates three standard log files, written to <code>%LOCALAPPDATA%\Microsoft\On-premises data gateway\</code> on the service account's profile:</p>
+<ul>
+<li><strong>GatewayInfo.log</strong> &mdash; General operational events: service start/stop, cloud service registration, heartbeat, query routing decisions, cluster membership changes.</li>
+<li><strong>GatewayErrors.log</strong> &mdash; Error-level events: connection failures, credential errors, query timeouts, mashup engine errors, throttling events.</li>
+<li><strong>GatewayNetwork.log</strong> &mdash; Network-level events: Azure Relay connectivity, outbound port issues, proxy negotiation, TLS handshake failures.</li>
+</ul>
+<p>By default (post-February 2023 installations), the gateway retains logs for 30 days up to a maximum of 5GB total, with individual log files capped at 100MB before rotating. These defaults are configured in <code>Microsoft.PowerBI.EnterpriseGateway.exe.config</code>.</p>
+
+<h4>The Performance Monitoring Logs (Structured Logging)</h4>
+<p>Beyond the standard operational logs, enabling the performance monitoring feature in <code>Microsoft.PowerBI.DataMovement.Pipeline.GatewayCore.dll.config</code> generates four additional structured log files designed for analysis in Power BI:</p>
+<ul>
+<li><strong>QueryExecutionReport</strong> &mdash; Per-query: gateway ID, request ID, data source type, query type (Import/DirectQuery/Power Apps/Power Automate), execution start time, total duration, data processing duration, success/failure. The <code>QueryText</code> field is base64-encoded for security.</li>
+<li><strong>QueryExecutionAggregation</strong> &mdash; Rolled up to 5-minute intervals by gateway, data source, query type, and success status. Used for trending without the noise of per-query detail.</li>
+<li><strong>SystemCounterAggregation</strong> &mdash; CPU and memory utilisation, aggregated at 5-minute intervals. Critical for capacity planning and throttling threshold calibration.</li>
+<li><strong>ErrorReport</strong> &mdash; Structured error events with full context, separate from the text-based GatewayErrors.log.</li>
+</ul>
+<p>Microsoft provides a Gateway Performance PBI template (.pbit) that reads these structured files directly. I have extended this template significantly in our environment: adding cross-node comparison views for cluster analysis, overlaying refresh failure events from the Power BI service activity log, and alerting on sustained CPU above threshold for more than 15 minutes.</p>
+
+<h4>The Logging Tradeoff: What to Enable and When</h4>
+<div style="overflow-x:auto">
+<table class="art-table">
+<thead><tr><th>Mode</th><th>What Is Captured</th><th>Pros</th><th>Cons</th></tr></thead>
+<tbody>
+<tr><td><strong>Standard logging (default)</strong></td><td>GatewayInfo, GatewayErrors, GatewayNetwork</td><td>Always-on, negligible overhead, 30-day retention, covers most diagnostic scenarios</td><td>Text format, no per-query timing, no structured aggregation, hard to query at scale</td></tr>
+<tr><td><strong>Performance monitoring logs</strong></td><td>QueryExecution, Aggregation, SystemCounters, ErrorReport</td><td>Structured CSV format, directly queryable in Power BI, per-query duration data, capacity planning, cluster comparison</td><td>Additional disk I/O, 10-file default retention (configurable), requires manual collection from each node, no workspace/dataset context in logs</td></tr>
+<tr><td><strong>Additional (verbose) logging</strong></td><td>Mashup engine internals, full query strings, verbose trace</td><td>Essential for deep debugging, credential issues, connector-level failures, data source-specific errors</td><td>Significant disk growth (can be 10x standard), short useful retention period, <strong>only enable for active investigation, disable immediately after</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>The Practical Tradeoff Decision</h4>
+<p>Standard logging should always be on &mdash; it is essentially free and covers the majority of incident investigation scenarios. Performance monitoring logs should be permanently enabled on all standard mode production gateways; the overhead is minimal and the structured format is invaluable for capacity planning. Verbose additional logging is strictly break-glass: enable it, reproduce the issue, export the logs, disable it. Leaving verbose logging enabled on a busy gateway can fill a disk in hours.</p>
+
+<h4>What Logs Actually Tell You That Monitoring Cannot</h4>
+<p>The most useful thing gateway logs have told me is not what failed &mdash; it is <em>why</em> it failed and <em>which layer</em> it failed at. A refresh failure in the Power BI service can originate from five different places: the data source itself, the network path between gateway and data source, the gateway service process, the Azure Relay connection between gateway and Power BI cloud service, or the query itself. The GatewayErrors.log combined with GatewayNetwork.log tells you exactly which layer. Without those logs, you are guessing.</p>
+<p>Three real patterns I have diagnosed exclusively through logs:</p>
+<ul>
+<li><strong>Credential cache stale failures</strong> &mdash; The gateway caches credentials for approximately 5 hours. When someone updates a data source credential in the Power BI service, refreshes continue failing until the cache expires. This shows up in GatewayErrors.log as repeated <code>InvalidConnectionCredentials</code> errors with timestamps that cluster exactly 5 hours after a credential change event &mdash; not immediately. Without log timestamps, this looks like a random refresh failure.</li>
+<li><strong>Azure Relay connectivity drops</strong> &mdash; GatewayNetwork.log records every Azure Relay reconnection event. A pattern of multiple reconnections per hour, combined with periods of GatewayInfo.log silence, indicates an upstream network issue between the gateway host and Azure &mdash; usually a proxy, firewall rule, or DNS resolution problem that IT networking can investigate with precision if you hand them the log timestamps.</li>
+<li><strong>Concurrency ceiling hits</strong> &mdash; When a gateway node hits its 30-query concurrency limit, subsequent queries fail immediately. This shows up as a spike of identical <code>ConcurrencyLimitExceeded</code> errors in GatewayErrors.log at a specific time. Cross-referencing with SystemCounterAggregation confirms whether this was a CPU-bound failure (throttling kicked in first) or a pure concurrency ceiling (CPU was fine, just too many parallel requests). The fix is different in each case.</li>
+</ul>
+
+<div class="art-tip">&#128161; <strong>The Governance Principle:</strong> Gateway logs are not just a debugging tool &mdash; they are a governance artefact. Audit log data from GatewayInfo combined with query data from the performance monitoring logs tells you which data sources are queried most, which semantic models drive the heaviest gateway load, and whether your cluster sizing is appropriate for the next quarter's refresh schedule. Build a Power BI report on top of them. Collect them centrally from all nodes. Treat them the same way you treat your activity logs from the Power BI service.</div>
+
+<p>Gateway management at enterprise scale is unglamorous work. It lives in config files, PowerShell sessions, Windows service accounts, and log directories that most BI professionals never think about until something breaks. Getting it right &mdash; typed policies, proper clustering, workload separation, always-on structured logging &mdash; is what separates a platform that handles 100+ workspace refresh orchestration reliably from one that generates support tickets at month-end.</p>
+<p><em>What gateway patterns have you encountered in large multi-workspace tenants? I am always interested in comparing cluster configurations and logging approaches across different enterprise environments.</em></p>
+<p><em>#PowerBI #MicrosoftFabric #EnterpriseBI #DataGovernance #PowerShell #GatewayManagement #DataEngineering #OnPremisesDataGateway #VNetGateway #Databricks</em></p></div>
+      <div class="art-panel-footer">
+        <div class="art-panel-nav">
+          <button class="art-nav-btn" onclick="openArticle('a8')">&#8592; Prev</button>
+          <a href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank" class="art-nav-btn art-nav-li">Follow on LinkedIn</a>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="art-panel" id="panel-a9">
+  <div class="art-panel-inner">
+    <div class="art-panel-header">
+      <button class="art-close" onclick="closeArticle()">&#10005;</button>
+      <div class="art-panel-topic">Gateway Architecture &#183; Power BI &#183; Governance</div>
+      <div class="art-counter">9 / 9</div>
+    </div>
+    <div class="art-panel-body">
+      <h1 class="art-panel-title">Enterprise Gateway Architecture: Installation, Load Balancing, Policy Control and Why Logging Saves You at 2am</h1>
+      <div class="art-panel-meta"><span>Phanindra Gaddam</span><span>&#183;</span><span>~12 min read</span><span>&#183;</span><span>Power BI Architect</span></div>
+      <div class="art-panel-divider"></div>
+      <div class="art-panel-content"><p>Gateway administration is one of those disciplines that is easy to underestimate until something breaks at 7am on a Monday and an executive's dashboard is blank. I have spent significant time across our enterprise deploying, configuring, and hardening every gateway type Microsoft offers &mdash; Personal, Standard (Enterprise), and VNet &mdash; and building controls around them that most teams don't have. This article covers what I did, the config-level details that matter, and why logging deserves far more attention than most Power BI teams give it.</p>
+
+<h3>The Four Gateway Types: What They Are and When to Use Each</h3>
+<p>Microsoft currently offers three on-premises gateway modes and one managed cloud gateway, and they serve genuinely different purposes. Getting this wrong at the start creates technical debt that is painful to unwind.</p>
+
+<h4>Personal Gateway (On-Premises Personal Mode)</h4>
+<p>The Personal gateway runs as an interactive Windows application &mdash; not a service. It only operates when the installing user is logged in and the application is running. It supports a single user, works only with Power BI (not Power Automate or Power Apps), and supports only Import mode scheduled refreshes. No DirectQuery, no Live Connection, no clustering, no high availability.</p>
+<p>In an enterprise context, Personal gateways are a <strong>governance liability</strong>. They proliferate silently &mdash; any Power BI user can install one without administrator approval. They run under personal user credentials, meaning when that person leaves the organisation, their gateway orphans every refresh job tied to it. They are invisible in the central Manage Connections and Gateways admin view unless you know to look.</p>
+<p>The correct use case for a Personal gateway is an individual analyst refreshing a handful of Import models from their own machine for exploratory work. It has no place in a production data estate.</p>
+
+<h4>Standard Gateway (On-Premises Standard Mode / Enterprise)</h4>
+<p>The Standard gateway runs as a persistent Windows service under a dedicated service account &mdash; typically <code>NT SERVICE\PBIEgwService</code> or a domain service account you specify. It operates independently of any user being logged in. It supports multiple users, multiple data sources, DirectQuery, Live Connection, composite models, clustering, high availability, and works across Power BI, Power Automate, Power Apps, Azure Data Factory, and Azure Logic Apps.</p>
+<p>This is what production environments should run. A single Standard gateway cluster can support up to <strong>10 member nodes</strong> and up to <strong>1,000 data sources</strong> per cluster. Installation requires local administrator rights on the host machine, and the service account needs appropriate permissions to reach the on-premises data sources it will query.</p>
+<p>A critical installation decision: use a <strong>dedicated service account</strong> in Active Directory rather than the default NT Service account. This gives you audit trail capability &mdash; you can trace exactly which queries the gateway service account executed against your source systems &mdash; and credential rotation through standard AD processes.</p>
+
+<h4>VNet Gateway (Virtual Network Data Gateway)</h4>
+<p>The VNet gateway is fundamentally different from the other two: it is a <strong>Microsoft-managed service</strong> with no installation required. You provision it through the Power Platform Admin Centre, and Microsoft spins up containerised gateway instances inside your Azure Virtual Network. It supports Dataflow Gen2, Power BI Semantic Models, Platform Dataflows, and Paginated Reports.</p>
+<p>The VNet gateway is the right answer when your data sources are cloud-hosted but behind Azure private endpoints or inside a VNet &mdash; Azure SQL with private link enabled, Azure Synapse behind a managed VNet, Azure Data Lake with restricted public access. The on-premises Standard gateway does not support private link scenarios; the VNet gateway does.</p>
+<p>The trade-off: VNet gateways require Fabric or Power BI Premium capacity. They auto-pause after a configurable inactivity period (default 30 minutes, configurable up to 24 hours) and take 2-3 minutes to resume after auto-pause. For workloads that need immediate availability, this cold-start delay matters. VNet gateway clusters support a maximum of <strong>3 members</strong>, compared to 10 for Standard.</p>
+
+<blockquote>Choosing the wrong gateway type is not just a technical mistake &mdash; it is a governance mistake. Personal gateways spread silently, VNet gateways add latency on cold starts, Standard gateways require infrastructure management. Know which you are deploying and why before you begin.</blockquote>
+
+<h3>Load Balancing: What the UI Doesn't Tell You</h3>
+<p>The Power BI admin portal exposes a single toggle under gateway cluster settings: <em>"Distribute requests across all active gateways in this cluster."</em> Most administrators enable this toggle and consider load balancing done. That is only half the story.</p>
+
+<h4>How Default Load Balancing Actually Works</h4>
+<p>With the toggle enabled, the gateway cloud service randomly selects a member node for each incoming request. It is not round-robin &mdash; it is random selection with availability checking. If the selected member is at or above a throttling threshold, the service selects another member. If all members are throttled, the request fails. Requests always route to the primary member when the toggle is disabled, regardless of its load.</p>
+
+<h4>The Config File That Changes Everything</h4>
+<p>The real load balancing controls live in a file that most administrators have never opened:</p>
+<p><code>C:\Program Files\On-premises data gateway\Microsoft.PowerBI.DataMovement.Pipeline.GatewayCore.dll.config</code></p>
+<p>This XML configuration file exposes the throttling thresholds that control when the load balancer considers a node "overloaded" and routes to another member. The three key parameters are:</p>
+<ul>
+<li><code>CPUUtilizationPercentageThreshold</code> &mdash; CPU percentage at which the node is considered throttled. Default is 0 (disabled). Setting this to, say, 80 means any node above 80% CPU will be skipped by the load balancer.</li>
+<li><code>MemoryUtilizationPercentageThreshold</code> &mdash; Memory percentage threshold. Also defaults to 0 (disabled). Critical to set in environments with large Import model refreshes that consume significant RAM.</li>
+<li><code>ConcurrentOperationCountThreshold</code> &mdash; Maximum simultaneous queries a single node will accept before being considered throttled. This is enabled by default. Setting this correctly prevents one large batch job from consuming all concurrency slots on a node, blocking small DirectQuery requests.</li>
+</ul>
+<p>These values must be set identically on <strong>every node in the cluster</strong>. They are not synchronised automatically. When we deployed our cluster, we used a PowerShell script to distribute the config file changes across all nodes after any update, ensuring consistency. A node with different thresholds from its cluster peers will behave unpredictably under load.</p>
+<p>After changing these values, the gateway Windows service must be restarted on each node for the changes to take effect.</p>
+
+<h4>Offline Nodes: The Silent Killer</h4>
+<p>One behaviour that catches teams off-guard: if a cluster member goes offline without being explicitly disabled in the admin portal, the load balancer will still attempt to route requests to it before failing over to an available node. This adds latency to every request during the failover window. Best practice is to disable a node in the portal before taking it offline for maintenance, and re-enable it only after confirming the service is healthy.</p>
+
+<h3>Policy Restriction: Preventing Unauthorised Gateway Installations</h3>
+<p>In a large enterprise, the proliferation of Personal gateways is a real and persistent governance problem. Any user with local administrator rights on their workstation can install a Personal gateway and begin routing sensitive data through it &mdash; outside your monitoring, outside your security controls, outside your data loss prevention policies.</p>
+<p>I built a PowerShell-based policy enforcement tool that addresses this at the machine level. The approach has two components:</p>
+
+<h4>Detection</h4>
+<p>The script queries the Active Directory tenant via the Power BI Admin REST API to enumerate all registered gateways, then cross-references against a whitelist of approved gateway hosts and service accounts. Any Personal gateway or Standard gateway registered from a non-approved host is flagged and reported. This runs as a scheduled task and feeds a Power BI report showing unauthorised installations in near-real-time.</p>
+
+<h4>Prevention</h4>
+<p>For machines where Personal gateways should never be installed, the script enforces a Windows Registry policy that blocks the gateway installer from completing registration. The gateway software can be downloaded and even installed locally, but the registration step &mdash; which is what creates the cloud-side gateway entry &mdash; fails with a policy violation error. Combined with software restriction policies that can be deployed via Group Policy, this creates a two-layer control.</p>
+<p>For Standard gateway installations, the enforcement is organisational: only approved server machines in approved OU paths in Active Directory are permitted to register new Standard gateways. The PowerShell script monitors for out-of-policy registrations and can invoke an automated deregistration flow via the Power BI Admin API for any gateway that registers without going through the approved change management process.</p>
+
+<div class="art-tip">&#128161; <strong>Why this matters:</strong> A Personal gateway running on a departing employee's laptop, connected to a production SQL Server, is a data exfiltration risk, a refresh reliability risk, and a compliance audit finding waiting to happen. Prevention is significantly cheaper than remediation.</div>
+
+<h3>Gateway Logging: The Most Underused Diagnostic Tool in Power BI</h3>
+<p>When a dataset refresh fails, the first thing most administrators do is check the Power BI Service error message. That message is almost always generic &mdash; "Refresh failed," "Data source error," "Query timed out." The real diagnostic information is in the gateway logs, and most teams have never looked at them.</p>
+
+<h4>The Three Default Log Files</h4>
+<p>The Standard gateway writes three log files by default, located at <code>%LOCALAPPDATA%\Microsoft\On-premises data gateway\</code> under the service account's profile (typically <code>C:\Windows\ServiceProfiles\PBIEgwService\AppData\Local\...</code>):</p>
+<ul>
+<li><strong>GatewayInfo.log</strong> &mdash; General operational events: gateway start/stop, connection establishment, data source queries, refresh requests received. Verbose by default. New file created daily, up to 100MB per file, 5GB total retention, 30-day age limit.</li>
+<li><strong>GatewayErrors.log</strong> &mdash; Error events only: failed connections, credential failures, timeout events, data source unreachable. This is your first stop for any refresh failure investigation.</li>
+<li><strong>GatewayNetwork.log</strong> &mdash; Network-level events: Azure Relay connection status, outbound connectivity checks, proxy events. Critical when troubleshooting gateway-to-cloud connectivity rather than gateway-to-datasource connectivity.</li>
+</ul>
+
+<h4>Additional Logging: The Double-Edged Sword</h4>
+<p>Beyond the default logs, the gateway supports <strong>Additional logging</strong>, enabled via the gateway application's Diagnostics tab or by setting parameters in <code>GatewayCore.dll.config</code>:</p>
+<ul>
+<li><code>QueryExecutionReportOn = True</code> &mdash; Enables per-query structured logging including query execution time, data source type, query status (success/failure), and the base64-encoded query text.</li>
+<li><code>SystemCounterReportOn = True</code> &mdash; Enables CPU and memory counter logging at configurable aggregation intervals (default 5 minutes) for the gateway process, mashup engine, and system overall.</li>
+</ul>
+<p>When enabled, these generate additional structured log files in a Report subfolder that can be fed directly into the <strong>Gateway Performance PBI template</strong> &mdash; a Microsoft-provided Power BI report template that visualises query throughput, execution times, error rates, and system resource usage across your gateway cluster.</p>
+
+<h4>The Logging Trade-off: Why You Should Not Leave It On Permanently</h4>
+<p>This is where most guidance oversimplifies. The Microsoft recommendation is to "temporarily enable Additional logging for troubleshooting." The reality is more nuanced:</p>
+<p><strong>The case for permanent additional logging:</strong> In a production environment with mission-critical refreshes, having continuous query-level telemetry means you can diagnose a 3am refresh failure in the morning with full context &mdash; exactly which query timed out, exactly how long it ran, exactly what the resource utilisation was at that moment. Without it, you are reconstructing the scene from limited evidence. The structured query logs also enable proactive optimisation: you can identify which data sources are consistently slow before they start causing failures.</p>
+<p><strong>The case against permanent additional logging:</strong> Additional logging does increase disk I/O on the gateway server, and the base64-encoded query text in the logs can contain sensitive data &mdash; column names, filter values, potentially PII depending on your query patterns. In environments with strict data classification requirements, storing query strings on a gateway server's local disk may violate your data handling policies. The log files also grow significantly under load &mdash; a busy gateway can generate several gigabytes per day under full additional logging, which requires a disciplined log rotation and retention strategy.</p>
+<p><strong>What I implemented:</strong> We enabled <code>SystemCounterReportOn</code> permanently &mdash; it captures resource utilisation with no query content, adding negligible overhead. <code>QueryExecutionReportOn</code> is enabled on a scheduled basis during peak refresh windows (typically 6am to 10am and during month-end batch runs), and disabled at other times via a scheduled PowerShell task that modifies the config file and restarts the gateway service. This gives us query-level telemetry when it matters most without accumulating sensitive query data continuously.</p>
+
+<h4>What Gateway Logs Actually Reveal</h4>
+<p>Gateway logs are not easy to read in raw form. They are stream-of-consciousness text files with inconsistent structure and significant noise. But once you build the parsing layer &mdash; or use the Performance template &mdash; they tell you things you cannot find anywhere else:</p>
+<ul>
+<li><strong>Which cluster member is handling which refresh</strong> &mdash; gateways distribute refresh requests across cluster members even for the same dataset, which is useful to know when a specific node has performance issues</li>
+<li><strong>Expired credential errors</strong> &mdash; GatewayErrors.log captures these the moment they occur, before users report failures, giving you a proactive window to act</li>
+<li><strong>Query execution patterns</strong> &mdash; which data sources are consistently slow, which queries are running 10x longer than their peers, which DirectQuery sessions are generating unexpectedly large result sets</li>
+<li><strong>Connectivity loss events</strong> &mdash; GatewayNetwork.log captures Azure Relay disconnections with timestamps, letting you correlate gateway outages with network events or upstream service incidents</li>
+<li><strong>Linking logs to the audit trail</strong> &mdash; the dataset ObjectId appears in the gateway info logs, allowing you to join gateway activity to the Power BI tenant activity log and trace a specific refresh failure all the way from the semantic model through the gateway to the data source query</li>
+</ul>
+
+<h3>The Architecture That Works at Scale</h3>
+<p>After deploying and managing this infrastructure across our enterprise, the configuration that has proven most resilient is:</p>
+<ul>
+<li>A minimum 3-node Standard gateway cluster on separate physical hosts (not VMs sharing the same underlying hardware), each with identical <code>GatewayCore.dll.config</code> throttling thresholds</li>
+<li>Load balancing enabled with <code>CPUUtilizationPercentageThreshold</code> set to 75 and <code>MemoryUtilizationPercentageThreshold</code> set to 80, preventing any single node from being saturated during peak refresh windows</li>
+<li>Dedicated AD service account with least-privilege access to each data source, password rotation managed through a PAM solution</li>
+<li>PowerShell monitoring that checks each cluster member's heartbeat every 5 minutes and alerts before the Power BI service even detects the outage</li>
+<li>Permanent system counter logging, scheduled query logging during business hours, centralised log collection to a shared path accessible to the monitoring stack</li>
+<li>Gateway installation policy enforcement that prevents Personal gateway proliferation and routes all new Standard gateway requests through change management</li>
+</ul>
+
+<p>Gateway infrastructure is not glamorous. It sits below the semantic model layer, invisible to business users until it fails. That invisibility is exactly why it deserves this level of engineering attention &mdash; because when it fails, everything above it fails with it.</p>
+<p><em>What gateway configurations have you found most effective in large enterprise environments? Happy to go deeper on any of these areas.</em></p>
+<p><em>#PowerBI #MicrosoftFabric #DataGateway #EnterpriseArchitecture #PowerShell #DataGovernance #OnPremises #VNet #LoadBalancing #HighAvailability</em></p></div>
+      <div class="art-panel-footer">
+        <div class="art-panel-nav">
+          <button class="art-nav-btn" onclick="openArticle('a8')">&#8592; Prev</button>
           <a href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank" class="art-nav-btn art-nav-li">Follow on LinkedIn</a>
           <span></span>
         </div>
