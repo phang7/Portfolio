@@ -492,6 +492,13 @@ footer{border-top:1px solid var(--bdr);padding:2.5rem 0;position:relative;z-inde
         <div class="art-desc">Step-by-step: ServiceNow Table API &rarr; Databricks Medallion Lakehouse &rarr; Power BI Direct Lake. Two paths covered &mdash; native Lakeflow Connect and custom Python. Ready to implement today.</div>
         <div class="art-footer"><span class="art-time">~15 min read</span><span class="art-badge live">&#9679; Live</span></div>
       </div>
+      <div class="art-card reveal" onclick="openArticle('a11')">
+        <div class="art-arrow">&#8599;</div>
+        <div class="art-topic">Power BI Support &#183; Career</div>
+        <div class="art-title">A Day in the Life of a Power BI Support Engineer: The Triage Playbook That Keeps You Sane</div>
+        <div class="art-desc">Every ticket feels like a fire. Missing data, broken visuals, RLS ghosts, bookmark limits &mdash; here is the systematic triage process that turns chaos into confidence.</div>
+        <div class="art-footer"><span class="art-time">~12 min read</span><span class="art-badge live">&#9679; Live</span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1256,7 +1263,7 @@ Get-DataGatewayInstaller -GatewayType Resource -Scope Organization
     <div class="art-panel-header">
       <button class="art-close" onclick="closeArticle()">&#10005;</button>
       <div class="art-panel-topic">ServiceNow &#183; Databricks &#183; Power BI</div>
-      <div class="art-counter">10 / 10</div>
+      <div class="art-counter">10 / 11</div>
     </div>
     <div class="art-panel-body">
       <h1 class="art-panel-title">From ServiceNow Tickets to Power BI Dashboard: A Complete Integration Guide with Real Code</h1>
@@ -1335,6 +1342,146 @@ Get-DataGatewayInstaller -GatewayType Resource -Scope Organization
       <div class="art-panel-footer">
         <div class="art-panel-nav">
           <button class="art-nav-btn" onclick="openArticle('a9')">&#8592; Prev</button>
+          <a href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank" class="art-nav-btn art-nav-li">Follow on LinkedIn</a>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="art-panel" id="panel-a11">
+  <div class="art-panel-inner">
+    <div class="art-panel-header">
+      <button class="art-close" onclick="closeArticle()">&#10005;</button>
+      <div class="art-panel-topic">Power BI Support &#183; Career Guide</div>
+      <div class="art-counter">11 / 11</div>
+    </div>
+    <div class="art-panel-body">
+      <h1 class="art-panel-title">A Day in the Life of a Power BI Support Engineer: The Triage Playbook That Keeps You Sane</h1>
+      <div class="art-panel-meta"><span>Phanindra Gaddam</span><span>&#183;</span><span>~12 min read</span><span>&#183;</span><span>Power BI Architect</span></div>
+      <div class="art-panel-divider"></div>
+      <div class="art-panel-content">
+<p>It is 8:47am. You have not opened your laptop yet. You already have four messages.</p>
+<p><em>"The sales dashboard is showing wrong numbers."</em></p>
+<p><em>"My report is not loading."</em></p>
+<p><em>"I cannot see the data from last week."</em></p>
+<p><em>"The bookmark I saved yesterday is gone."</em></p>
+<p>Welcome to Power BI support.</p>
+<p>If you are new to this role, the first thing to understand is that <strong>none of these messages tell you what is actually wrong.</strong> Every one of them is a symptom, not a diagnosis. The wrong numbers could be a refresh failure, a DAX bug, an RLS misconfiguration, a filter the user applied and forgot about, or a genuine data quality issue three systems upstream. You will not know until you triage.</p>
+<p>This article is the playbook I wish someone had handed me. It will not stop the tickets from coming. But it will stop you from panicking when they do.</p>
+<h3>First: Understand Who Is Actually Asking</h3>
+<p>Power BI support is unusual because your users span an enormous range of technical literacy. The question "the data is wrong" means something completely different depending on who is asking.</p>
+<ul>
+<li><strong>The executive</strong> opened the dashboard once, saw a number different from the one in the email they received, and has now escalated it to your manager. Nine times out of ten, the email had a different date filter. Stay calm.</li>
+<li><strong>The analyst</strong> actually understands the data and has noticed a genuine discrepancy. Take this one seriously immediately. Analysts are usually right.</li>
+<li><strong>The business user</strong> does not know what a filter is. They applied one accidentally, hid it, and now cannot figure out why they cannot see December.</li>
+<li><strong>The developer</strong> wants to know why their newly published report does not match the dataset. They probably changed something and forgot to tell anyone.</li>
+</ul>
+<p>Calibrating your response to who is asking saves enormous time. The executive needs a confident one-line answer quickly. The analyst needs a collaborative investigation. The business user needs a screen share. The developer needs a peer review.</p>
+<h3>The Triage Framework: Five Questions Before You Touch Anything</h3>
+<p>Before you open a single report or query a single dataset, ask these five questions. They will narrow a universe of possible causes down to two or three in under five minutes.</p>
+<div style="background:var(--sur2);border:1px solid rgba(59,158,255,.2);border-radius:8px;padding:1.2rem 1.5rem;margin:1.2rem 0">
+<div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--acc);margin-bottom:1rem;letter-spacing:.1em">THE FIVE TRIAGE QUESTIONS</div>
+<div style="display:flex;flex-direction:column;gap:.7rem">
+<div style="display:flex;gap:.8rem;align-items:flex-start">
+  <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--acc);font-weight:500;flex-shrink:0;padding-top:.1rem">1.</span>
+  <div><div style="font-size:.88rem;font-weight:500;color:var(--txt);margin-bottom:.2rem">When did it last work correctly?</div>  <div style="font-size:.82rem;color:var(--mut);line-height:1.6">If it worked yesterday and not today, the answer is almost certainly a refresh failure or a data source change. If it never worked for this user, the answer is almost certainly permissions or RLS.</div></div>
+</div>
+<div style="display:flex;gap:.8rem;align-items:flex-start">
+  <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--acc);font-weight:500;flex-shrink:0;padding-top:.1rem">2.</span>
+  <div><div style="font-size:.88rem;font-weight:500;color:var(--txt);margin-bottom:.2rem">Is it affecting one person or many?</div>  <div style="font-size:.82rem;color:var(--mut);line-height:1.6">One person = likely permissions, RLS, or a browser/app issue. Many people = likely a refresh failure, a model change, or a capacity problem.</div></div>
+</div>
+<div style="display:flex;gap:.8rem;align-items:flex-start">
+  <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--acc);font-weight:500;flex-shrink:0;padding-top:.1rem">3.</span>
+  <div><div style="font-size:.88rem;font-weight:500;color:var(--txt);margin-bottom:.2rem">Is the data missing, wrong, or slow?</div>  <div style="font-size:.82rem;color:var(--mut);line-height:1.6">Missing = refresh, RLS, or filter. Wrong = DAX bug, relationship issue, or data quality upstream. Slow = capacity throttling, an inefficient visual, or a Direct Query timeout.</div></div>
+</div>
+<div style="display:flex;gap:.8rem;align-items:flex-start">
+  <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--acc);font-weight:500;flex-shrink:0;padding-top:.1rem">4.</span>
+  <div><div style="font-size:.88rem;font-weight:500;color:var(--txt);margin-bottom:.2rem">Has anything changed recently?</div>  <div style="font-size:.82rem;color:var(--mut);line-height:1.6">A deployment, a data source change, a gateway update, a report edit, a credential rotation. 80% of support tickets are caused by a change someone made and did not communicate.</div></div>
+</div>
+<div style="display:flex;gap:.8rem;align-items:flex-start">
+  <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--acc);font-weight:500;flex-shrink:0;padding-top:.1rem">5.</span>
+  <div><div style="font-size:.88rem;font-weight:500;color:var(--txt);margin-bottom:.2rem">Can you reproduce it yourself?</div>  <div style="font-size:.82rem;color:var(--mut);line-height:1.6">If you can reproduce it, you can diagnose it. If you cannot, it is likely a user-specific context issue &mdash; their filters, their browser, their cached credentials.</div></div>
+</div>
+</div></div>
+<h3>The Most Common Tickets and How to Handle Each One</h3>
+<h4>&#128203; "The data is wrong / missing"</h4>
+<p>This is the most common and the most anxiety-inducing. Here is the diagnostic sequence:</p>
+<ul>
+<li><strong>Check the refresh history first.</strong> Go to the semantic model in Power BI Service &rarr; click the three dots &rarr; Refresh history. Did the last refresh succeed? What time did it run? If the refresh failed, that is your answer. Fix the refresh, the data comes back, ticket closed.</li>
+<li><strong>Check the user's filters.</strong> Before assuming anything is broken, ask the user to share a screenshot with the filter pane open. You will be amazed how often a hidden date filter or a cross-filter from another visual is the entire explanation.</li>
+<li><strong>Check the data source.</strong> Did the upstream database or file get updated? Is the SharePoint folder still in the same location? Was a column renamed? These are the silent killers that break reports without any error message.</li>
+<li><strong>Check if it affects all users or just one.</strong> If only one user sees missing data, go straight to RLS (see below). If everyone sees it, the issue is in the data pipeline or the semantic model.</li>
+</ul>
+<p><strong>How to communicate:</strong> Never say "the data is wrong" in your response to the user without knowing why. Say "I am investigating this and will update you within the hour." Then investigate. Communicate findings, not speculation.</p>
+<h4>&#128274; "I cannot see data that I should be able to see" (RLS Issues)</h4>
+<p>Row-Level Security issues are the trickiest because the report does not error &mdash; it just silently shows less data than the user expects. There is no error message. From the user's perspective, data is simply "missing."</p>
+<ul>
+<li><strong>Test as the user.</strong> In Power BI Desktop or Service, use "View as role" with the user's email or their assigned role. Does the data match what they see? If yes, RLS is working as designed and the question is whether the design is correct. If no, there is a role assignment bug.</li>
+<li><strong>Check the role assignment.</strong> Go to the semantic model security settings. Is the user in the correct role? Are they in a security group that is mapped to the role? Have they recently changed teams or departments, making their old role assignment obsolete?</li>
+<li><strong>Check the DAX filter expression.</strong> The most common RLS bug is a DAX filter that works in development but fails in production because a username format changed (e.g. <code>USERPRINCIPALNAME()</code> returning a different format than the lookup table expects). Run the expression manually in DAX Studio to see what it returns for the affected user.</li>
+<li><strong>Check indirect RLS.</strong> If the report uses multiple tables with relationships, RLS applied to one table cascades to related tables. A user who cannot see rows in a dimension table will see blank fact table data even though they have no direct restriction on the fact table.</li>
+</ul>
+<p><strong>How to communicate:</strong> Be careful here. Telling a user "your access is restricted by design" can feel dismissive. Instead say: "I have checked your access configuration. It appears you are seeing data scoped to [your region/team/role]. If this is not correct, I will need to work with your manager to verify the intended access level." This puts the ball back to the business owner, not you.</p>
+<h4>&#9889; "The report is really slow / not loading"</h4>
+<p>Performance complaints come in two flavours: consistently slow for everyone, or intermittently slow for one person. They have completely different causes.</p>
+<ul>
+<li><strong>Check capacity health first.</strong> Open the Capacity Metrics App. Are CU levels spiking during the times the user reports slowness? Is there throttling? If yes, this is a capacity problem, not a report problem. The fix is either capacity sizing or reducing concurrent workloads.</li>
+<li><strong>Check the storage mode.</strong> Is the report on DirectQuery or Live Connection to a slow source? DirectQuery pushes every visual interaction as a query to the underlying database. If that database is slow, the report is slow. The fix is either moving to Import mode or optimising the source queries.</li>
+<li><strong>Check the specific visual.</strong> Ask the user which visual is slow. Use Performance Analyzer in Power BI Desktop (View &rarr; Performance Analyzer &rarr; Start recording &rarr; refresh visuals) to see exactly how long each visual's DAX query takes. A single badly written measure on a high-cardinality visual can bring the whole page to its knees.</li>
+<li><strong>Check for too many visuals on one page.</strong> There is no hard limit, but pages with 20+ visuals make dozens of simultaneous DAX queries on page load. Split the page or use bookmarks to show/hide visual groups.</li>
+<li><strong>Check the user's connection.</strong> Before blaming the report, ask if the user is on VPN, a slow network, or the mobile app. Sometimes the report is fine and the connection is the issue.</li>
+</ul>
+<h4>&#128278; "My bookmark disappeared" / "I cannot create more bookmarks"</h4>
+<p>This one catches a lot of support engineers off guard because there is an actual platform limit most users do not know about.</p>
+<p>Power BI has a limit of <strong>20 personal bookmarks per report per user</strong> in the Power BI Service. Once a user hits 20, the "Add bookmark" option silently stops working or throws a vague error. Users experience this as "bookmarks are broken."</p>
+<p>The fix: Ask the user how many bookmarks they have on that report. If they are at or near 20, they need to delete old ones to create new ones. Communicate this as a platform limitation, not a bug.</p>
+<p>Other bookmark issues:</p>
+<ul>
+<li><strong>Bookmark captures filters the user did not intend.</strong> Personal bookmarks capture the full page state including all filters. If a user bookmarked a filtered view, their "default view" bookmark will always open with that filter. Solution: create a fresh bookmark with all filters cleared.</li>
+<li><strong>Report bookmarks vs personal bookmarks.</strong> Report bookmarks (created by the report developer in Desktop) are different from personal bookmarks (created by end users in Service). Users sometimes confuse the two, especially after a report update clears their personal bookmarks when the underlying report structure changes.</li>
+<li><strong>Bookmarks lost after report republish.</strong> If a developer republishes the report with structural changes, personal bookmarks tied to pages or visuals that no longer exist will break. This is expected behaviour &mdash; but it needs to be communicated before the publish, not after.</li>
+</ul>
+<h4>&#128196; "A functionality I used last week is not there anymore"</h4>
+<p>This covers missing buttons, missing drill-through options, missing export options, and missing slicers. Almost always caused by one of three things:</p>
+<ul>
+<li><strong>The report was republished and the developer removed or moved something.</strong> Always check the report's publish history or ask the report owner if any changes were deployed recently.</li>
+<li><strong>Tenant settings changed.</strong> Export to Excel, export to CSV, publish to web, and many other features are controlled by Fabric Admin tenant settings. If a tenant admin tightened the settings, those features disappear for affected users silently. Check the Admin Portal &rarr; Tenant Settings to verify.</li>
+<li><strong>The user's licence changed.</strong> Some features are Pro-only or Premium-only. If a user was moved from a Premium workspace to a shared workspace, features like paginated reports or larger dataset sizes disappear.</li>
+</ul>
+<h4>&#128200; "The numbers in the report do not match the spreadsheet / another report"</h4>
+<p>This is the most politically charged ticket you will receive. Someone senior is involved. Stay methodical.</p>
+<ul>
+<li><strong>Establish the date and filter context of both sources.</strong> Before any analysis, confirm: what date range, what region, what business unit is each source showing? Different filter contexts produce different numbers. This alone resolves the majority of these tickets.</li>
+<li><strong>Identify the calculation definition.</strong> Does "revenue" mean the same thing in both reports? Gross or net? Including returns or excluding? Including inter-company transactions or not? Numbers can both be technically correct but measure different things.</li>
+<li><strong>Trace the data lineage.</strong> Which system does each report read from? If one reads from a data warehouse and another reads directly from the source system, timing and transformation differences explain the gap.</li>
+<li><strong>Never say one source is "right" and the other is "wrong"</strong> until you have done the full investigation. Saying the spreadsheet is wrong to a finance director before you are certain is a career-limiting move.</li>
+</ul>
+<p><strong>How to communicate:</strong> "I am reconciling the two sources. I will send you a summary of the calculation definitions and filter contexts being used in each by end of day." Then deliver that summary. Structured, factual, no blame.</p>
+<h3>The Communication Rules That Save You Every Time</h3>
+<p>Technical diagnosis is only half the job. How you communicate is what gets remembered.</p>
+<h4>Acknowledge within 15 minutes, fix when you know</h4>
+<p>Users panic when they feel ignored. A quick acknowledgement &mdash; even just "I have seen this and am investigating" &mdash; buys you the time to actually diagnose. Silence is the worst thing you can do.</p>
+<h4>Never speculate in writing</h4>
+<p>Do not say "it might be a refresh issue" unless you have confirmed it is a refresh issue. Speculation gets forwarded, misquoted, and escalated. Only state what you have confirmed.</p>
+<h4>Translate technical findings into business language</h4>
+<p>The executive does not want to know that the incremental refresh partition boundary was misaligned. They want to know "the report was showing data from two days ago instead of yesterday. This has been corrected and will not recur."</p>
+<h4>Always close the loop</h4>
+<p>When you fix a ticket, send a brief summary of what was wrong and what was done. This builds trust and also creates a searchable knowledge base for the next time the same issue appears.</p>
+<h4>Know when to escalate vs when to investigate</h4>
+<p>A P1 business-critical report showing wrong numbers to the CEO needs to be escalated to the report owner and your manager immediately &mdash; not investigated solo. Know your escalation path before you need it.</p>
+<div class="art-tip">&#128203; <strong>The One-Page Triage Cheat Sheet</strong><br/><br/>&#128313; <strong>Data missing / wrong</strong> &rarr; Check refresh history &rarr; Check user filters &rarr; Check RLS &rarr; Check source data<br/>&#128313; <strong>Only one user affected</strong> &rarr; Start with RLS and permissions<br/>&#128313; <strong>Everyone affected</strong> &rarr; Start with refresh failure and capacity<br/>&#128313; <strong>Slow report</strong> &rarr; Check capacity metrics &rarr; Check storage mode &rarr; Run Performance Analyzer<br/>&#128313; <strong>Feature missing</strong> &rarr; Check recent publishes &rarr; Check tenant settings &rarr; Check user licence<br/>&#128313; <strong>Bookmark issues</strong> &rarr; Check 20-bookmark limit &rarr; Check report structure changes<br/>&#128313; <strong>Numbers mismatch</strong> &rarr; Align filter context first &rarr; Align calculation definition &rarr; Then trace data lineage</div>
+<h3>What Nobody Tells You When You Start This Role</h3>
+<p>The hardest part of Power BI support is not the technical diagnosis. The technical diagnosis has a process, and that process is learnable in a few months. The hard part is managing the emotional temperature of the person on the other end of the ticket.</p>
+<p>A senior analyst who cannot see their data the morning of a board presentation is not just experiencing a technical inconvenience. They are experiencing a professional crisis. The energy coming through that support ticket is fear and frustration, not hostility. If you can absorb that, acknowledge it calmly, and resolve it quickly, you will be remembered as the person who saved the presentation. That is the reputation that turns support engineers into architects.</p>
+<p>Every ticket is a pattern. After six months of Power BI support, you will start recognising the same ten issues repeating in different costumes. Build a personal knowledge base. Write down every ticket, what the diagnosis was, and what fixed it. By month twelve, you are the fastest diagnostician in the room &mdash; not because you are clever, but because you have seen it before.</p>
+<p>Do not panic. Follow the process. Communicate clearly. The chaos is temporary. The knowledge is permanent.</p>
+<p><em>If you are in a Power BI support role right now, what is the ticket that keeps coming back? I would genuinely like to add it to this playbook.</em></p>
+<p><em>#PowerBI #MicrosoftFabric #ITSupport #DataAnalytics #BusinessIntelligence #PowerBISupport #CareerAdvice #DataGovernance #ITSM</em></p>
+      </div>
+      <div class="art-panel-footer">
+        <div class="art-panel-nav">
+          <button class="art-nav-btn" onclick="openArticle('a10')">&#8592; Prev</button>
           <a href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank" class="art-nav-btn art-nav-li">Follow on LinkedIn</a>
           <span></span>
         </div>
