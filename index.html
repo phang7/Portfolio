@@ -870,8 +870,9 @@ footer{border-top:1px solid var(--bdr);padding:2.5rem 0;position:relative;z-inde
   <div class="con">
     <div class="ftin">
       <div class="ftcp">&copy; 2025 Phanindra Gaddam &middot; Power BI Architect &middot; Wayne, NJ</div>
-      <div style="display:flex;align-items:center;gap:.5rem">
-        <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fphang7.github.io%2FPortfolio&count_bg=%2300E5C3&title_bg=%230D1525&icon=&icon_color=%23E7E7E7&title=views&edge_flat=true" alt="visitor count" style="height:18px;border-radius:3px"/>
+      <div id="vctr" style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--mut);display:flex;align-items:center;gap:.5rem;opacity:0;transition:opacity .6s">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--ac2);display:inline-block;animation:pulse 2s ease infinite"></span>
+        <span id="vnum">0</span>&nbsp;portfolio views
       </div>
       <div class="ftls">
         <a href="mailto:Phani&#46;g19&#64;gmail&#46;com">Email</a>
@@ -907,7 +908,30 @@ function closeArticle(){
 }
 document.getElementById('artOverlay').addEventListener('click',closeArticle);
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeArticle();});
-// visitor counter: hits.seeyoufarm.com badge (see footer img tag)
+// ── VISITOR COUNTER ─────────────────────────────────────────
+(function(){
+  // counterapi.dev - free countapi.xyz replacement, no account needed
+  fetch('https://api.counterapi.dev/v1/phang7-portfolio/pageviews/up')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var val = d.count || d.value || d.hits;
+      if(val){
+        document.getElementById('vnum').textContent = Number(val).toLocaleString();
+        document.getElementById('vctr').style.opacity = '1';
+      }
+    })
+    .catch(function(){
+      // fallback: try hitting alternative
+      fetch('https://api.countapi.xyz/hit/phang7-portfolio/pageviews')
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          if(d && d.value){
+            document.getElementById('vnum').textContent = Number(d.value).toLocaleString();
+            document.getElementById('vctr').style.opacity = '1';
+          }
+        }).catch(function(){});
+    });
+})();
 </script>
 <div class="art-panel" id="panel-a8">
   <div class="art-panel-inner">
