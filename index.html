@@ -485,6 +485,13 @@ footer{border-top:1px solid var(--bdr);padding:2.5rem 0;position:relative;z-inde
         <div class="art-desc">A deep technical walkthrough of Personal, Standard, and VNet gateway deployment, config-file-level load balancing, PowerShell policy enforcement, and the real trade-offs of gateway logging.</div>
         <div class="art-footer"><span class="art-time">~12 min read</span><span class="art-badge live">&#9679; Live</span></div>
       </div>
+      <div class="art-card reveal" onclick="openArticle('a10')">
+        <div class="art-arrow">&#8599;</div>
+        <div class="art-topic">ServiceNow &#183; Databricks &#183; Power BI</div>
+        <div class="art-title">From ServiceNow Tickets to Power BI Dashboard: A Complete Integration Guide with Real Code</div>
+        <div class="art-desc">Step-by-step: ServiceNow Table API &rarr; Databricks Medallion Lakehouse &rarr; Power BI Direct Lake. Two paths covered &mdash; native Lakeflow Connect and custom Python. Ready to implement today.</div>
+        <div class="art-footer"><span class="art-time">~15 min read</span><span class="art-badge live">&#9679; Live</span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -983,7 +990,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeArticle
     <div class="art-panel-header">
       <button class="art-close" onclick="closeArticle()">&#10005;</button>
       <div class="art-panel-topic">Gateway Architecture &#183; Power BI &#183; Governance</div>
-      <div class="art-counter">9 / 9</div>
+      <div class="art-counter">9 / 10</div>
     </div>
     <div class="art-panel-body">
       <h1 class="art-panel-title">Enterprise Gateway Management at Scale: Installation, Clustering, Load Balancing, Policy Control, and the Logging You Cannot Afford to Skip</h1>
@@ -1129,7 +1136,7 @@ Get-DataGatewayInstaller -GatewayType Resource -Scope Organization
     <div class="art-panel-header">
       <button class="art-close" onclick="closeArticle()">&#10005;</button>
       <div class="art-panel-topic">Gateway Architecture &#183; Power BI &#183; Governance</div>
-      <div class="art-counter">9 / 9</div>
+      <div class="art-counter">9 / 10</div>
     </div>
     <div class="art-panel-body">
       <h1 class="art-panel-title">Enterprise Gateway Architecture: Installation, Load Balancing, Policy Control and Why Logging Saves You at 2am</h1>
@@ -1243,6 +1250,97 @@ Get-DataGatewayInstaller -GatewayType Resource -Scope Organization
       <div class="art-panel-footer">
         <div class="art-panel-nav">
           <button class="art-nav-btn" onclick="openArticle('a8')">&#8592; Prev</button>
+          <a href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank" class="art-nav-btn art-nav-li">Follow on LinkedIn</a>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="art-panel" id="panel-a10">
+  <div class="art-panel-inner">
+    <div class="art-panel-header">
+      <button class="art-close" onclick="closeArticle()">&#10005;</button>
+      <div class="art-panel-topic">ServiceNow &#183; Databricks &#183; Power BI</div>
+      <div class="art-counter">10 / 10</div>
+    </div>
+    <div class="art-panel-body">
+      <h1 class="art-panel-title">From ServiceNow Tickets to Power BI Dashboard: A Complete Integration Guide with Real Code</h1>
+      <div class="art-panel-meta"><span>Phanindra Gaddam</span><span>&#183;</span><span>~15 min read</span><span>&#183;</span><span>Power BI Architect</span></div>
+      <div class="art-panel-divider"></div>
+      <div class="art-panel-content">
+<p>ServiceNow is one of the most data-rich platforms in any enterprise. Incident volumes, SLA breach rates, change success rates, problem recurrence &mdash; it is all there. Yet in most organisations, none of it is in a reportable state. The built-in ServiceNow reports are limited, slow to customise, and siloed from every other data source.</p>
+<p>The ask I hear repeatedly: <em>"I want to see ServiceNow data in Power BI, alongside our operational data, refreshed automatically, without anyone exporting a spreadsheet."</em></p>
+<p>This article gives you the complete implementation path. Two approaches are covered &mdash; the modern no-code route using Databricks Lakeflow Connect, and custom Python for full control. Both land ServiceNow data in a Databricks Medallion Lakehouse and surface it in Power BI via Direct Lake.</p>
+<h3>Understanding the Architecture First</h3>
+<p>ServiceNow's Table API is rate-limited and not built for analytics-volume queries. You cannot point Power BI directly at it. The correct pattern is:</p>
+<ul>
+<li><strong>Extract</strong> from ServiceNow Table API &rarr; land raw data in Databricks <strong>Bronze</strong> layer</li>
+<li><strong>Transform</strong> in Databricks &rarr; clean, typed data in <strong>Silver</strong> layer</li>
+<li><strong>Aggregate</strong> &rarr; reporting-ready metrics in <strong>Gold</strong> layer Delta tables</li>
+<li><strong>Report</strong> in Power BI via Databricks SQL Endpoint or Direct Lake (Fabric)</li>
+</ul>
+<p>Power BI reads from fast pre-computed Delta tables. ServiceNow API rate limits become irrelevant.</p>
+<h3>The ServiceNow Tables You Actually Need</h3>
+<div style="overflow-x:auto"><table class="art-table"><thead><tr><th>Table</th><th>API Name</th><th>Key Fields for Reporting</th></tr></thead><tbody>
+<tr><td><strong>Incidents</strong></td><td>incident</td><td>number, priority, state, assigned_to, opened_at, resolved_at, made_sla, sys_updated_on</td></tr>
+<tr><td><strong>Change Requests</strong></td><td>change_request</td><td>number, type, risk, state, start_date, end_date, sys_updated_on</td></tr>
+<tr><td><strong>Problems</strong></td><td>problem</td><td>number, state, known_error, workaround, sys_updated_on</td></tr>
+<tr><td><strong>Service Requests</strong></td><td>sc_request</td><td>number, state, requested_for, opened_at, sys_updated_on</td></tr>
+<tr><td><strong>Users</strong></td><td>sys_user</td><td>sys_id, name, email, department (for joins)</td></tr>
+</tbody></table></div>
+<p>The <code>sys_updated_on</code> field is your cursor column in every table. Always filter by <code>sys_updated_on &gt; last_run_timestamp</code> &mdash; never do a full extract on every pipeline run.</p>
+<h3>Path 1: Databricks Lakeflow Connect (No-Code, Recommended)</h3>
+<p>Databricks Lakeflow Connect has a native ServiceNow connector that is Generally Available. A free tier on Azure Databricks now includes it. It handles authentication, incremental ingestion, schema evolution, and Unity Catalog governance automatically.</p>
+<h4>Step 1 &mdash; Set Up ServiceNow OAuth</h4>
+<p>In ServiceNow: <strong>System OAuth &rarr; Application Registry &rarr; New &rarr; Create an OAuth API endpoint for external clients</strong>. Copy the Client ID and Client Secret. Assign the service account the <code>snc_read_only</code> role &mdash; read-only is sufficient.</p>
+<h4>Step 2 &mdash; Create Connection in Databricks</h4>
+<p>Navigate to <strong>Catalog &rarr; External Locations &rarr; Create Connection</strong>. Select ServiceNow, enter your instance URL (<code>https://yourinstance.service-now.com</code>), Client ID, and Client Secret.</p>
+<h4>Step 3 &mdash; Create the Ingestion Pipeline</h4>
+<p>Navigate to <strong>Data Ingestion &rarr; Add Data &rarr; Databricks Connectors &rarr; ServiceNow</strong>. Select connection, choose tables (start with incident, change_request, problem, sys_user), select destination catalog/schema, save. Set schedule: hourly for incidents, daily for reference tables. Lakeflow writes each table as a streaming Delta table and uses <code>sys_updated_on</code> as cursor automatically.</p>
+<h3>Path 2: Custom Python in a Databricks Notebook</h3>
+<p>Use this when you need custom field selection or are on a tier without Lakeflow Connect.</p>
+<h4>Step 1 &mdash; Store Credentials in Databricks Secrets (never hardcode)</h4>
+<div style="background:var(--sur2);border:1px solid var(--bdr);border-radius:6px;padding:1rem;font-family:'DM Mono',monospace;font-size:.76rem;color:var(--acc);line-height:1.7;margin:1rem 0;overflow-x:auto"><code>databricks secrets create-scope --scope servicenow<br/>databricks secrets put --scope servicenow --key instance_url<br/>databricks secrets put --scope servicenow --key username<br/>databricks secrets put --scope servicenow --key password</code></div>
+<h4>Step 2 &mdash; Incremental Extract (Bronze layer)</h4>
+<div style="background:var(--sur2);border:1px solid var(--bdr);border-radius:6px;padding:1rem;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--acc);line-height:1.7;margin:1rem 0;overflow-x:auto"><code>import requests<br/>from delta.tables import DeltaTable<br/>from pyspark.sql.functions import current_timestamp<br/><br/>INSTANCE = dbutils.secrets.get("servicenow", "instance_url")<br/>USER     = dbutils.secrets.get("servicenow", "username")<br/>PASS     = dbutils.secrets.get("servicenow", "password")<br/><br/>def extract_table(table_name, fields, last_run, page_size=1000):<br/>&nbsp;&nbsp;url = f"{INSTANCE}/api/now/table/{table_name}"<br/>&nbsp;&nbsp;all_records, offset = [], 0<br/>&nbsp;&nbsp;while True:<br/>&nbsp;&nbsp;&nbsp;&nbsp;params = {<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"sysparm_query": f"sys_updated_on&gt;{last_run}^ORDERBYsys_updated_on",<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"sysparm_fields": ",".join(fields),<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"sysparm_limit": page_size,<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"sysparm_offset": offset,<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"sysparm_display_value": "true"<br/>&nbsp;&nbsp;&nbsp;&nbsp;}<br/>&nbsp;&nbsp;&nbsp;&nbsp;resp = requests.get(url, auth=(USER, PASS),<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;headers={"Accept":"application/json"}, params=params)<br/>&nbsp;&nbsp;&nbsp;&nbsp;records = resp.json().get("result", [])<br/>&nbsp;&nbsp;&nbsp;&nbsp;if not records: break<br/>&nbsp;&nbsp;&nbsp;&nbsp;all_records.extend(records)<br/>&nbsp;&nbsp;&nbsp;&nbsp;offset += page_size<br/>&nbsp;&nbsp;return all_records</code></div>
+<h4>Step 3 &mdash; Upsert to Bronze Delta Table</h4>
+<div style="background:var(--sur2);border:1px solid var(--bdr);border-radius:6px;padding:1rem;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--acc);line-height:1.7;margin:1rem 0;overflow-x:auto"><code># After extracting records:<br/>df = spark.createDataFrame(records).withColumn("_ingested_at", current_timestamp())<br/>DeltaTable.forName(spark, "main.bronze_snow.incident")<br/>&nbsp;&nbsp;.alias("t").merge(df.alias("s"), "t.sys_id = s.sys_id")<br/>&nbsp;&nbsp;.whenMatchedUpdateAll()<br/>&nbsp;&nbsp;.whenNotMatchedInsertAll()<br/>&nbsp;&nbsp;.execute()  # Upsert &mdash; handles re-opens and updates correctly</code></div>
+<h3>Silver Layer &mdash; Clean and Type</h3>
+<div style="background:var(--sur2);border:1px solid var(--bdr);border-radius:6px;padding:1rem;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--acc);line-height:1.7;margin:1rem 0;overflow-x:auto"><code>CREATE OR REPLACE TABLE main.silver_snow.incident AS<br/>SELECT<br/>&nbsp;&nbsp;sys_id, number, short_description,<br/>&nbsp;&nbsp;CASE priority WHEN "1" THEN "Critical" WHEN "2" THEN "High"<br/>&nbsp;&nbsp;&nbsp;&nbsp;WHEN "3" THEN "Moderate" WHEN "4" THEN "Low" ELSE "Unknown" END AS priority_label,<br/>&nbsp;&nbsp;CASE state WHEN "1" THEN "New" WHEN "2" THEN "In Progress"<br/>&nbsp;&nbsp;&nbsp;&nbsp;WHEN "6" THEN "Resolved" WHEN "7" THEN "Closed" ELSE state END AS state_label,<br/>&nbsp;&nbsp;assignment_group, category,<br/>&nbsp;&nbsp;CAST(opened_at AS TIMESTAMP) AS opened_at,<br/>&nbsp;&nbsp;CAST(resolved_at AS TIMESTAMP) AS resolved_at,<br/>&nbsp;&nbsp;ROUND(DATEDIFF(HOUR, CAST(opened_at AS TIMESTAMP),<br/>&nbsp;&nbsp;&nbsp;&nbsp;CAST(resolved_at AS TIMESTAMP)), 2) AS resolution_hours,<br/>&nbsp;&nbsp;CASE WHEN made_sla = "true" THEN 1 ELSE 0 END AS met_sla,<br/>&nbsp;&nbsp;DATE(CAST(opened_at AS TIMESTAMP)) AS opened_date<br/>FROM main.bronze_snow.incident<br/>WHERE sys_id IS NOT NULL<br/>QUALIFY ROW_NUMBER() OVER (PARTITION BY sys_id ORDER BY _ingested_at DESC) = 1</code></div>
+<h3>Gold Layer &mdash; Pre-Aggregated for Power BI</h3>
+<div style="background:var(--sur2);border:1px solid var(--bdr);border-radius:6px;padding:1rem;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--acc);line-height:1.7;margin:1rem 0;overflow-x:auto"><code>CREATE OR REPLACE TABLE main.gold_snow.incident_daily AS<br/>SELECT<br/>&nbsp;&nbsp;opened_date, assignment_group, priority_label,<br/>&nbsp;&nbsp;COUNT(*)                         AS total_incidents,<br/>&nbsp;&nbsp;ROUND(AVG(met_sla) * 100, 1)    AS sla_pct,<br/>&nbsp;&nbsp;ROUND(AVG(resolution_hours), 1) AS avg_resolution_hours,<br/>&nbsp;&nbsp;SUM(CASE WHEN state_label = "Closed" THEN 1 ELSE 0 END) AS closed_count,<br/>&nbsp;&nbsp;SUM(CASE WHEN state_label IN ("New","In Progress") THEN 1 ELSE 0 END) AS open_count<br/>FROM main.silver_snow.incident<br/>GROUP BY opened_date, assignment_group, priority_label</code></div>
+<h3>Connect Power BI</h3>
+<p><strong>Option A &mdash; Databricks SQL Endpoint:</strong> Power BI Desktop &rarr; Get Data &rarr; Azure Databricks &rarr; enter workspace URL &rarr; select SQL Warehouse &rarr; connect to <code>main.gold_snow.incident_daily</code>. Use Import mode with incremental refresh, or DirectQuery for near-real-time.</p>
+<p><strong>Option B &mdash; Microsoft Fabric Direct Lake:</strong> Create a Lakehouse shortcut pointing to your Gold schema, build a Direct Lake semantic model. Sub-second query performance, no data duplication.</p>
+<h3>The Six Visuals Every IT Leader Wants</h3>
+<ul>
+<li><strong>KPI cards</strong> &mdash; Open incidents | SLA % | Avg resolution hours | Week-over-week change</li>
+<li><strong>Trend line</strong> &mdash; Incidents opened vs closed per day (is the backlog growing?)</li>
+<li><strong>Priority breakdown</strong> &mdash; Open Critical/High by team &mdash; the escalation radar</li>
+<li><strong>SLA heat map</strong> &mdash; Calendar heat map of breach days (pattern detection)</li>
+<li><strong>Team leaderboard</strong> &mdash; Assignment group | Open count | Avg resolution | SLA %</li>
+<li><strong>Change risk matrix</strong> &mdash; Scatter: Change requests by risk score vs success rate</li>
+</ul>
+<h3>Things That Will Trip You Up</h3>
+<h4>Display values vs raw codes</h4>
+<p>ServiceNow stores states as integers (<code>1</code>, <code>2</code>, <code>6</code>, <code>7</code>). Always use <code>sysparm_display_value=true</code> in your API call, or map them in Silver. Raw integers in Power BI confuse every business user immediately.</p>
+<h4>Pagination</h4>
+<p>The API returns maximum 10,000 records per request. Always paginate with <code>sysparm_limit</code> and <code>sysparm_offset</code>. The while loop in the code above handles this.</p>
+<h4>Reference fields</h4>
+<p>Fields like <code>assigned_to</code> and <code>assignment_group</code> return <code>sys_id</code> values without <code>sysparm_display_value=true</code>. Join Silver incident to Silver sys_user on <code>sys_id</code> to get human-readable names in reports.</p>
+<h4>Re-opened incidents</h4>
+<p>An incident resolved today might be re-opened tomorrow. This is why you upsert on <code>sys_id</code> rather than append. The merge statement handles state changes correctly &mdash; the Silver QUALIFY clause always shows the latest version.</p>
+<div class="art-tip">&#128161; <strong>Start here:</strong> If you have Azure Databricks, check the Lakeflow Connect free tier first &mdash; it saves days of engineering. If you need custom field control or have a non-Azure setup, the Python path above is production-ready. Either way, the Silver and Gold SQL above applies to both paths.</div>
+<h3>What You Can Answer Once This Is Running</h3>
+<p>This pipeline unlocks questions that no ServiceNow report can answer on its own: How many P1 incidents occurred during change windows last quarter? Which teams have the highest correlation between incident volume and capacity CU spikes? Which problem tickets have been open 90+ days with no related incidents resolved? What is the MTTR trend by priority, month-over-month, for the last two years?</p>
+<p>These require a data platform. Now you have one.</p>
+<p><em>What ServiceNow tables are you prioritising in your analytics environment? Particularly interested in CMDB + ITSM metric combinations that have driven real operational decisions.</em></p>
+<p><em>#ServiceNow #Databricks #PowerBI #MicrosoftFabric #DataEngineering #ITSM #LakeflowConnect #MedallionArchitecture #DirectLake #EnterpriseBI</em></p>
+      </div>
+      <div class="art-panel-footer">
+        <div class="art-panel-nav">
+          <button class="art-nav-btn" onclick="openArticle('a9')">&#8592; Prev</button>
           <a href="https://www.linkedin.com/in/phanindra-gaddam-0886b153/" target="_blank" class="art-nav-btn art-nav-li">Follow on LinkedIn</a>
           <span></span>
         </div>
